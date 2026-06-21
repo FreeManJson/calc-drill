@@ -1,0 +1,149 @@
+Tag: phase0-0-init
+
+Phase:
+  Phase 0 / 0 of 5
+
+Type:
+  [x] Project Bootstrap
+  [ ] Skeleton
+  [ ] Routing
+  [ ] Types / Defaults
+  [ ] Layout / Build Stabilize
+
+Summary:
+  Vite + React + TypeScript の新規プロジェクトを作成し、
+  Git 管理を開始するための初期構築を実施した。
+
+Details:
+  - npm create vite@latest で React / TypeScript テンプレートを生成
+  - npm install を実行
+  - 初期状態で npm run build が通ることを確認
+  - Git リポジトリを初期化
+  - main ブランチへ統一
+  - 今後の再設計作業の基準点として初期コミットを作成
+
+Files:
+  - Vite テンプレート一式
+  - package.json
+  - tsconfig*.json
+  - vite.config.ts
+  - src/*
+  - .gitignore
+
+Verification:
+  - npm install: OK
+  - npm run build: OK
+  - git init: OK
+  - initial commit: OK
+
+Impact:
+  - 既存プロジェクトとは切り離した新規構築
+  - 今後の Phase 0 / 1 以降はこのタグを基準点として積み上げる
+
+Next:
+  - Phase 0 / 1 of 5
+  - 骨組みディレクトリとダミーページを追加
+  - routes 定数を追加
+
+
+
+::: operation
+C:\_Creater\calc-training>npm create vite@latest
+
+> npx
+> create-vite
+
+|
+o  Project name:
+|  calc-drill
+|
+o  Select a framework:
+|  React
+|
+o  Select a variant:
+|  TypeScript
+|
+o  Install with npm and start now?
+|  Yes
+|
+o  Scaffolding project in C:\_Creater\calc-training\calc-drill...
+|
+o  Installing dependencies with npm...
+
+added 152 packages, and audited 153 packages in 11s
+
+42 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+|
+o  Starting dev server...
+
+> calc-drill@0.0.0 dev
+> vite
+
+
+  VITE v8.0.16  ready in 503 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+h
+
+  Shortcuts
+  press r + enter to restart the server
+  press u + enter to show server url
+  press o + enter to open in browser
+  press c + enter to clear console
+  press q + enter to quit
+q
+
+C:\_Creater\calc-training>cd calc-drill
+
+C:\_Creater\calc-training\calc-drill>npm run build
+
+> calc-drill@0.0.0 build
+> tsc -b && vite build
+
+vite v8.0.16 building client environment for production...
+✓ 20 modules transformed.
+computing gzip size...
+dist/index.html                   0.46 kB │ gzip:  0.29 kB
+dist/assets/react-CHdo91hT.svg    4.12 kB │ gzip:  2.06 kB
+dist/assets/vite-BF8QNONU.svg     8.70 kB │ gzip:  1.60 kB
+dist/assets/hero-CLDdwZDr.png    13.05 kB
+dist/assets/index-D64VDMd1.css    4.10 kB │ gzip:  1.47 kB
+dist/assets/index-DfKp6xNp.js   193.35 kB │ gzip: 60.67 kB
+
+✓ built in 244ms
+
+C:\_Creater\calc-training\calc-drill>
+C:\_Creater\calc-training\calc-drill>git init
+Initialized empty Git repository in C:/_Creater/calc-training/calc-drill/.git/
+
+C:\_Creater\calc-training\calc-drill>git branch -M main
+
+C:\_Creater\calc-training\calc-drill>git branch
+
+C:\_Creater\calc-training\calc-drill>mkdir tags
+
+<< このドキュメント（gitタグ）>> を保存
+
+C:\_Creater\calc-training\calc-drill>git add .
+
+C:\_Creater\calc-training\calc-drill>git status
+
+C:\_Creater\calc-training\calc-drill>git commit -m "Phase0-0: Vite React TypeScript プロジェクトを初期作成"
+
+C:\_Creater\calc-training\calc-drill>git status
+
+C:\_Creater\calc-training\calc-drill>git tag -a phase0-0-init -F tags/phase0-0-init.txt --cleanup=verbatim
+
+C:\_Creater\calc-training\calc-drill>git log --oneline --decorate
+
+C:\_Creater\calc-training\calc-drill>git tag
+
+C:\_Creater\calc-training\calc-drill>git show phase0-0-init
+
+:::
+
