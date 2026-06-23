@@ -1,0 +1,42 @@
+Tag: phase0-1-skeleton
+
+Phase:
+  Phase 0 / 1 of 5
+
+Type:
+  [ ] Project Bootstrap
+  [x] Skeleton
+  [ ] Routing
+  [ ] Types / Defaults
+  [ ] Layout / Build Stabilize
+
+Summary:
+  プロジェクト骨組みとして pages / constants を追加し、5画面分のダミーページを作成した。
+
+Details:
+  - Top / Settings / Play / Score / Result のページ雛形を追加
+  - src/constants/routes.ts にルート文字列を定義
+  - Vite 初期サンプルを外し、見出しのみの最小表示へ整理
+
+Files:
+  - src/App.tsx
+  - src/App.css
+  - src/index.css
+  - src/constants/routes.ts
+  - src/pages/TopPage.tsx
+  - src/pages/SettingsPage.tsx
+  - src/pages/PlayPage.tsx
+  - src/pages/ScorePage.tsx
+  - src/pages/ResultPage.tsx
+
+Verification:
+  - npm.cmd run build: OK
+  - 画面遷移確認: 未実施（次フェーズで接続予定）
+
+Impact:
+  - 次フェーズのルーティング接続に向けたページ雛形を追加
+  - 本格ロジックや状態管理への影響なし
+
+Next:
+  - Phase 0 / 2 of 5: ルーティング接続
+  
