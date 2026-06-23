@@ -1,0 +1,33 @@
+Tag: phase0-2-routing
+
+Phase:
+  Phase 0 / 2 of 5
+
+Type:
+  [ ] Project Bootstrap
+  [ ] Skeleton
+  [x] Routing
+  [ ] Types / Defaults
+  [ ] Layout / Build Stabilize
+
+Summary:
+  5つのダミーページをルート定数に沿って切り替えられるようにした。
+
+Details:
+  - Top / Settings / Play / Score / Result のナビゲーションを追加
+  - History API を使ってパス変更と画面表示を同期
+  - ブラウザの戻る/進むに対応
+
+Files:
+  - src/App.tsx
+  - src/App.css
+
+Verification:
+  - npm.cmd run build: OK
+
+Impact:
+  - 次フェーズ以降の画面実装に向けてページ遷移の土台を追加
+  - 各ページの本格ロジックには未着手
+
+Next:
+  - Phase 0 / 3 of 5

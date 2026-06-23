@@ -1,6 +1,26 @@
-.page-list {
-  display: grid;
-  gap: 16px;
+.app-nav {
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 24px;
+}
+
+.app-nav__link {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 8px 12px;
+  text-decoration: none;
+}
+
+.app-nav__link[aria-current='page'] {
+  background: var(--text-heading);
+  border-color: var(--text-heading);
+  color: var(--bg);
+}
+
+.page-shell {
   padding: 24px;
 }
 
