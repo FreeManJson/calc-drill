@@ -1,0 +1,8 @@
+#:schema https://developers.openai.com/codex/config-schema.json
+
+model = "gpt-5.5"
+
+[project]
+name = "calc-drill"
+
+model_instructions_file = "../docs/codex/00_START_HERE.md"
