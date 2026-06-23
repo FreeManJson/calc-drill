@@ -1,0 +1,33 @@
+Tag: phase3-play-core
+
+Phase:
+  Phase 3
+
+Type:
+  [ ] Settings Storage
+  [ ] Top / Settings Sync
+  [ ] Question Logic
+  [x] Play Core
+  [ ] Result / Score
+
+Summary:
+  Play画面で開始、回答、正誤判定、タイマー終了までの基本進行を実装した。
+
+Details:
+  - useTimedPlay hook を追加
+  - 制限時間カウントダウンを追加
+  - 回答入力と正誤判定を追加
+  - 正解時は次の問題へ進行
+  - 不正解時は短時間フィードバックを表示
+  - プレイ終了とリトライを追加
+
+Verification:
+  - npm.cmd run build: OK
+  - npm.cmd run lint: OK
+
+Impact:
+  - Phase 4 の Result 実装に渡すプレイ履歴の土台を追加
+  - 結果保存、スコア集計、Result画面接続は未実装
+
+Next:
+  - Phase 4
