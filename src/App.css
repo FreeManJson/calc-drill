@@ -148,6 +148,19 @@
   gap: 16px;
 }
 
+.answer-form {
+  border-radius: 8px;
+  transition: background-color 120ms ease;
+}
+
+.answer-form--correct {
+  background: #ecfdf5;
+}
+
+.answer-form--incorrect {
+  background: #fef2f2;
+}
+
 .answer-display {
   border: 1px solid var(--border);
   border-radius: 8px;

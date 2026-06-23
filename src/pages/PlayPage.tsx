@@ -33,7 +33,13 @@ export function PlayPage({ onComplete, settings }: PlayPageProps) {
         )}
 
         {play.status === 'playing' && play.currentQuestion !== null && (
-          <div className="answer-form">
+          <div
+            className={
+              play.answerEffect === null
+                ? 'answer-form'
+                : `answer-form answer-form--${play.answerEffect}`
+            }
+          >
             <p className="question-preview__formula">
               {formatQuestion(play.currentQuestion)}
             </p>

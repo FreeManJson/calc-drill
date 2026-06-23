@@ -1,0 +1,33 @@
+Tag: phase7-feedback-effects
+
+Phase:
+  Phase 7
+
+Type:
+  [ ] Settings Storage
+  [ ] Question Logic
+  [ ] Play Core
+  [ ] Result / Score
+  [x] Sound / Light Effects
+
+Summary:
+  回答時の軽い音と視覚フィードバックを追加した。
+
+Details:
+  - feedbackEffects service を追加
+  - 正解時の短い音を追加
+  - 不正解時の短い音を追加
+  - 正解 / 不正解に応じた入力エリアのハイライトを追加
+  - 正解時はポップアップなしで即次問へ進む挙動を維持
+  - Phase plan にPhase 7完了メモを追記
+
+Verification:
+  - cmd /c npm run build: OK
+  - npm.cmd run lint: OK
+
+Impact:
+  - Play中の回答フィードバックが少し分かりやすくなった
+  - Score保存、Result構造、問題生成への変更なし
+
+Next:
+  - Phase 8
