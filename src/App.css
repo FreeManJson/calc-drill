@@ -62,6 +62,11 @@
   text-align: left;
 }
 
+.page-description {
+  color: var(--text-muted);
+  margin: 12px 0 0;
+}
+
 .settings-summary {
   display: grid;
   gap: 12px;

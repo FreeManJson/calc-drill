@@ -28,7 +28,7 @@ export function PlayPage({ onComplete, settings }: PlayPageProps) {
 
         {play.status === 'idle' && (
           <button className="primary-button" onClick={play.start} type="button">
-            Start
+            Start {settings.timeLimitSeconds}-second drill
           </button>
         )}
 

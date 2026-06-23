@@ -1,3 +1,4 @@
+import { DEFAULT_TIME_LIMIT_SECONDS } from '../constants/defaults'
 import { OPERATION_TYPES } from '../types/drill'
 import type { DrillSettings, OperationType } from '../types/drill'
 
@@ -38,6 +39,9 @@ export function SettingsPage({
   return (
     <section className="page">
       <h1>Settings</h1>
+      <p className="page-description">
+        The MVP default is a {DEFAULT_TIME_LIMIT_SECONDS}-second drill.
+      </p>
       <div className="settings-form">
         <label className="field">
           <span>Time limit seconds</span>

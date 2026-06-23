@@ -56,3 +56,6 @@
 
 ## Phase 9
 - 開発用アンロック
+
+## Phase 6 note
+- Phase 6 done: 30-second MVP default and copy cleanup

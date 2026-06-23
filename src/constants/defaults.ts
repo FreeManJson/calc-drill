@@ -1,9 +1,11 @@
 import { OPERATION_TYPES } from '../types/drill'
 import type { DrillSettings, ScoreSummary } from '../types/drill'
 
+export const DEFAULT_TIME_LIMIT_SECONDS = 30
+
 export const DEFAULT_SETTINGS: DrillSettings = {
   mode: 'timeLimit',
-  timeLimitSeconds: 10,
+  timeLimitSeconds: DEFAULT_TIME_LIMIT_SECONDS,
   difficulty: 'beginner',
   operations: [...OPERATION_TYPES],
   allowNegativeAnswers: false,

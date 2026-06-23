@@ -1,0 +1,33 @@
+Tag: phase6-30sec-mvp
+
+Phase:
+  Phase 6
+
+Type:
+  [ ] Settings Storage
+  [ ] Question Logic
+  [ ] Play Core
+  [ ] Result / Score
+  [x] 30sec MVP Cleanup
+
+Summary:
+  無料MVP向けに30秒ドリルを初期設定とし、表示文言を整理した。
+
+Details:
+  - DEFAULT_TIME_LIMIT_SECONDS を追加
+  - デフォルト制限時間を30秒に変更
+  - Top画面に現在の秒数を使った説明文を追加
+  - Settings画面にMVPデフォルト秒数の説明を追加
+  - Play開始ボタンに秒数を表示
+  - Phase plan にPhase 6完了メモを追記
+
+Verification:
+  - cmd /c npm run build: OK
+  - npm.cmd run lint: OK
+
+Impact:
+  - 新規ユーザーの初期プレイ時間が30秒になる
+  - 保存済み設定、Score保存、Result構造への破壊的変更なし
+
+Next:
+  - Phase 7

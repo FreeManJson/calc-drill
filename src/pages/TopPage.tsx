@@ -8,6 +8,9 @@ export function TopPage({ settings }: TopPageProps) {
   return (
     <section className="page">
       <h1>Top</h1>
+      <p className="page-description">
+        Practice quick arithmetic in a {settings.timeLimitSeconds}-second drill.
+      </p>
       <dl className="settings-summary">
         <div>
           <dt>Time limit</dt>
