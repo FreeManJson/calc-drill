@@ -37,6 +37,7 @@
 ## Phase 3 split note
 - Phase 3-A: Play number tile input UI, NumberPad / AnswerDisplay
 - Phase 3-B: Play answer judgment connection
+- Phase 3-B done: NumberPad OK judges the current answer and clears input
 
 ## Phase 4
 - Result 実装

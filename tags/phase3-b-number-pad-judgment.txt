@@ -1,0 +1,39 @@
+Tag: phase3-b-number-pad-judgment
+
+Phase:
+  Phase 3-B
+
+Type:
+  [ ] Settings Storage
+  [ ] Question Logic
+  [x] Play Input UI
+  [x] Play Judgment
+  [ ] Result / Score
+
+Summary:
+  数字タイルで入力した値を、現在問題の正誤判定へ接続した。
+
+Details:
+  - NumberPad の OK 押下で submitAnswer を実行
+  - 入力値を数値化して現在問題の answer と比較
+  - 正解時は feedback を出さずに次問へ進行
+  - 不正解時は既存 feedback を表示
+  - 正解後、不正解後ともに入力値をクリア
+  - Phase 3-A の仮 OK 表示を削除
+  - Phase plan に Phase 3-B 完了条件を追記
+
+Files:
+  - docs/codex/04_PHASE_PLAN.md
+  - src/hooks/useTimedPlay.ts
+  - src/pages/PlayPage.tsx
+
+Verification:
+  - cmd /c npm run build: OK
+  - npm.cmd run lint: OK
+
+Impact:
+  - Play画面で数字タイル入力による回答が可能になった
+  - Result集計、保存構造、効果音、演出には未着手
+
+Next:
+  - Phase 4

@@ -21,7 +21,6 @@ export function useTimedPlay(settings: DrillSettings) {
     null,
   )
   const [answerInput, setAnswerInput] = useState('')
-  const [confirmedInput, setConfirmedInput] = useState<string | null>(null)
   const [answers, setAnswers] = useState<AnswerRecord[]>([])
   const [remainingSecondsState, setRemainingSeconds] = useState(
     settings.timeLimitSeconds,
@@ -70,7 +69,6 @@ export function useTimedPlay(settings: DrillSettings) {
     setStatus('playing')
     setCurrentQuestion(generateQuestion(settings))
     setAnswerInput('')
-    setConfirmedInput(null)
     setAnswers([])
     setRemainingSeconds(settings.timeLimitSeconds)
     setFeedback(null)
@@ -83,21 +81,20 @@ export function useTimedPlay(settings: DrillSettings) {
   }
 
   const appendAnswerDigit = (digit: string) => {
-    setConfirmedInput(null)
     setAnswerInput((currentInput) => `${currentInput}${digit}`)
   }
 
   const clearAnswerInput = () => {
-    setConfirmedInput(null)
     setAnswerInput('')
-  }
-
-  const confirmAnswerInput = () => {
-    setConfirmedInput(answerInput)
   }
 
   const submitAnswer = () => {
     if (status !== 'playing' || currentQuestion === null) {
+      return
+    }
+
+    if (answerInput === '') {
+      setFeedback({ isCorrect: false, message: 'Enter an integer.' })
       return
     }
 
@@ -137,8 +134,6 @@ export function useTimedPlay(settings: DrillSettings) {
     appendAnswerDigit,
     answers,
     clearAnswerInput,
-    confirmAnswerInput,
-    confirmedInput,
     correctCount,
     currentQuestion,
     feedback,

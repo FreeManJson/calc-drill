@@ -11,7 +11,7 @@ type PlayPageProps = {
 export function PlayPage({ settings }: PlayPageProps) {
   const play = useTimedPlay(settings)
   const handleNumberPadOk = () => {
-    play.confirmAnswerInput()
+    play.submitAnswer()
   }
 
   return (
@@ -45,11 +45,6 @@ export function PlayPage({ settings }: PlayPageProps) {
             {play.feedback !== null && (
               <p className="feedback" role="status">
                 {play.feedback.message}
-              </p>
-            )}
-            {play.confirmedInput !== null && (
-              <p className="feedback" role="status">
-                OK received.
               </p>
             )}
             <div className="play-actions">
