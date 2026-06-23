@@ -1,0 +1,38 @@
+Tag: phase2-question-generator
+
+Phase:
+  Phase 2
+
+Type:
+  [ ] Settings Storage
+  [ ] Top / Settings Sync
+  [x] Question Logic
+  [ ] Play Core
+  [ ] Result / Score
+
+Summary:
+  設定に基づいて計算問題を1問生成するロジックを追加した。
+
+Details:
+  - questionGenerator service を追加
+  - 初級の 1〜9 の整数問題を生成
+  - 足し算と引き算に対応
+  - 引き算で負の答えを出さない制御を追加
+  - Play 画面に生成問題のプレビューを表示
+
+Files:
+  - src/services/questionGenerator.ts
+  - src/pages/PlayPage.tsx
+  - src/App.tsx
+  - src/App.css
+
+Verification:
+  - npm.cmd run build: OK
+  - npm.cmd run lint: OK
+
+Impact:
+  - Phase 3 の Play コア実装で使う出題単位を追加
+  - 回答入力、タイマー、結果保存には未着手
+
+Next:
+  - Phase 3

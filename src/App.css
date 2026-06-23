@@ -119,3 +119,22 @@
   color: var(--text-muted);
   margin: 0;
 }
+
+.question-preview {
+  display: grid;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.question-preview__label {
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.question-preview__formula {
+  color: var(--text-heading);
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+}

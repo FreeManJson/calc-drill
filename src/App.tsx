@@ -49,7 +49,7 @@ function renderPage(
         />
       )
     case ROUTES.play:
-      return <PlayPage />
+      return <PlayPage settings={settings} />
     case ROUTES.score:
       return <ScorePage />
     case ROUTES.result:
