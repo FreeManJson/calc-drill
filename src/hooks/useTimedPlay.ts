@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { generateQuestion } from '../services/questionGenerator'
 import type {
   AnswerRecord,
   DrillQuestion,
   DrillSettings,
+  PlayResult,
 } from '../types/drill'
 
 const INCORRECT_FEEDBACK_MS = 700
@@ -15,7 +16,14 @@ type Feedback = {
   message: string
 } | null
 
-export function useTimedPlay(settings: DrillSettings) {
+type UseTimedPlayOptions = {
+  onComplete: (result: PlayResult) => void
+}
+
+export function useTimedPlay(
+  settings: DrillSettings,
+  { onComplete }: UseTimedPlayOptions,
+) {
   const [status, setStatus] = useState<PlayStatus>('idle')
   const [currentQuestion, setCurrentQuestion] = useState<DrillQuestion | null>(
     null,
@@ -27,8 +35,31 @@ export function useTimedPlay(settings: DrillSettings) {
   )
   const [feedback, setFeedback] = useState<Feedback>(null)
   const [startedAtMs, setStartedAtMs] = useState<number | null>(null)
+  const answersRef = useRef<AnswerRecord[]>([])
+  const onCompleteRef = useRef(onComplete)
+  const settingsRef = useRef(settings)
+  const startedAtMsRef = useRef<number | null>(null)
 
   const correctCount = answers.filter((answer) => answer.isCorrect).length
+
+  useEffect(() => {
+    onCompleteRef.current = onComplete
+    settingsRef.current = settings
+  }, [onComplete, settings])
+
+  const completePlay = () => {
+    const startedAt = startedAtMsRef.current
+    const durationMs = startedAt === null ? 0 : Math.max(Date.now() - startedAt, 0)
+    const resultAnswers = answersRef.current
+
+    onCompleteRef.current({
+      settings: settingsRef.current,
+      correctCount: resultAnswers.filter((answer) => answer.isCorrect).length,
+      totalCount: resultAnswers.length,
+      durationMs,
+      answers: resultAnswers,
+    })
+  }
 
   useEffect(() => {
     if (status !== 'playing' || feedback !== null) {
@@ -39,6 +70,7 @@ export function useTimedPlay(settings: DrillSettings) {
       setRemainingSeconds((currentSeconds) => {
         if (currentSeconds <= 1) {
           setStatus('finished')
+          completePlay()
           return 0
         }
 
@@ -70,14 +102,18 @@ export function useTimedPlay(settings: DrillSettings) {
     setCurrentQuestion(generateQuestion(settings))
     setAnswerInput('')
     setAnswers([])
+    answersRef.current = []
     setRemainingSeconds(settings.timeLimitSeconds)
     setFeedback(null)
-    setStartedAtMs(Date.now())
+    const now = Date.now()
+    setStartedAtMs(now)
+    startedAtMsRef.current = now
   }
 
   const finish = () => {
     setStatus('finished')
     setFeedback(null)
+    completePlay()
   }
 
   const appendAnswerDigit = (digit: string) => {
@@ -115,7 +151,9 @@ export function useTimedPlay(settings: DrillSettings) {
       answeredAtMs,
     }
 
-    setAnswers((currentAnswers) => [...currentAnswers, answerRecord])
+    const nextAnswers = [...answersRef.current, answerRecord]
+    answersRef.current = nextAnswers
+    setAnswers(nextAnswers)
     setAnswerInput('')
 
     if (isCorrect) {

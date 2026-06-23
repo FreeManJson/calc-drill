@@ -9,7 +9,7 @@ import { ScorePage } from './pages/ScorePage'
 import { SettingsPage } from './pages/SettingsPage'
 import { TopPage } from './pages/TopPage'
 import { loadSettings, saveSettings } from './services/settingsStorage'
-import type { DrillSettings } from './types/drill'
+import type { DrillSettings, PlayResult } from './types/drill'
 import './App.css'
 
 type NavItem = {
@@ -39,6 +39,8 @@ function renderPage(
   route: AppRoute,
   settings: DrillSettings,
   onSettingsChange: (settings: DrillSettings) => void,
+  latestResult: PlayResult | null,
+  onPlayComplete: (result: PlayResult) => void,
 ) {
   switch (route) {
     case ROUTES.settings:
@@ -49,11 +51,11 @@ function renderPage(
         />
       )
     case ROUTES.play:
-      return <PlayPage settings={settings} />
+      return <PlayPage onComplete={onPlayComplete} settings={settings} />
     case ROUTES.score:
       return <ScorePage />
     case ROUTES.result:
-      return <ResultPage />
+      return <ResultPage result={latestResult} />
     case ROUTES.top:
       return <TopPage settings={settings} />
   }
@@ -62,6 +64,7 @@ function renderPage(
 function App() {
   const [currentRoute, setCurrentRoute] = useState<AppRoute>(getCurrentRoute)
   const [settings, setSettings] = useState<DrillSettings>(loadSettings)
+  const [latestResult, setLatestResult] = useState<PlayResult | null>(null)
 
   useEffect(() => {
     saveSettings(settings)
@@ -79,12 +82,7 @@ function App() {
     }
   }, [])
 
-  const handleNavigate = (
-    event: MouseEvent<HTMLAnchorElement>,
-    route: AppRoute,
-  ) => {
-    event.preventDefault()
-
+  const navigateTo = (route: AppRoute) => {
     if (route === currentRoute) {
       return
     }
@@ -93,13 +91,32 @@ function App() {
     setCurrentRoute(route)
   }
 
+  const handleNavigate = (
+    event: MouseEvent<HTMLAnchorElement>,
+    route: AppRoute,
+  ) => {
+    event.preventDefault()
+    navigateTo(route)
+  }
+
+  const handlePlayComplete = (result: PlayResult) => {
+    setLatestResult(result)
+    navigateTo(ROUTES.result)
+  }
+
   return (
     <AppLayout
       currentRoute={currentRoute}
       navItems={navItems}
       onNavigate={handleNavigate}
     >
-      {renderPage(currentRoute, settings, setSettings)}
+      {renderPage(
+        currentRoute,
+        settings,
+        setSettings,
+        latestResult,
+        handlePlayComplete,
+      )}
     </AppLayout>
   )
 }

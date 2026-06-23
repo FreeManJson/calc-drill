@@ -207,3 +207,63 @@ button {
   border-color: var(--text-heading);
   color: var(--surface);
 }
+
+.empty-message {
+  color: var(--text-muted);
+  margin: 20px 0 0;
+}
+
+.result-panel {
+  display: grid;
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.result-summary {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+}
+
+.result-summary div {
+  display: grid;
+  gap: 4px;
+}
+
+.result-summary dt {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.result-summary dd {
+  color: var(--text-heading);
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.answer-history {
+  display: grid;
+  gap: 12px;
+}
+
+.answer-history h2 {
+  font-size: 20px;
+  margin: 0;
+}
+
+.answer-history ol {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 24px;
+}
+
+.answer-history li {
+  gap: 4px;
+}
+
+.answer-history li,
+.answer-history li span {
+  display: grid;
+}

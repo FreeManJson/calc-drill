@@ -1,0 +1,32 @@
+Tag: phase4-result
+
+Phase:
+  Phase 4
+
+Type:
+  [ ] Settings Storage
+  [ ] Question Logic
+  [ ] Play Input UI
+  [ ] Play Judgment
+  [x] Result
+
+Summary:
+  Play完了時の結果をResult画面に表示できるようにした。
+
+Details:
+  - Play終了時にPlayResultを作成
+  - Appで最新のプレイ結果を保持
+  - Play完了時にResult画面へ遷移
+  - Result画面にスコア、時間、回答履歴を表示
+  - 結果未作成時の空表示を追加
+
+Verification:
+  - cmd /c npm run build: OK
+  - npm.cmd run lint: OK
+
+Impact:
+  - 1プレイ直後の結果確認が可能になった
+  - Score集計、永続保存、履歴管理には未着手
+
+Next:
+  - Phase 5

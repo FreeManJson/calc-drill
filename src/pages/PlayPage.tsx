@@ -2,14 +2,15 @@ import { AnswerDisplay } from '../components/play/AnswerDisplay'
 import { NumberPad } from '../components/play/NumberPad'
 import { useTimedPlay } from '../hooks/useTimedPlay'
 import { formatQuestion } from '../services/questionGenerator'
-import type { DrillSettings } from '../types/drill'
+import type { DrillSettings, PlayResult } from '../types/drill'
 
 type PlayPageProps = {
+  onComplete: (result: PlayResult) => void
   settings: DrillSettings
 }
 
-export function PlayPage({ settings }: PlayPageProps) {
-  const play = useTimedPlay(settings)
+export function PlayPage({ onComplete, settings }: PlayPageProps) {
+  const play = useTimedPlay(settings, { onComplete })
   const handleNumberPadOk = () => {
     play.submitAnswer()
   }
