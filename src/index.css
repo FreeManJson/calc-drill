@@ -1,7 +1,8 @@
 :root {
   --text: #1f2937;
   --text-heading: #111827;
-  --bg: #ffffff;
+  --bg: #f9fafb;
+  --surface: #ffffff;
   --border: #e5e7eb;
 
   font: 16px/1.5 system-ui, 'Segoe UI', Roboto, sans-serif;
@@ -15,7 +16,12 @@
 }
 
 body {
+  background: var(--bg);
   margin: 0;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 #root {

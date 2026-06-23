@@ -1,0 +1,36 @@
+Tag: phase0-4-layout
+
+Phase:
+  Phase 0 / 4 of 5
+
+Type:
+  [ ] Project Bootstrap
+  [ ] Skeleton
+  [ ] Routing
+  [ ] Types / Defaults
+  [x] Layout / Build Stabilize
+
+Summary:
+  共通レイアウトを追加し、各ダミーページを載せるための最低限のスタイルを整えた。
+
+Details:
+  - AppLayout を追加してヘッダー、ナビ、メイン領域を共通化
+  - App.tsx からレイアウト責務を分離
+  - ページ幅、余白、背景、ページ枠の最小スタイルを追加
+  - ナビゲーションが小さい画面でも折り返せるよう調整
+
+Files:
+  - src/App.tsx
+  - src/App.css
+  - src/index.css
+  - src/layouts/AppLayout.tsx
+
+Verification:
+  - npm.cmd run build: OK
+
+Impact:
+  - 後続 Phase の画面実装に使う共通表示枠を追加
+  - ページ本体の仕様やゲームロジックへの影響なし
+
+Next:
+  - Phase 1

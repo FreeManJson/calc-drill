@@ -1,12 +1,42 @@
-.app-nav {
+.app-layout {
+  min-height: 100svh;
+}
+
+.app-header {
   border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.app-header__inner,
+.page-shell {
+  box-sizing: border-box;
+  margin: 0 auto;
+  max-width: 960px;
+  width: 100%;
+}
+
+.app-header__inner {
+  display: grid;
+  gap: 16px;
+  padding: 20px;
+}
+
+.app-title {
+  color: var(--text-heading);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.app-nav {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  padding: 24px;
 }
 
 .app-nav__link {
+  background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   color: var(--text);
@@ -21,12 +51,13 @@
 }
 
 .page-shell {
-  padding: 24px;
+  padding: 20px;
 }
 
 .page {
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 24px;
+  padding: 20px;
   text-align: left;
 }

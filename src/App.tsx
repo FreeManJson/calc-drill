@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import type { MouseEvent } from 'react'
 import { ROUTES } from './constants/routes'
 import type { AppRoute } from './constants/routes'
+import { AppLayout } from './layouts/AppLayout'
 import { ResultPage } from './pages/ResultPage'
 import { PlayPage } from './pages/PlayPage'
 import { ScorePage } from './pages/ScorePage'
@@ -77,22 +78,13 @@ function App() {
   }
 
   return (
-    <>
-      <nav className="app-nav" aria-label="Main navigation">
-        {navItems.map((item) => (
-          <a
-            aria-current={item.route === currentRoute ? 'page' : undefined}
-            className="app-nav__link"
-            href={item.route}
-            key={item.route}
-            onClick={(event) => handleNavigate(event, item.route)}
-          >
-            {item.label}
-          </a>
-        ))}
-      </nav>
-      <main className="page-shell">{renderPage(currentRoute)}</main>
-    </>
+    <AppLayout
+      currentRoute={currentRoute}
+      navItems={navItems}
+      onNavigate={handleNavigate}
+    >
+      {renderPage(currentRoute)}
+    </AppLayout>
   )
 }
 
