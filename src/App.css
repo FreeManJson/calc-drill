@@ -219,6 +219,10 @@ button {
   margin-top: 20px;
 }
 
+.score-panel {
+  margin-top: 20px;
+}
+
 .result-summary {
   display: grid;
   gap: 12px;

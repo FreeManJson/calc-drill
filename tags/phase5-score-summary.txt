@@ -1,0 +1,33 @@
+Tag: phase5-score-summary
+
+Phase:
+  Phase 5
+
+Type:
+  [ ] Settings Storage
+  [ ] Question Logic
+  [ ] Play Core
+  [ ] Result
+  [x] Score / Storage
+
+Summary:
+  プレイ結果から累積スコアを更新し、Score画面に表示できるようにした。
+
+Details:
+  - scoreStorage service を追加
+  - ScoreSummary の load / save を実装
+  - Play完了時に累積プレイ回数とベスト正解数を更新
+  - 最新結果を ScoreSummary に保存
+  - Score画面に total plays / best correct count / latest score を表示
+  - localStorage から保存済みスコアを復元
+
+Verification:
+  - cmd /c npm run build: OK
+  - npm.cmd run lint: OK
+
+Impact:
+  - プレイ成績の累積保存が可能になった
+  - 効果音、演出、詳細な履歴管理には未着手
+
+Next:
+  - Phase 6

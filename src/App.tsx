@@ -8,8 +8,13 @@ import { PlayPage } from './pages/PlayPage'
 import { ScorePage } from './pages/ScorePage'
 import { SettingsPage } from './pages/SettingsPage'
 import { TopPage } from './pages/TopPage'
+import {
+  loadScoreSummary,
+  recordPlayResult,
+  saveScoreSummary,
+} from './services/scoreStorage'
 import { loadSettings, saveSettings } from './services/settingsStorage'
-import type { DrillSettings, PlayResult } from './types/drill'
+import type { DrillSettings, PlayResult, ScoreSummary } from './types/drill'
 import './App.css'
 
 type NavItem = {
@@ -39,7 +44,7 @@ function renderPage(
   route: AppRoute,
   settings: DrillSettings,
   onSettingsChange: (settings: DrillSettings) => void,
-  latestResult: PlayResult | null,
+  scoreSummary: ScoreSummary,
   onPlayComplete: (result: PlayResult) => void,
 ) {
   switch (route) {
@@ -53,9 +58,9 @@ function renderPage(
     case ROUTES.play:
       return <PlayPage onComplete={onPlayComplete} settings={settings} />
     case ROUTES.score:
-      return <ScorePage />
+      return <ScorePage scoreSummary={scoreSummary} />
     case ROUTES.result:
-      return <ResultPage result={latestResult} />
+      return <ResultPage result={scoreSummary.latestResult} />
     case ROUTES.top:
       return <TopPage settings={settings} />
   }
@@ -64,7 +69,8 @@ function renderPage(
 function App() {
   const [currentRoute, setCurrentRoute] = useState<AppRoute>(getCurrentRoute)
   const [settings, setSettings] = useState<DrillSettings>(loadSettings)
-  const [latestResult, setLatestResult] = useState<PlayResult | null>(null)
+  const [scoreSummary, setScoreSummary] =
+    useState<ScoreSummary>(loadScoreSummary)
 
   useEffect(() => {
     saveSettings(settings)
@@ -100,7 +106,12 @@ function App() {
   }
 
   const handlePlayComplete = (result: PlayResult) => {
-    setLatestResult(result)
+    setScoreSummary((currentScoreSummary) => {
+      const nextScoreSummary = recordPlayResult(currentScoreSummary, result)
+
+      saveScoreSummary(nextScoreSummary)
+      return nextScoreSummary
+    })
     navigateTo(ROUTES.result)
   }
 
@@ -114,7 +125,7 @@ function App() {
         currentRoute,
         settings,
         setSettings,
-        latestResult,
+        scoreSummary,
         handlePlayComplete,
       )}
     </AppLayout>
