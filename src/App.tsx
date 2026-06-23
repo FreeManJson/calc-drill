@@ -8,6 +8,8 @@ import { PlayPage } from './pages/PlayPage'
 import { ScorePage } from './pages/ScorePage'
 import { SettingsPage } from './pages/SettingsPage'
 import { TopPage } from './pages/TopPage'
+import { loadSettings, saveSettings } from './services/settingsStorage'
+import type { DrillSettings } from './types/drill'
 import './App.css'
 
 type NavItem = {
@@ -33,10 +35,19 @@ function getCurrentRoute(): AppRoute {
     : ROUTES.top
 }
 
-function renderPage(route: AppRoute) {
+function renderPage(
+  route: AppRoute,
+  settings: DrillSettings,
+  onSettingsChange: (settings: DrillSettings) => void,
+) {
   switch (route) {
     case ROUTES.settings:
-      return <SettingsPage />
+      return (
+        <SettingsPage
+          onSettingsChange={onSettingsChange}
+          settings={settings}
+        />
+      )
     case ROUTES.play:
       return <PlayPage />
     case ROUTES.score:
@@ -44,12 +55,17 @@ function renderPage(route: AppRoute) {
     case ROUTES.result:
       return <ResultPage />
     case ROUTES.top:
-      return <TopPage />
+      return <TopPage settings={settings} />
   }
 }
 
 function App() {
   const [currentRoute, setCurrentRoute] = useState<AppRoute>(getCurrentRoute)
+  const [settings, setSettings] = useState<DrillSettings>(loadSettings)
+
+  useEffect(() => {
+    saveSettings(settings)
+  }, [settings])
 
   useEffect(() => {
     const handlePopState = () => {
@@ -83,7 +99,7 @@ function App() {
       navItems={navItems}
       onNavigate={handleNavigate}
     >
-      {renderPage(currentRoute)}
+      {renderPage(currentRoute, settings, setSettings)}
     </AppLayout>
   )
 }

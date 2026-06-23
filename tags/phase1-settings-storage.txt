@@ -1,0 +1,39 @@
+Tag: phase1-settings-storage
+
+Phase:
+  Phase 1
+
+Type:
+  [x] Settings Storage
+  [x] Top / Settings Sync
+  [ ] Question Logic
+  [ ] Play Core
+  [ ] Result / Score
+
+Summary:
+  設定保存基盤を追加し、Settings で変更した内容を Top に反映できるようにした。
+
+Details:
+  - settingsStorage service で localStorage の読み書きを集約
+  - 保存済み設定の読み込み、JSON parse、fallback を追加
+  - App で DrillSettings state を管理
+  - TopPage に現在設定のサマリを表示
+  - SettingsPage に時間制限と演算種別の最小フォームを追加
+
+Files:
+  - src/App.tsx
+  - src/App.css
+  - src/index.css
+  - src/pages/TopPage.tsx
+  - src/pages/SettingsPage.tsx
+  - src/services/settingsStorage.ts
+
+Verification:
+  - npm.cmd run build: OK
+
+Impact:
+  - 後続 Phase の Play / Result / Score が参照する設定保存の土台を追加
+  - 出題ロジック、プレイ進行、結果保存には未着手
+
+Next:
+  - Phase 2
