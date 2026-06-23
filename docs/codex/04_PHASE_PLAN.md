@@ -62,3 +62,6 @@
 
 ## Phase 7 note
 - Phase 7 done: light answer sound and feedback highlight
+
+## Phase 8 note
+- Phase 8 done: landscape Play layout support

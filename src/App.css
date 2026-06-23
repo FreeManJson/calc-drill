@@ -289,3 +289,31 @@ button {
 .answer-history li span {
   display: grid;
 }
+
+@media (orientation: landscape) and (min-width: 720px) {
+  .app-header__inner {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .answer-form {
+    align-items: start;
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 320px);
+  }
+
+  .play-question-area,
+  .play-input-area {
+    display: grid;
+    gap: 16px;
+  }
+
+  .feedback,
+  .play-actions {
+    grid-column: 1 / -1;
+  }
+
+  .question-preview__formula {
+    font-size: 56px;
+  }
+}

@@ -40,15 +40,19 @@ export function PlayPage({ onComplete, settings }: PlayPageProps) {
                 : `answer-form answer-form--${play.answerEffect}`
             }
           >
-            <p className="question-preview__formula">
-              {formatQuestion(play.currentQuestion)}
-            </p>
-            <AnswerDisplay value={play.answerInput} />
-            <NumberPad
-              onClear={play.clearAnswerInput}
-              onDigit={play.appendAnswerDigit}
-              onOk={handleNumberPadOk}
-            />
+            <div className="play-question-area">
+              <p className="question-preview__formula">
+                {formatQuestion(play.currentQuestion)}
+              </p>
+              <AnswerDisplay value={play.answerInput} />
+            </div>
+            <div className="play-input-area">
+              <NumberPad
+                onClear={play.clearAnswerInput}
+                onDigit={play.appendAnswerDigit}
+                onOk={handleNumberPadOk}
+              />
+            </div>
             {play.feedback !== null && (
               <p className="feedback" role="status">
                 {play.feedback.message}

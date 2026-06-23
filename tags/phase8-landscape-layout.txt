@@ -1,0 +1,32 @@
+Tag: phase8-landscape-layout
+
+Phase:
+  Phase 8
+
+Type:
+  [ ] Settings Storage
+  [ ] Question Logic
+  [ ] Play Core
+  [ ] Result / Score
+  [x] Landscape Layout
+
+Summary:
+  Play画面を横長表示でも使いやすい2カラム構成に調整した。
+
+Details:
+  - Play中の問題表示エリアと入力エリアを分離
+  - 横長表示でanswer formを2カラム化
+  - 横長時のヘッダー配置を横並びに調整
+  - 横長時の問題表示サイズを拡大
+  - Phase planにPhase 8完了メモを追記
+
+Verification:
+  - cmd /c npm run build: OK
+  - npm.cmd run lint: OK
+
+Impact:
+  - 横向き端末や横長ブラウザでPlay画面が使いやすくなった
+  - Play判定、Score保存、Result構造への変更なし
+
+Next:
+  - Phase 9
