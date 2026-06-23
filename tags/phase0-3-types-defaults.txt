@@ -1,0 +1,35 @@
+Tag: phase0-3-types-defaults
+
+Phase:
+  Phase 0 / 3 of 5
+
+Type:
+  [ ] Project Bootstrap
+  [ ] Skeleton
+  [ ] Routing
+  [x] Types / Defaults
+  [ ] Layout / Build Stabilize
+
+Summary:
+  設定、問題、結果、スコア集計の型定義と初期値、storage key を追加した。
+
+Details:
+  - ゲームモード、難易度、演算種別の型を追加
+  - DrillSettings / DrillQuestion / PlayResult / ScoreSummary を追加
+  - 10秒・初級・足し算/引き算の初期設定を定義
+  - settings / scoreSummary の storage key を定義
+
+Files:
+  - src/types/drill.ts
+  - src/constants/defaults.ts
+  - src/constants/storageKeys.ts
+
+Verification:
+  - npm.cmd run build: OK
+
+Impact:
+  - 後続 Phase の設定保存、出題、結果表示、スコア集計の土台を追加
+  - UI 表示や画面遷移への影響なし
+
+Next:
+  - Phase 0 / 4 of 5
