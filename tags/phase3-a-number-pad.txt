@@ -1,0 +1,43 @@
+Tag: phase3-a-number-pad
+
+Phase:
+  Phase 3-A
+
+Type:
+  [ ] Settings Storage
+  [ ] Question Logic
+  [x] Play Input UI
+  [ ] Play Judgment
+  [ ] Result / Score
+
+Summary:
+  Play画面に数字タイル入力UIの土台を追加した。
+
+Details:
+  - NumberPad コンポーネントを追加
+  - AnswerDisplay コンポーネントを追加
+  - 0〜9 / C / OK の数字タイルUIを追加
+  - タイル押下で入力中の値を更新
+  - Cで入力値をクリア
+  - OKの押下ハンドラ入口を追加
+  - OKは正解判定には未接続
+  - Phase plan に Phase 3-A / 3-B の追記を追加
+
+Files:
+  - docs/codex/04_PHASE_PLAN.md
+  - src/components/play/AnswerDisplay.tsx
+  - src/components/play/NumberPad.tsx
+  - src/hooks/useTimedPlay.ts
+  - src/pages/PlayPage.tsx
+  - src/App.css
+
+Verification:
+  - cmd /c npm run build: OK
+  - npm.cmd run lint: OK
+
+Impact:
+  - Play画面の入力UIを数字タイルへ置き換え
+  - 正解判定、問題生成、Result接続、保存処理への追加変更なし
+
+Next:
+  - Phase 3-B: 数字タイルOKと正解判定の接続

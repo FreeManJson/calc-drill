@@ -143,6 +143,37 @@
   gap: 16px;
 }
 
+.answer-display {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: grid;
+  gap: 4px;
+  padding: 16px;
+}
+
+.answer-display__label {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.answer-display__value {
+  color: var(--text-heading);
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.2;
+  min-height: 38px;
+}
+
+.number-pad {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.number-pad__button {
+  min-height: 48px;
+}
+
 .question-preview__formula {
   color: var(--text-heading);
   font-size: 40px;

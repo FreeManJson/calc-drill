@@ -1,3 +1,5 @@
+import { AnswerDisplay } from '../components/play/AnswerDisplay'
+import { NumberPad } from '../components/play/NumberPad'
 import { useTimedPlay } from '../hooks/useTimedPlay'
 import { formatQuestion } from '../services/questionGenerator'
 import type { DrillSettings } from '../types/drill'
@@ -8,6 +10,9 @@ type PlayPageProps = {
 
 export function PlayPage({ settings }: PlayPageProps) {
   const play = useTimedPlay(settings)
+  const handleNumberPadOk = () => {
+    play.confirmAnswerInput()
+  }
 
   return (
     <section className="page">
@@ -27,41 +32,32 @@ export function PlayPage({ settings }: PlayPageProps) {
         )}
 
         {play.status === 'playing' && play.currentQuestion !== null && (
-          <form
-            className="answer-form"
-            onSubmit={(event) => {
-              event.preventDefault()
-              play.submitAnswer()
-            }}
-          >
+          <div className="answer-form">
             <p className="question-preview__formula">
               {formatQuestion(play.currentQuestion)}
             </p>
-            <label className="field">
-              <span>Answer</span>
-              <input
-                autoComplete="off"
-                inputMode="numeric"
-                onChange={(event) =>
-                  play.setAnswerInput(event.currentTarget.value)
-                }
-                value={play.answerInput}
-              />
-            </label>
+            <AnswerDisplay value={play.answerInput} />
+            <NumberPad
+              onClear={play.clearAnswerInput}
+              onDigit={play.appendAnswerDigit}
+              onOk={handleNumberPadOk}
+            />
             {play.feedback !== null && (
               <p className="feedback" role="status">
                 {play.feedback.message}
               </p>
             )}
+            {play.confirmedInput !== null && (
+              <p className="feedback" role="status">
+                OK received.
+              </p>
+            )}
             <div className="play-actions">
-              <button className="primary-button" type="submit">
-                Submit
-              </button>
               <button onClick={play.finish} type="button">
                 Finish
               </button>
             </div>
-          </form>
+          </div>
         )}
 
         {play.status === 'finished' && (

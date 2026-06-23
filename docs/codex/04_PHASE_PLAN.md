@@ -34,6 +34,10 @@
 ## Phase 3
 - Play コア実装
 
+## Phase 3 split note
+- Phase 3-A: Play number tile input UI, NumberPad / AnswerDisplay
+- Phase 3-B: Play answer judgment connection
+
 ## Phase 4
 - Result 実装
 
