@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   playCorrectSound,
   playIncorrectSound,
@@ -43,7 +43,10 @@ export function useTimedPlay(
   const [feedback, setFeedback] = useState<Feedback>(null)
   const [startedAtMs, setStartedAtMs] = useState<number | null>(null)
   const answersRef = useRef<AnswerRecord[]>([])
+  const completedRef = useRef(false)
   const onCompleteRef = useRef(onComplete)
+  const pauseStartedAtMsRef = useRef<number | null>(null)
+  const pausedDurationMsRef = useRef(0)
   const settingsRef = useRef(settings)
   const startedAtMsRef = useRef<number | null>(null)
 
@@ -54,9 +57,28 @@ export function useTimedPlay(
     settingsRef.current = settings
   }, [onComplete, settings])
 
-  const completePlay = () => {
+  const getPausedDurationMs = useCallback(() => {
+    const activePauseMs =
+      pauseStartedAtMsRef.current === null
+        ? 0
+        : Math.max(Date.now() - pauseStartedAtMsRef.current, 0)
+
+    return pausedDurationMsRef.current + activePauseMs
+  }, [])
+
+  const completePlay = useCallback(() => {
+    if (completedRef.current) {
+      return
+    }
+
+    completedRef.current = true
     const startedAt = startedAtMsRef.current
-    const durationMs = startedAt === null ? 0 : Math.max(Date.now() - startedAt, 0)
+    const rawDurationMs =
+      startedAt === null
+        ? 0
+        : Math.max(Date.now() - startedAt - getPausedDurationMs(), 0)
+    const maxDurationMs = settingsRef.current.timeLimitSeconds * 1000
+    const durationMs = Math.min(rawDurationMs, maxDurationMs)
     const resultAnswers = answersRef.current
 
     onCompleteRef.current({
@@ -66,7 +88,7 @@ export function useTimedPlay(
       durationMs,
       answers: resultAnswers,
     })
-  }
+  }, [getPausedDurationMs])
 
   useEffect(() => {
     if (status !== 'playing' || feedback !== null) {
@@ -88,7 +110,7 @@ export function useTimedPlay(
     return () => {
       window.clearInterval(intervalId)
     }
-  }, [feedback, status])
+  }, [completePlay, feedback, status])
 
   useEffect(() => {
     if (feedback === null) {
@@ -96,6 +118,14 @@ export function useTimedPlay(
     }
 
     const timeoutId = window.setTimeout(() => {
+      if (pauseStartedAtMsRef.current !== null) {
+        pausedDurationMsRef.current += Math.max(
+          Date.now() - pauseStartedAtMsRef.current,
+          0,
+        )
+        pauseStartedAtMsRef.current = null
+      }
+
       setFeedback(null)
     }, INCORRECT_FEEDBACK_MS)
 
@@ -124,6 +154,9 @@ export function useTimedPlay(
     setAnswerInput('')
     setAnswers([])
     answersRef.current = []
+    completedRef.current = false
+    pauseStartedAtMsRef.current = null
+    pausedDurationMsRef.current = 0
     setRemainingSeconds(settings.timeLimitSeconds)
     setAnswerEffect(null)
     setFeedback(null)
@@ -152,9 +185,6 @@ export function useTimedPlay(
     }
 
     if (answerInput === '') {
-      setAnswerEffect('incorrect')
-      playIncorrectSound()
-      setFeedback({ isCorrect: false, message: 'Enter an integer.' })
       return
     }
 
@@ -163,6 +193,7 @@ export function useTimedPlay(
     if (!Number.isInteger(userAnswer)) {
       setAnswerEffect('incorrect')
       playIncorrectSound()
+      pauseStartedAtMsRef.current = Date.now()
       setFeedback({ isCorrect: false, message: 'Enter an integer.' })
       return
     }
@@ -191,6 +222,8 @@ export function useTimedPlay(
 
     setAnswerEffect('incorrect')
     playIncorrectSound()
+    pauseStartedAtMsRef.current = Date.now()
+    setAnswerInput('')
     setFeedback({
       isCorrect: false,
       message: `Incorrect. Answer: ${currentQuestion.answer}`,

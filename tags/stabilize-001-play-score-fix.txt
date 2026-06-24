@@ -1,0 +1,36 @@
+Tag: stabilize-001-play-score-fix
+
+Phase:
+  Stabilize-001
+
+Type:
+  [x] Bug Fix
+  [x] Play Stabilize
+  [x] Result Duration
+  [x] Score Count
+  [ ] UI Expansion
+
+Summary:
+  Play / Result / Score の基本動作バグを修正し、記録機能の前提を安定化した。
+
+Details:
+  - 未入力OKを誤答扱いにしないよう修正
+  - 未入力OKで効果音、feedback、AnswerEffectを出さないよう修正
+  - 不正解後に解答欄をクリア
+  - completedRefでプレイ完了処理の二重実行を防止
+  - feedback中の停止時間をResult Durationから除外
+  - Durationを制限時間上限でclamp
+  - Score保存をstate更新後のeffectへ移動
+  - backlogにStabilize-001完了メモを追記
+
+Verification:
+  - cmd /c npm run build: OK
+  - npm.cmd run lint: OK
+
+Impact:
+  - Total Playsが1プレイにつき1回だけ増える前提を安定化
+  - 30秒モードのDurationが30秒を超えない前提を追加
+  - localStorage構造の大規模変更なし
+
+Next:
+  - Play-001

@@ -79,6 +79,10 @@ function App() {
   }, [settings])
 
   useEffect(() => {
+    saveScoreSummary(scoreSummary)
+  }, [scoreSummary])
+
+  useEffect(() => {
     const handlePopState = () => {
       setCurrentRoute(getCurrentRoute())
     }
@@ -109,10 +113,7 @@ function App() {
 
   const handlePlayComplete = (result: PlayResult) => {
     setScoreSummary((currentScoreSummary) => {
-      const nextScoreSummary = recordPlayResult(currentScoreSummary, result)
-
-      saveScoreSummary(nextScoreSummary)
-      return nextScoreSummary
+      return recordPlayResult(currentScoreSummary, result)
     })
     navigateTo(ROUTES.result)
   }

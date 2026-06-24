@@ -76,3 +76,7 @@ Phase 9 以降は、改善チケット方式で進める。
 - 1 commit に収まらない場合は、さらに小さい改善チケットへ分ける
 - build が失敗した場合は、同じ作業単位で修正まで行う
 - 仕様を広げる場合は、先にこの backlog へ追記してから実装する
+
+## Completed
+
+- Stabilize-001: Fixed empty OK handling, single completion guard, active duration, and score increment stability.
