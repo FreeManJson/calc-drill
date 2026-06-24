@@ -80,3 +80,4 @@ Phase 9 以降は、改善チケット方式で進める。
 ## Completed
 
 - Stabilize-001: Fixed empty OK handling, single completion guard, active duration, and score increment stability.
+- Stabilize-002: Fixed empty answer display so blank input and typed 0 are visually distinct.

@@ -1,0 +1,30 @@
+Tag: stabilize-002-empty-answer-display
+
+Phase:
+  Stabilize-002
+
+Type:
+  [x] Bug Fix
+  [x] Play Display
+  [ ] Score / Result
+  [ ] Storage
+
+Summary:
+  解答欄の未入力状態を0ではなく空欄で表示するよう修正した。
+
+Details:
+  - AnswerDisplayの未入力表示を空欄に変更
+  - 入力値0はユーザーが0タイルを押した場合のみ表示
+  - 未入力状態向けのaria-labelを追加
+  - Stabilize-002完了メモをbacklogへ追記
+
+Verification:
+  - cmd /c npm run build: OK
+  - npm.cmd run lint: OK
+
+Impact:
+  - 未入力状態と0入力済み状態を見た目上区別できる
+  - Play判定、Score、Result、localStorage構造への変更なし
+
+Next:
+  - Play-001
