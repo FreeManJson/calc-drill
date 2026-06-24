@@ -1,0 +1,32 @@
+Tag: docs-001-improvement-backlog
+
+Phase:
+  Docs-001
+
+Type:
+  [x] Documentation
+  [x] Improvement Backlog
+  [ ] App Logic
+  [ ] UI Implementation
+
+Summary:
+  Phase 9以降の改善チケット運用に向けて、既知問題と改善優先順位を文書化した。
+
+Details:
+  - 06_IMPROVEMENT_BACKLOG.md を追加
+  - 既知不具合を整理
+  - Stabilize / Play / Question / UI / Settings / Special の優先改善を整理
+  - 課金アンロック方針を記載
+  - 当面やらないことを明記
+  - 1 ticket = 1 commit の作業ルールを記載
+  - 00_START_HERE.md と 04_PHASE_PLAN.md に参照を追記
+
+Verification:
+  - cmd /c npm run build: OK
+
+Impact:
+  - アプリコードの挙動変更なし
+  - Phase 9以降の改善作業の入口を整備
+
+Next:
+  - Stabilize-001

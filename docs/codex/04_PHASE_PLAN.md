@@ -68,3 +68,6 @@
 
 ## Phase 9 note
 - Phase 9 done: dev-only reset tools
+
+## After Phase 9
+- Phase 9 以降は `docs/codex/06_IMPROVEMENT_BACKLOG.md` を参照し、改善チケット方式で進める

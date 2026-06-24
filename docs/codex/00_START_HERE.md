@@ -35,3 +35,6 @@
 - 実施した確認内容
 - 日本語 commit メッセージ
 - 詳細付き tag 本文案
+
+## Improvement Backlog
+- Phase 9 以降の改善チケット運用は `docs/codex/06_IMPROVEMENT_BACKLOG.md` を参照する
