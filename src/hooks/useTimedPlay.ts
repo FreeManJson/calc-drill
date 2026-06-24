@@ -37,6 +37,7 @@ export function useTimedPlay(
   const [currentQuestion, setCurrentQuestion] = useState<DrillQuestion | null>(
     null,
   )
+  const [nextQuestion, setNextQuestion] = useState<DrillQuestion | null>(null)
   const [answerInput, setAnswerInput] = useState('')
   const [answers, setAnswers] = useState<AnswerRecord[]>([])
   const [countdownValue, setCountdownValue] = useState<CountdownValue | null>(
@@ -183,8 +184,12 @@ export function useTimedPlay(
   }, [answerEffect])
 
   const start = () => {
+    const firstQuestion = generateQuestion(settings)
+    const secondQuestion = generateQuestion(settings)
+
     setStatus('countdown')
-    setCurrentQuestion(generateQuestion(settings))
+    setCurrentQuestion(firstQuestion)
+    setNextQuestion(secondQuestion)
     setAnswerInput('')
     setAnswers([])
     answersRef.current = []
@@ -250,7 +255,8 @@ export function useTimedPlay(
     if (isCorrect) {
       setAnswerEffect('correct')
       playCorrectSound()
-      setCurrentQuestion(generateQuestion(settings))
+      setCurrentQuestion(nextQuestion ?? generateQuestion(settings))
+      setNextQuestion(generateQuestion(settings))
       return
     }
 
@@ -274,6 +280,7 @@ export function useTimedPlay(
     correctCount,
     currentQuestion,
     feedback,
+    nextQuestion,
     remainingSeconds:
       status === 'idle' ? settings.timeLimitSeconds : remainingSecondsState,
     setAnswerInput,

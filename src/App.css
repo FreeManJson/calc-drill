@@ -203,12 +203,42 @@
   min-height: 220px;
 }
 
-.question-preview__formula {
+.countdown-panel {
+  display: grid;
+  gap: 20px;
+}
+
+.question-lane {
+  display: grid;
+  gap: 12px;
+}
+
+.question-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: grid;
+  gap: 6px;
+  padding: 16px;
+}
+
+.question-card--next {
+  background: var(--bg);
+}
+
+.question-card__label {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.question-card__formula {
   color: var(--text-heading);
   font-size: 40px;
   font-weight: 700;
   line-height: 1.2;
-  margin: 0;
+}
+
+.question-card--next .question-card__formula {
+  font-size: 24px;
 }
 
 .feedback {
@@ -346,7 +376,7 @@ button {
     grid-column: 1 / -1;
   }
 
-  .question-preview__formula {
+  .question-card--current .question-card__formula {
     font-size: 56px;
   }
 }

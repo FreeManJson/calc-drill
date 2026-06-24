@@ -1,8 +1,8 @@
 import { AnswerDisplay } from '../components/play/AnswerDisplay'
 import { NumberPad } from '../components/play/NumberPad'
+import { QuestionLane } from '../components/play/QuestionLane'
 import { StartCountdown } from '../components/play/StartCountdown'
 import { useTimedPlay } from '../hooks/useTimedPlay'
-import { formatQuestion } from '../services/questionGenerator'
 import type { DrillSettings, PlayResult } from '../types/drill'
 
 type PlayPageProps = {
@@ -33,8 +33,16 @@ export function PlayPage({ onComplete, settings }: PlayPageProps) {
           </button>
         )}
 
-        {play.status === 'countdown' && play.countdownValue !== null && (
-          <StartCountdown value={play.countdownValue} />
+        {play.status === 'countdown' &&
+          play.countdownValue !== null &&
+          play.currentQuestion !== null && (
+            <div className="countdown-panel">
+              <StartCountdown value={play.countdownValue} />
+              <QuestionLane
+                currentQuestion={play.currentQuestion}
+                nextQuestion={play.nextQuestion}
+              />
+            </div>
         )}
 
         {play.status === 'playing' && play.currentQuestion !== null && (
@@ -46,9 +54,10 @@ export function PlayPage({ onComplete, settings }: PlayPageProps) {
             }
           >
             <div className="play-question-area">
-              <p className="question-preview__formula">
-                {formatQuestion(play.currentQuestion)}
-              </p>
+              <QuestionLane
+                currentQuestion={play.currentQuestion}
+                nextQuestion={play.nextQuestion}
+              />
               <AnswerDisplay value={play.answerInput} />
             </div>
             <div className="play-input-area">
