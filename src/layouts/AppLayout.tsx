@@ -1,6 +1,6 @@
 import type { MouseEvent, ReactNode } from 'react'
 import type { AppRoute } from '../constants/routes'
-import { t } from '../i18n/messages'
+import type { AppMessages } from '../i18n/messages'
 
 type NavItem = {
   label: string
@@ -10,6 +10,7 @@ type NavItem = {
 type AppLayoutProps = {
   children: ReactNode
   currentRoute: AppRoute
+  messages: AppMessages
   navItems: NavItem[]
   onNavigate: (
     event: MouseEvent<HTMLAnchorElement>,
@@ -20,6 +21,7 @@ type AppLayoutProps = {
 export function AppLayout({
   children,
   currentRoute,
+  messages,
   navItems,
   onNavigate,
 }: AppLayoutProps) {
@@ -27,8 +29,8 @@ export function AppLayout({
     <div className="app-layout">
       <header className="app-header">
         <div className="app-header__inner">
-          <p className="app-title">{t.appTitle}</p>
-          <nav className="app-nav" aria-label={t.appTitle}>
+          <p className="app-title">{messages.appTitle}</p>
+          <nav className="app-nav" aria-label={messages.appTitle}>
             {navItems.map((item) => (
               <a
                 aria-current={item.route === currentRoute ? 'page' : undefined}

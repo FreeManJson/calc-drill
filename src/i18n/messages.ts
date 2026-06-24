@@ -3,7 +3,7 @@ import type { OperationType } from '../types/drill'
 export const LANGUAGES = ['ja', 'en'] as const
 export type Language = (typeof LANGUAGES)[number]
 
-type AppMessages = {
+export type AppMessages = {
   appTitle: string
   nav: {
     top: string
@@ -13,6 +13,7 @@ type AppMessages = {
     result: string
   }
   common: {
+    formatSeconds: (seconds: number) => string
     seconds: string
     selected: string
     off: string
@@ -32,6 +33,9 @@ type AppMessages = {
     title: string
     description: (seconds: number) => string
     timeLimitSeconds: string
+    language: string
+    languageJapanese: string
+    languageEnglish: string
     operations: string
     negativeAnswersOff: string
   }
@@ -87,6 +91,7 @@ export const messages = {
       result: 'けっか',
     },
     common: {
+      formatSeconds: (seconds) => `${seconds}秒`,
       seconds: '秒',
       selected: 'えらんでいる',
       off: 'お休み',
@@ -111,6 +116,9 @@ export const messages = {
       title: 'くわしい設定',
       description: (seconds) => `いまは ${seconds}秒ドリルがきほんです。`,
       timeLimitSeconds: 'じかん（秒）',
+      language: 'ことば',
+      languageJapanese: '日本語',
+      languageEnglish: 'English',
       operations: 'もんだい',
       negativeAnswersOff: 'マイナスの答えは出ません。',
     },
@@ -162,6 +170,7 @@ export const messages = {
       result: 'Result',
     },
     common: {
+      formatSeconds: (seconds) => `${seconds} seconds`,
       seconds: 'seconds',
       selected: 'Selected',
       off: 'Off',
@@ -188,6 +197,9 @@ export const messages = {
       description: (seconds) =>
         `The MVP default is a ${seconds}-second drill.`,
       timeLimitSeconds: 'Time limit seconds',
+      language: 'Language',
+      languageJapanese: '日本語',
+      languageEnglish: 'English',
       operations: 'Operations',
       negativeAnswersOff: 'Negative answers are off.',
     },
@@ -231,4 +243,6 @@ export const messages = {
   },
 } satisfies Record<Language, AppMessages>
 
-export const t = messages[DEFAULT_LANGUAGE]
+export function getMessages(language: Language) {
+  return messages[language]
+}

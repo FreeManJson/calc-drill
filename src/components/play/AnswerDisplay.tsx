@@ -1,10 +1,11 @@
-import { t } from '../../i18n/messages'
+import type { AppMessages } from '../../i18n/messages'
 
 type AnswerDisplayProps = {
+  messages: AppMessages
   value: string
 }
 
-export function AnswerDisplay({ value }: AnswerDisplayProps) {
+export function AnswerDisplay({ messages: t, value }: AnswerDisplayProps) {
   return (
     <div
       className="answer-display"

@@ -3,7 +3,7 @@ import {
   playCorrectSound,
   playIncorrectSound,
 } from '../services/feedbackEffects'
-import { t } from '../i18n/messages'
+import type { AppMessages } from '../i18n/messages'
 import { generateQuestion } from '../services/questionGenerator'
 import type {
   AnswerRecord,
@@ -27,12 +27,13 @@ type Feedback = {
 } | null
 
 type UseTimedPlayOptions = {
+  messages: AppMessages
   onComplete: (result: PlayResult) => void
 }
 
 export function useTimedPlay(
   settings: DrillSettings,
-  { onComplete }: UseTimedPlayOptions,
+  { messages: t, onComplete }: UseTimedPlayOptions,
 ) {
   const [status, setStatus] = useState<PlayStatus>('idle')
   const [currentQuestion, setCurrentQuestion] = useState<DrillQuestion | null>(

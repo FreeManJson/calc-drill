@@ -1,0 +1,13 @@
+UI-001B: 言語切り替え設定を追加
+
+- Settings 画面に 日本語 / English の言語切り替えを追加
+- DrillSettings に language を追加
+- 既存の設定保存へ language を保存
+- language 未保存時は ja を既定値として扱う
+- App から現在言語の辞書を各画面へ渡し、即時反映
+- 設定リセット時は日本語へ戻る
+- docs/codex/06_IMPROVEMENT_BACKLOG.md に完了メモを追記
+
+確認:
+- npm run lint: OK
+- npm run build: OK

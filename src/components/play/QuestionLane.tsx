@@ -1,14 +1,16 @@
-import { t } from '../../i18n/messages'
+import type { AppMessages } from '../../i18n/messages'
 import { formatQuestion } from '../../services/questionGenerator'
 import type { DrillQuestion } from '../../types/drill'
 
 type QuestionLaneProps = {
   currentQuestion: DrillQuestion
+  messages: AppMessages
   nextQuestion: DrillQuestion | null
 }
 
 export function QuestionLane({
   currentQuestion,
+  messages: t,
   nextQuestion,
 }: QuestionLaneProps) {
   return (

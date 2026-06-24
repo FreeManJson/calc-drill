@@ -85,3 +85,4 @@ Phase 9 以降は、改善チケット方式で進める。
 - Play-002: Added current and next question display with promotion on correct answers.
 - Question-001: Added beginner multiplication and division generation behind locked operation UI with dev unlock.
 - UI-001A: Added ja/en message dictionary and switched default display text to Japanese.
+- UI-001B: Added persisted language setting and runtime ja/en message switching.

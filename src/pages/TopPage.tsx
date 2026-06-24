@@ -2,15 +2,16 @@ import {
   isLockedOperation,
   isOperationUnlocked,
 } from '../constants/operations'
-import { t } from '../i18n/messages'
+import type { AppMessages } from '../i18n/messages'
 import { OPERATION_TYPES } from '../types/drill'
 import type { DrillSettings } from '../types/drill'
 
 type TopPageProps = {
+  messages: AppMessages
   settings: DrillSettings
 }
 
-export function TopPage({ settings }: TopPageProps) {
+export function TopPage({ messages: t, settings }: TopPageProps) {
   return (
     <section className="page">
       <h1>{t.top.title}</h1>
@@ -21,8 +22,7 @@ export function TopPage({ settings }: TopPageProps) {
         <div>
           <dt>{t.top.timeLimit}</dt>
           <dd>
-            {settings.timeLimitSeconds}
-            {t.common.seconds}
+            {t.common.formatSeconds(settings.timeLimitSeconds)}
           </dd>
         </div>
         <div>

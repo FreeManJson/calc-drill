@@ -1,6 +1,8 @@
 import { DEFAULT_SETTINGS } from '../constants/defaults'
 import { getUnlockedOperations } from '../constants/operations'
 import { STORAGE_KEYS } from '../constants/storageKeys'
+import { DEFAULT_LANGUAGE, LANGUAGES } from '../i18n/messages'
+import type { Language } from '../i18n/messages'
 import { DIFFICULTIES, GAME_MODES, OPERATION_TYPES } from '../types/drill'
 import type {
   Difficulty,
@@ -19,6 +21,10 @@ function isGameMode(value: unknown): value is GameMode {
 
 function isDifficulty(value: unknown): value is Difficulty {
   return DIFFICULTIES.includes(value as Difficulty)
+}
+
+function isLanguage(value: unknown): value is Language {
+  return LANGUAGES.includes(value as Language)
 }
 
 function isOperationType(value: unknown): value is OperationType {
@@ -47,6 +53,7 @@ function parseSettings(value: unknown): DrillSettings {
       value.timeLimitSeconds > 0
         ? Math.trunc(value.timeLimitSeconds)
         : DEFAULT_SETTINGS.timeLimitSeconds,
+    language: isLanguage(value.language) ? value.language : DEFAULT_LANGUAGE,
     difficulty: isDifficulty(value.difficulty)
       ? value.difficulty
       : DEFAULT_SETTINGS.difficulty,

@@ -1,16 +1,17 @@
-import { t } from '../i18n/messages'
+import type { AppMessages } from '../i18n/messages'
 import { formatQuestion } from '../services/questionGenerator'
 import type { PlayResult } from '../types/drill'
 
 type ResultPageProps = {
+  messages: AppMessages
   result: PlayResult | null
 }
 
-function formatDuration(durationMs: number) {
-  return `${Math.round(durationMs / 1000)}${t.common.seconds}`
+function formatDuration(durationMs: number, t: AppMessages) {
+  return t.common.formatSeconds(Math.round(durationMs / 1000))
 }
 
-export function ResultPage({ result }: ResultPageProps) {
+export function ResultPage({ messages: t, result }: ResultPageProps) {
   return (
     <section className="page">
       <h1>{t.result.title}</h1>
@@ -27,13 +28,12 @@ export function ResultPage({ result }: ResultPageProps) {
             </div>
             <div>
               <dt>{t.result.duration}</dt>
-              <dd>{formatDuration(result.durationMs)}</dd>
+              <dd>{formatDuration(result.durationMs, t)}</dd>
             </div>
             <div>
               <dt>{t.result.timeLimit}</dt>
               <dd>
-                {result.settings.timeLimitSeconds}
-                {t.common.seconds}
+                {t.common.formatSeconds(result.settings.timeLimitSeconds)}
               </dd>
             </div>
           </dl>

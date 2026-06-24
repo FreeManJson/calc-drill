@@ -1,11 +1,12 @@
-import { t } from '../i18n/messages'
+import type { AppMessages } from '../i18n/messages'
 import type { ScoreSummary } from '../types/drill'
 
 type ScorePageProps = {
+  messages: AppMessages
   scoreSummary: ScoreSummary
 }
 
-export function ScorePage({ scoreSummary }: ScorePageProps) {
+export function ScorePage({ messages: t, scoreSummary }: ScorePageProps) {
   const latestResult = scoreSummary.latestResult
 
   return (

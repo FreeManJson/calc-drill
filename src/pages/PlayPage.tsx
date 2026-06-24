@@ -3,16 +3,17 @@ import { NumberPad } from '../components/play/NumberPad'
 import { QuestionLane } from '../components/play/QuestionLane'
 import { StartCountdown } from '../components/play/StartCountdown'
 import { useTimedPlay } from '../hooks/useTimedPlay'
-import { t } from '../i18n/messages'
+import type { AppMessages } from '../i18n/messages'
 import type { DrillSettings, PlayResult } from '../types/drill'
 
 type PlayPageProps = {
+  messages: AppMessages
   onComplete: (result: PlayResult) => void
   settings: DrillSettings
 }
 
-export function PlayPage({ onComplete, settings }: PlayPageProps) {
-  const play = useTimedPlay(settings, { onComplete })
+export function PlayPage({ messages: t, onComplete, settings }: PlayPageProps) {
+  const play = useTimedPlay(settings, { messages: t, onComplete })
   const handleNumberPadOk = () => {
     play.submitAnswer()
   }
@@ -23,8 +24,7 @@ export function PlayPage({ onComplete, settings }: PlayPageProps) {
       <div className="play-panel">
         <div className="play-stats" aria-label={t.play.statusLabel}>
           <p>
-            {t.play.time}: {play.remainingSeconds}
-            {t.common.seconds}
+            {t.play.time}: {t.common.formatSeconds(play.remainingSeconds)}
           </p>
           <p>
             {t.play.score}: {play.correctCount} / {play.totalCount}
@@ -44,6 +44,7 @@ export function PlayPage({ onComplete, settings }: PlayPageProps) {
               <StartCountdown value={play.countdownValue} />
               <QuestionLane
                 currentQuestion={play.currentQuestion}
+                messages={t}
                 nextQuestion={play.nextQuestion}
               />
             </div>
@@ -60,12 +61,14 @@ export function PlayPage({ onComplete, settings }: PlayPageProps) {
             <div className="play-question-area">
               <QuestionLane
                 currentQuestion={play.currentQuestion}
+                messages={t}
                 nextQuestion={play.nextQuestion}
               />
-              <AnswerDisplay value={play.answerInput} />
+              <AnswerDisplay messages={t} value={play.answerInput} />
             </div>
             <div className="play-input-area">
               <NumberPad
+                messages={t}
                 onClear={play.clearAnswerInput}
                 onDigit={play.appendAnswerDigit}
                 onOk={handleNumberPadOk}

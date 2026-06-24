@@ -1,3 +1,5 @@
+import type { Language } from '../i18n/messages'
+
 export const GAME_MODES = ['timeLimit'] as const
 export type GameMode = (typeof GAME_MODES)[number]
 
@@ -15,6 +17,7 @@ export type OperationType = (typeof OPERATION_TYPES)[number]
 export type DrillSettings = {
   mode: GameMode
   timeLimitSeconds: number
+  language: Language
   difficulty: Difficulty
   operations: OperationType[]
   allowNegativeAnswers: boolean

@@ -3,16 +3,19 @@ import {
   isLockedOperation,
   isOperationUnlocked,
 } from '../constants/operations'
-import { t } from '../i18n/messages'
+import { LANGUAGES } from '../i18n/messages'
+import type { AppMessages, Language } from '../i18n/messages'
 import { OPERATION_TYPES } from '../types/drill'
 import type { DrillSettings, OperationType } from '../types/drill'
 
 type SettingsPageProps = {
+  messages: AppMessages
   onSettingsChange: (settings: DrillSettings) => void
   settings: DrillSettings
 }
 
 export function SettingsPage({
+  messages: t,
   onSettingsChange,
   settings,
 }: SettingsPageProps) {
@@ -45,6 +48,10 @@ export function SettingsPage({
     }
   }
 
+  const handleLanguageChange = (language: Language) => {
+    updateSettings({ language })
+  }
+
   return (
     <section className="page">
       <h1>{t.settings.title}</h1>
@@ -63,6 +70,26 @@ export function SettingsPage({
             value={settings.timeLimitSeconds}
           />
         </label>
+
+        <fieldset className="field-group">
+          <legend>{t.settings.language}</legend>
+          {LANGUAGES.map((language) => (
+            <label className="check-field" key={language}>
+              <input
+                checked={settings.language === language}
+                name="language"
+                onChange={() => handleLanguageChange(language)}
+                type="radio"
+                value={language}
+              />
+              <span>
+                {language === 'ja'
+                  ? t.settings.languageJapanese
+                  : t.settings.languageEnglish}
+              </span>
+            </label>
+          ))}
+        </fieldset>
 
         <fieldset className="field-group">
           <legend>{t.settings.operations}</legend>

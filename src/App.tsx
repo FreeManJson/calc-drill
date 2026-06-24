@@ -4,7 +4,8 @@ import { DevTools } from './components/dev/DevTools'
 import { DEFAULT_SCORE_SUMMARY, DEFAULT_SETTINGS } from './constants/defaults'
 import { ROUTES } from './constants/routes'
 import type { AppRoute } from './constants/routes'
-import { t } from './i18n/messages'
+import { getMessages } from './i18n/messages'
+import type { AppMessages } from './i18n/messages'
 import { AppLayout } from './layouts/AppLayout'
 import { ResultPage } from './pages/ResultPage'
 import { PlayPage } from './pages/PlayPage'
@@ -25,16 +26,18 @@ type NavItem = {
   route: AppRoute
 }
 
-const navItems: NavItem[] = [
-  { label: t.nav.top, route: ROUTES.top },
-  { label: t.nav.settings, route: ROUTES.settings },
-  { label: t.nav.play, route: ROUTES.play },
-  { label: t.nav.score, route: ROUTES.score },
-  { label: t.nav.result, route: ROUTES.result },
-]
+function getNavItems(t: AppMessages): NavItem[] {
+  return [
+    { label: t.nav.top, route: ROUTES.top },
+    { label: t.nav.settings, route: ROUTES.settings },
+    { label: t.nav.play, route: ROUTES.play },
+    { label: t.nav.score, route: ROUTES.score },
+    { label: t.nav.result, route: ROUTES.result },
+  ]
+}
 
 function isAppRoute(pathname: string): pathname is AppRoute {
-  return navItems.some((item) => item.route === pathname)
+  return Object.values(ROUTES).some((route) => route === pathname)
 }
 
 function getCurrentRoute(): AppRoute {
@@ -45,6 +48,7 @@ function getCurrentRoute(): AppRoute {
 
 function renderPage(
   route: AppRoute,
+  t: AppMessages,
   settings: DrillSettings,
   onSettingsChange: (settings: DrillSettings) => void,
   scoreSummary: ScoreSummary,
@@ -54,18 +58,25 @@ function renderPage(
     case ROUTES.settings:
       return (
         <SettingsPage
+          messages={t}
           onSettingsChange={onSettingsChange}
           settings={settings}
         />
       )
     case ROUTES.play:
-      return <PlayPage onComplete={onPlayComplete} settings={settings} />
+      return (
+        <PlayPage
+          messages={t}
+          onComplete={onPlayComplete}
+          settings={settings}
+        />
+      )
     case ROUTES.score:
-      return <ScorePage scoreSummary={scoreSummary} />
+      return <ScorePage messages={t} scoreSummary={scoreSummary} />
     case ROUTES.result:
-      return <ResultPage result={scoreSummary.latestResult} />
+      return <ResultPage messages={t} result={scoreSummary.latestResult} />
     case ROUTES.top:
-      return <TopPage settings={settings} />
+      return <TopPage messages={t} settings={settings} />
   }
 }
 
@@ -74,6 +85,8 @@ function App() {
   const [settings, setSettings] = useState<DrillSettings>(loadSettings)
   const [scoreSummary, setScoreSummary] =
     useState<ScoreSummary>(loadScoreSummary)
+  const t = getMessages(settings.language)
+  const navItems = getNavItems(t)
 
   useEffect(() => {
     saveSettings(settings)
@@ -130,13 +143,15 @@ function App() {
   }
 
   return (
-    <AppLayout
-      currentRoute={currentRoute}
-      navItems={navItems}
-      onNavigate={handleNavigate}
-    >
+      <AppLayout
+        currentRoute={currentRoute}
+        messages={t}
+        navItems={navItems}
+        onNavigate={handleNavigate}
+      >
       {renderPage(
         currentRoute,
+        t,
         settings,
         setSettings,
         scoreSummary,
