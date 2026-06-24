@@ -1,4 +1,4 @@
-import { OPERATION_TYPES } from '../types/drill'
+import { FREE_OPERATION_TYPES } from './operations'
 import type { DrillSettings, ScoreSummary } from '../types/drill'
 
 export const DEFAULT_TIME_LIMIT_SECONDS = 30
@@ -7,7 +7,7 @@ export const DEFAULT_SETTINGS: DrillSettings = {
   mode: 'timeLimit',
   timeLimitSeconds: DEFAULT_TIME_LIMIT_SECONDS,
   difficulty: 'beginner',
-  operations: [...OPERATION_TYPES],
+  operations: [...FREE_OPERATION_TYPES],
   allowNegativeAnswers: false,
 }
 

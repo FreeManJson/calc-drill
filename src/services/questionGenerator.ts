@@ -11,6 +11,8 @@ const BEGINNER_MAX = 9
 const OPERATION_SYMBOLS: Record<OperationType, string> = {
   addition: '+',
   subtraction: '-',
+  multiplication: '×',
+  division: '÷',
 }
 
 type RandomSource = () => number
@@ -37,7 +39,10 @@ function getOperation(
   return operations[operationIndex] ?? DEFAULT_SETTINGS.operations[0]
 }
 
-function getOperands(settings: DrillSettings, randomSource: RandomSource) {
+function getAdditionOrSubtractionOperands(
+  settings: DrillSettings,
+  randomSource: RandomSource,
+) {
   const left = getRandomInteger(BEGINNER_MIN, BEGINNER_MAX, randomSource)
   const right = getRandomInteger(BEGINNER_MIN, BEGINNER_MAX, randomSource)
 
@@ -48,12 +53,48 @@ function getOperands(settings: DrillSettings, randomSource: RandomSource) {
   return { left: right, right: left }
 }
 
+function getMultiplicationQuestion(randomSource: RandomSource): DrillQuestion {
+  const left = getRandomInteger(BEGINNER_MIN, BEGINNER_MAX, randomSource)
+  const right = getRandomInteger(BEGINNER_MIN, BEGINNER_MAX, randomSource)
+
+  return {
+    left,
+    right,
+    operation: 'multiplication',
+    answer: left * right,
+  }
+}
+
+function getDivisionQuestion(randomSource: RandomSource): DrillQuestion {
+  const answer = getRandomInteger(BEGINNER_MIN, BEGINNER_MAX, randomSource)
+  const right = getRandomInteger(BEGINNER_MIN, BEGINNER_MAX, randomSource)
+
+  return {
+    left: answer * right,
+    right,
+    operation: 'division',
+    answer,
+  }
+}
+
 export function generateQuestion(
   settings: DrillSettings,
   randomSource: RandomSource = Math.random,
 ): DrillQuestion {
   const operation = getOperation(settings, randomSource)
-  const { left, right } = getOperands(settings, randomSource)
+
+  if (operation === 'multiplication') {
+    return getMultiplicationQuestion(randomSource)
+  }
+
+  if (operation === 'division') {
+    return getDivisionQuestion(randomSource)
+  }
+
+  const { left, right } = getAdditionOrSubtractionOperands(
+    settings,
+    randomSource,
+  )
   const answer = operation === 'addition' ? left + right : left - right
 
   return {

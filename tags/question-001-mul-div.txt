@@ -1,0 +1,14 @@
+Question-001: 掛け算と割り算の出題に対応
+
+- 演算種別に multiplication / division を追加
+- 初級の掛け算問題を 1〜9 × 1〜9 で生成
+- 初級の割り算問題を余りなし、答え 1〜9 の範囲で生成
+- 問題表示で × / ÷ 記号を表示
+- Top / Settings に掛け算・割り算を表示
+- 通常状態では掛け算・割り算をロック扱いに維持
+- 開発時のみ Dev unlock として掛け算・割り算を選択可能
+- docs/codex/06_IMPROVEMENT_BACKLOG.md に完了メモを追記
+
+確認:
+- npm run lint: OK
+- npm run build: OK

@@ -87,6 +87,32 @@
   margin: 0;
 }
 
+.operation-summary {
+  display: grid;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.operation-summary li {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.operation-summary__status,
+.lock-badge {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1;
+  padding: 4px 8px;
+}
+
 .settings-form {
   display: grid;
   gap: 20px;
@@ -118,6 +144,10 @@
   align-items: center;
   display: flex;
   gap: 8px;
+}
+
+.check-field--locked {
+  color: var(--text-muted);
 }
 
 .settings-note {

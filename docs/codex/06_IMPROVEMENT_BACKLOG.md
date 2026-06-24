@@ -83,3 +83,4 @@ Phase 9 以降は、改善チケット方式で進める。
 - Stabilize-002: Fixed empty answer display so blank input and typed 0 are visually distinct.
 - Play-001: Added start countdown before timer and answer input begin.
 - Play-002: Added current and next question display with promotion on correct answers.
+- Question-001: Added beginner multiplication and division generation behind locked operation UI with dev unlock.

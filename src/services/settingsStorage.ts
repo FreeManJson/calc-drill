@@ -1,4 +1,5 @@
 import { DEFAULT_SETTINGS } from '../constants/defaults'
+import { getUnlockedOperations } from '../constants/operations'
 import { STORAGE_KEYS } from '../constants/storageKeys'
 import { DIFFICULTIES, GAME_MODES, OPERATION_TYPES } from '../types/drill'
 import type {
@@ -29,7 +30,7 @@ function parseOperations(value: unknown): OperationType[] {
     return DEFAULT_SETTINGS.operations
   }
 
-  const operations = value.filter(isOperationType)
+  const operations = getUnlockedOperations(value.filter(isOperationType))
   return operations.length > 0 ? operations : DEFAULT_SETTINGS.operations
 }
 

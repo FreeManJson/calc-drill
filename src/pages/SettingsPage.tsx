@@ -1,4 +1,9 @@
 import { DEFAULT_TIME_LIMIT_SECONDS } from '../constants/defaults'
+import {
+  isLockedOperation,
+  isOperationUnlocked,
+  OPERATION_LABELS,
+} from '../constants/operations'
 import { OPERATION_TYPES } from '../types/drill'
 import type { DrillSettings, OperationType } from '../types/drill'
 
@@ -27,6 +32,10 @@ export function SettingsPage({
     operation: OperationType,
     checked: boolean,
   ) => {
+    if (!isOperationUnlocked(operation)) {
+      return
+    }
+
     const operations = checked
       ? [...settings.operations, operation]
       : settings.operations.filter((item) => item !== operation)
@@ -57,18 +66,37 @@ export function SettingsPage({
 
         <fieldset className="field-group">
           <legend>Operations</legend>
-          {OPERATION_TYPES.map((operation) => (
-            <label className="check-field" key={operation}>
-              <input
-                checked={settings.operations.includes(operation)}
-                onChange={(event) =>
-                  handleOperationChange(operation, event.currentTarget.checked)
+          {OPERATION_TYPES.map((operation) => {
+            const isUnlocked = isOperationUnlocked(operation)
+
+            return (
+              <label
+                className={
+                  isUnlocked ? 'check-field' : 'check-field check-field--locked'
                 }
-                type="checkbox"
-              />
-              <span>{operation}</span>
-            </label>
-          ))}
+                key={operation}
+              >
+                <input
+                  checked={settings.operations.includes(operation)}
+                  disabled={!isUnlocked}
+                  onChange={(event) =>
+                    handleOperationChange(
+                      operation,
+                      event.currentTarget.checked,
+                    )
+                  }
+                  type="checkbox"
+                />
+                <span>{OPERATION_LABELS[operation]}</span>
+                {!isUnlocked && <span className="lock-badge">Locked</span>}
+                {isUnlocked &&
+                  import.meta.env.DEV &&
+                  isLockedOperation(operation) && (
+                    <span className="lock-badge">Dev unlock</span>
+                  )}
+              </label>
+            )
+          })}
         </fieldset>
 
         <p className="settings-note">Negative answers are off.</p>

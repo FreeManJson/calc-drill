@@ -4,7 +4,12 @@ export type GameMode = (typeof GAME_MODES)[number]
 export const DIFFICULTIES = ['beginner'] as const
 export type Difficulty = (typeof DIFFICULTIES)[number]
 
-export const OPERATION_TYPES = ['addition', 'subtraction'] as const
+export const OPERATION_TYPES = [
+  'addition',
+  'subtraction',
+  'multiplication',
+  'division',
+] as const
 export type OperationType = (typeof OPERATION_TYPES)[number]
 
 export type DrillSettings = {
