@@ -1,3 +1,4 @@
+import { t } from '../i18n/messages'
 import type { ScoreSummary } from '../types/drill'
 
 type ScorePageProps = {
@@ -9,22 +10,22 @@ export function ScorePage({ scoreSummary }: ScorePageProps) {
 
   return (
     <section className="page">
-      <h1>Score</h1>
+      <h1>{t.score.title}</h1>
       <div className="score-panel">
         <dl className="result-summary">
           <div>
-            <dt>Total plays</dt>
+            <dt>{t.score.totalPlays}</dt>
             <dd>{scoreSummary.totalPlayCount}</dd>
           </div>
           <div>
-            <dt>Best correct count</dt>
+            <dt>{t.score.best}</dt>
             <dd>{scoreSummary.bestCorrectCount}</dd>
           </div>
           <div>
-            <dt>Latest score</dt>
+            <dt>{t.score.latestScore}</dt>
             <dd>
               {latestResult === null
-                ? '-'
+                ? t.common.noData
                 : `${latestResult.correctCount} / ${latestResult.totalCount}`}
             </dd>
           </div>

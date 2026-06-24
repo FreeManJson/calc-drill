@@ -1,0 +1,13 @@
+UI-001A: 表示文言を辞書化して日本語表示に対応
+
+- ja / en の文言辞書を追加
+- 既定表示を日本語に変更
+- Top / Settings / Play / Result / Score の主要文言を辞書参照へ移行
+- Play の解答欄、現在/次の問題、フィードバック文言を日本語化
+- 演算名とロック表示を辞書化
+- 英語文言を将来切り替え用に保持
+- docs/codex/06_IMPROVEMENT_BACKLOG.md に完了メモを追記
+
+確認:
+- npm run lint: OK
+- npm run build: OK

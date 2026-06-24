@@ -1,3 +1,4 @@
+import { t } from '../i18n/messages'
 import { formatQuestion } from '../services/questionGenerator'
 import type { PlayResult } from '../types/drill'
 
@@ -6,45 +7,50 @@ type ResultPageProps = {
 }
 
 function formatDuration(durationMs: number) {
-  return `${Math.round(durationMs / 1000)} seconds`
+  return `${Math.round(durationMs / 1000)}${t.common.seconds}`
 }
 
 export function ResultPage({ result }: ResultPageProps) {
   return (
     <section className="page">
-      <h1>Result</h1>
+      <h1>{t.result.title}</h1>
       {result === null ? (
-        <p className="empty-message">No play result yet.</p>
+        <p className="empty-message">{t.result.noResult}</p>
       ) : (
         <div className="result-panel">
           <dl className="result-summary">
             <div>
-              <dt>Score</dt>
+              <dt>{t.result.score}</dt>
               <dd>
                 {result.correctCount} / {result.totalCount}
               </dd>
             </div>
             <div>
-              <dt>Duration</dt>
+              <dt>{t.result.duration}</dt>
               <dd>{formatDuration(result.durationMs)}</dd>
             </div>
             <div>
-              <dt>Time limit</dt>
-              <dd>{result.settings.timeLimitSeconds} seconds</dd>
+              <dt>{t.result.timeLimit}</dt>
+              <dd>
+                {result.settings.timeLimitSeconds}
+                {t.common.seconds}
+              </dd>
             </div>
           </dl>
 
           <div className="answer-history">
-            <h2>Answers</h2>
+            <h2>{t.result.answers}</h2>
             {result.answers.length === 0 ? (
-              <p className="empty-message">No answers submitted.</p>
+              <p className="empty-message">{t.result.noAnswers}</p>
             ) : (
               <ol>
                 {result.answers.map((answer, index) => (
                   <li key={`${answer.answeredAtMs}-${index}`}>
                     <span>{formatQuestion(answer.question)}</span>
-                    <span>Your answer: {answer.userAnswer}</span>
-                    <span>{answer.isCorrect ? 'Correct' : 'Incorrect'}</span>
+                    <span>{t.result.yourAnswer(answer.userAnswer)}</span>
+                    <span>
+                      {answer.isCorrect ? t.result.correct : t.result.incorrect}
+                    </span>
                   </li>
                 ))}
               </ol>

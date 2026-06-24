@@ -3,6 +3,7 @@ import {
   playCorrectSound,
   playIncorrectSound,
 } from '../services/feedbackEffects'
+import { t } from '../i18n/messages'
 import { generateQuestion } from '../services/questionGenerator'
 import type {
   AnswerRecord,
@@ -233,7 +234,7 @@ export function useTimedPlay(
       setAnswerEffect('incorrect')
       playIncorrectSound()
       pauseStartedAtMsRef.current = Date.now()
-      setFeedback({ isCorrect: false, message: 'Enter an integer.' })
+      setFeedback({ isCorrect: false, message: t.play.enterInteger })
       return
     }
 
@@ -266,7 +267,7 @@ export function useTimedPlay(
     setAnswerInput('')
     setFeedback({
       isCorrect: false,
-      message: `Incorrect. Answer: ${currentQuestion.answer}`,
+      message: t.play.incorrectAnswer(currentQuestion.answer),
     })
   }
 

@@ -1,8 +1,8 @@
 import {
   isLockedOperation,
   isOperationUnlocked,
-  OPERATION_LABELS,
 } from '../constants/operations'
+import { t } from '../i18n/messages'
 import { OPERATION_TYPES } from '../types/drill'
 import type { DrillSettings } from '../types/drill'
 
@@ -13,21 +13,24 @@ type TopPageProps = {
 export function TopPage({ settings }: TopPageProps) {
   return (
     <section className="page">
-      <h1>Top</h1>
+      <h1>{t.top.title}</h1>
       <p className="page-description">
-        Practice quick arithmetic in a {settings.timeLimitSeconds}-second drill.
+        {t.top.description(settings.timeLimitSeconds)}
       </p>
       <dl className="settings-summary">
         <div>
-          <dt>Time limit</dt>
-          <dd>{settings.timeLimitSeconds} seconds</dd>
+          <dt>{t.top.timeLimit}</dt>
+          <dd>
+            {settings.timeLimitSeconds}
+            {t.common.seconds}
+          </dd>
         </div>
         <div>
-          <dt>Difficulty</dt>
+          <dt>{t.top.difficulty}</dt>
           <dd>{settings.difficulty}</dd>
         </div>
         <div>
-          <dt>Operations</dt>
+          <dt>{t.top.operations}</dt>
           <dd>
             <ul className="operation-summary">
               {OPERATION_TYPES.map((operation) => {
@@ -38,15 +41,15 @@ export function TopPage({ settings }: TopPageProps) {
 
                 return (
                   <li key={operation}>
-                    <span>{OPERATION_LABELS[operation]}</span>
+                    <span>{t.operationLabels[operation]}</span>
                     <span className="operation-summary__status">
                       {isSelected
-                        ? 'Selected'
+                        ? t.common.selected
                         : isDevUnlocked
-                          ? 'Dev unlock'
+                          ? t.common.devUnlock
                           : isUnlocked
-                            ? 'Off'
-                            : 'Locked'}
+                            ? t.common.off
+                            : t.common.locked}
                     </span>
                   </li>
                 )

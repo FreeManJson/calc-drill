@@ -2,8 +2,8 @@ import { DEFAULT_TIME_LIMIT_SECONDS } from '../constants/defaults'
 import {
   isLockedOperation,
   isOperationUnlocked,
-  OPERATION_LABELS,
 } from '../constants/operations'
+import { t } from '../i18n/messages'
 import { OPERATION_TYPES } from '../types/drill'
 import type { DrillSettings, OperationType } from '../types/drill'
 
@@ -47,13 +47,13 @@ export function SettingsPage({
 
   return (
     <section className="page">
-      <h1>Settings</h1>
+      <h1>{t.settings.title}</h1>
       <p className="page-description">
-        The MVP default is a {DEFAULT_TIME_LIMIT_SECONDS}-second drill.
+        {t.settings.description(DEFAULT_TIME_LIMIT_SECONDS)}
       </p>
       <div className="settings-form">
         <label className="field">
-          <span>Time limit seconds</span>
+          <span>{t.settings.timeLimitSeconds}</span>
           <input
             min="1"
             onChange={(event) =>
@@ -65,7 +65,7 @@ export function SettingsPage({
         </label>
 
         <fieldset className="field-group">
-          <legend>Operations</legend>
+          <legend>{t.settings.operations}</legend>
           {OPERATION_TYPES.map((operation) => {
             const isUnlocked = isOperationUnlocked(operation)
 
@@ -87,19 +87,21 @@ export function SettingsPage({
                   }
                   type="checkbox"
                 />
-                <span>{OPERATION_LABELS[operation]}</span>
-                {!isUnlocked && <span className="lock-badge">Locked</span>}
+                <span>{t.operationLabels[operation]}</span>
+                {!isUnlocked && (
+                  <span className="lock-badge">{t.common.locked}</span>
+                )}
                 {isUnlocked &&
                   import.meta.env.DEV &&
                   isLockedOperation(operation) && (
-                    <span className="lock-badge">Dev unlock</span>
+                    <span className="lock-badge">{t.common.devUnlock}</span>
                   )}
               </label>
             )
           })}
         </fieldset>
 
-        <p className="settings-note">Negative answers are off.</p>
+        <p className="settings-note">{t.settings.negativeAnswersOff}</p>
       </div>
     </section>
   )

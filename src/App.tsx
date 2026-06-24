@@ -4,6 +4,7 @@ import { DevTools } from './components/dev/DevTools'
 import { DEFAULT_SCORE_SUMMARY, DEFAULT_SETTINGS } from './constants/defaults'
 import { ROUTES } from './constants/routes'
 import type { AppRoute } from './constants/routes'
+import { t } from './i18n/messages'
 import { AppLayout } from './layouts/AppLayout'
 import { ResultPage } from './pages/ResultPage'
 import { PlayPage } from './pages/PlayPage'
@@ -25,11 +26,11 @@ type NavItem = {
 }
 
 const navItems: NavItem[] = [
-  { label: 'Top', route: ROUTES.top },
-  { label: 'Settings', route: ROUTES.settings },
-  { label: 'Play', route: ROUTES.play },
-  { label: 'Score', route: ROUTES.score },
-  { label: 'Result', route: ROUTES.result },
+  { label: t.nav.top, route: ROUTES.top },
+  { label: t.nav.settings, route: ROUTES.settings },
+  { label: t.nav.play, route: ROUTES.play },
+  { label: t.nav.score, route: ROUTES.score },
+  { label: t.nav.result, route: ROUTES.result },
 ]
 
 function isAppRoute(pathname: string): pathname is AppRoute {

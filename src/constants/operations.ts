@@ -10,13 +10,6 @@ export const LOCKED_OPERATION_TYPES: OperationType[] = [
   'division',
 ]
 
-export const OPERATION_LABELS: Record<OperationType, string> = {
-  addition: 'Addition',
-  subtraction: 'Subtraction',
-  multiplication: 'Multiplication',
-  division: 'Division',
-}
-
 export function isOperationUnlocked(operation: OperationType) {
   return FREE_OPERATION_TYPES.includes(operation) || import.meta.env.DEV
 }

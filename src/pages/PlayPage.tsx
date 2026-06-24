@@ -3,6 +3,7 @@ import { NumberPad } from '../components/play/NumberPad'
 import { QuestionLane } from '../components/play/QuestionLane'
 import { StartCountdown } from '../components/play/StartCountdown'
 import { useTimedPlay } from '../hooks/useTimedPlay'
+import { t } from '../i18n/messages'
 import type { DrillSettings, PlayResult } from '../types/drill'
 
 type PlayPageProps = {
@@ -18,18 +19,21 @@ export function PlayPage({ onComplete, settings }: PlayPageProps) {
 
   return (
     <section className="page">
-      <h1>Play</h1>
+      <h1>{t.play.title}</h1>
       <div className="play-panel">
-        <div className="play-stats" aria-label="Play status">
-          <p>Time: {play.remainingSeconds}s</p>
+        <div className="play-stats" aria-label={t.play.statusLabel}>
           <p>
-            Score: {play.correctCount} / {play.totalCount}
+            {t.play.time}: {play.remainingSeconds}
+            {t.common.seconds}
+          </p>
+          <p>
+            {t.play.score}: {play.correctCount} / {play.totalCount}
           </p>
         </div>
 
         {play.status === 'idle' && (
           <button className="primary-button" onClick={play.start} type="button">
-            Start {settings.timeLimitSeconds}-second drill
+            {t.play.start(settings.timeLimitSeconds)}
           </button>
         )}
 
@@ -74,7 +78,7 @@ export function PlayPage({ onComplete, settings }: PlayPageProps) {
             )}
             <div className="play-actions">
               <button onClick={play.finish} type="button">
-                Finish
+                {t.play.finish}
               </button>
             </div>
           </div>
@@ -82,12 +86,12 @@ export function PlayPage({ onComplete, settings }: PlayPageProps) {
 
         {play.status === 'finished' && (
           <div className="play-finished">
-            <p>Finished</p>
+            <p>{t.play.finished}</p>
             <p>
-              Score: {play.correctCount} / {play.totalCount}
+              {t.play.score}: {play.correctCount} / {play.totalCount}
             </p>
             <button className="primary-button" onClick={play.start} type="button">
-              Retry
+              {t.play.retry}
             </button>
           </div>
         )}

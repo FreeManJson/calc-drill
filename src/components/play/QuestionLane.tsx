@@ -1,3 +1,4 @@
+import { t } from '../../i18n/messages'
 import { formatQuestion } from '../../services/questionGenerator'
 import type { DrillQuestion } from '../../types/drill'
 
@@ -11,9 +12,9 @@ export function QuestionLane({
   nextQuestion,
 }: QuestionLaneProps) {
   return (
-    <div className="question-lane" aria-label="Question preview">
+    <div className="question-lane" aria-label={t.play.questionPreview}>
       <section className="question-card question-card--current">
-        <span className="question-card__label">Current</span>
+        <span className="question-card__label">{t.play.currentQuestion}</span>
         <span className="question-card__formula">
           {formatQuestion(currentQuestion)}
         </span>
@@ -21,7 +22,7 @@ export function QuestionLane({
 
       {nextQuestion !== null && (
         <section className="question-card question-card--next">
-          <span className="question-card__label">Next</span>
+          <span className="question-card__label">{t.play.nextQuestion}</span>
           <span className="question-card__formula">
             {formatQuestion(nextQuestion)}
           </span>

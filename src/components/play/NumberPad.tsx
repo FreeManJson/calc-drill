@@ -1,3 +1,5 @@
+import { t } from '../../i18n/messages'
+
 const NUMBER_PAD_DIGITS = ['7', '8', '9', '4', '5', '6', '1', '2', '3', '0']
 
 type NumberPadProps = {
@@ -8,7 +10,7 @@ type NumberPadProps = {
 
 export function NumberPad({ onClear, onDigit, onOk }: NumberPadProps) {
   return (
-    <div className="number-pad" aria-label="Number pad">
+    <div className="number-pad" aria-label={t.play.numberPadLabel}>
       {NUMBER_PAD_DIGITS.map((digit) => (
         <button
           className="number-pad__button"
