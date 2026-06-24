@@ -13,9 +13,12 @@ import type {
 
 const INCORRECT_FEEDBACK_MS = 700
 const ANSWER_EFFECT_MS = 220
+const COUNTDOWN_STEP_MS = 400
+const COUNTDOWN_VALUES = ['3', '2', '1', 'Go'] as const
 
-export type PlayStatus = 'idle' | 'playing' | 'finished'
+export type PlayStatus = 'idle' | 'countdown' | 'playing' | 'finished'
 export type AnswerEffect = 'correct' | 'incorrect' | null
+export type CountdownValue = (typeof COUNTDOWN_VALUES)[number]
 
 type Feedback = {
   isCorrect: boolean
@@ -36,6 +39,9 @@ export function useTimedPlay(
   )
   const [answerInput, setAnswerInput] = useState('')
   const [answers, setAnswers] = useState<AnswerRecord[]>([])
+  const [countdownValue, setCountdownValue] = useState<CountdownValue | null>(
+    null,
+  )
   const [remainingSecondsState, setRemainingSeconds] = useState(
     settings.timeLimitSeconds,
   )
@@ -89,6 +95,34 @@ export function useTimedPlay(
       answers: resultAnswers,
     })
   }, [getPausedDurationMs])
+
+  useEffect(() => {
+    if (status !== 'countdown') {
+      return
+    }
+
+    let countdownIndex = 0
+
+    const intervalId = window.setInterval(() => {
+      countdownIndex += 1
+
+      if (countdownIndex >= COUNTDOWN_VALUES.length) {
+        window.clearInterval(intervalId)
+        setCountdownValue(null)
+        setStatus('playing')
+        const now = Date.now()
+        setStartedAtMs(now)
+        startedAtMsRef.current = now
+        return
+      }
+
+      setCountdownValue(COUNTDOWN_VALUES[countdownIndex])
+    }, COUNTDOWN_STEP_MS)
+
+    return () => {
+      window.clearInterval(intervalId)
+    }
+  }, [status])
 
   useEffect(() => {
     if (status !== 'playing' || feedback !== null) {
@@ -149,7 +183,7 @@ export function useTimedPlay(
   }, [answerEffect])
 
   const start = () => {
-    setStatus('playing')
+    setStatus('countdown')
     setCurrentQuestion(generateQuestion(settings))
     setAnswerInput('')
     setAnswers([])
@@ -159,10 +193,10 @@ export function useTimedPlay(
     pausedDurationMsRef.current = 0
     setRemainingSeconds(settings.timeLimitSeconds)
     setAnswerEffect(null)
+    setCountdownValue(COUNTDOWN_VALUES[0])
     setFeedback(null)
-    const now = Date.now()
-    setStartedAtMs(now)
-    startedAtMsRef.current = now
+    setStartedAtMs(null)
+    startedAtMsRef.current = null
   }
 
   const finish = () => {
@@ -236,6 +270,7 @@ export function useTimedPlay(
     appendAnswerDigit,
     answers,
     clearAnswerInput,
+    countdownValue,
     correctCount,
     currentQuestion,
     feedback,

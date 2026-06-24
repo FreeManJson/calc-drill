@@ -1,5 +1,6 @@
 import { AnswerDisplay } from '../components/play/AnswerDisplay'
 import { NumberPad } from '../components/play/NumberPad'
+import { StartCountdown } from '../components/play/StartCountdown'
 import { useTimedPlay } from '../hooks/useTimedPlay'
 import { formatQuestion } from '../services/questionGenerator'
 import type { DrillSettings, PlayResult } from '../types/drill'
@@ -30,6 +31,10 @@ export function PlayPage({ onComplete, settings }: PlayPageProps) {
           <button className="primary-button" onClick={play.start} type="button">
             Start {settings.timeLimitSeconds}-second drill
           </button>
+        )}
+
+        {play.status === 'countdown' && play.countdownValue !== null && (
+          <StartCountdown value={play.countdownValue} />
         )}
 
         {play.status === 'playing' && play.currentQuestion !== null && (

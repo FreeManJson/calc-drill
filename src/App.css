@@ -192,6 +192,17 @@
   min-height: 48px;
 }
 
+.start-countdown {
+  align-items: center;
+  color: var(--text-heading);
+  display: grid;
+  font-size: 64px;
+  font-weight: 800;
+  justify-items: center;
+  line-height: 1;
+  min-height: 220px;
+}
+
 .question-preview__formula {
   color: var(--text-heading);
   font-size: 40px;

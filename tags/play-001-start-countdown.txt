@@ -1,0 +1,35 @@
+Tag: play-001-start-countdown
+
+Phase:
+  Play-001
+
+Type:
+  [x] Play Experience
+  [x] Countdown
+  [ ] Question Logic
+  [ ] Result / Score
+  [ ] Storage
+
+Summary:
+  Play開始時に短いカウントダウンを追加し、完了後にタイマーと入力受付を開始するようにした。
+
+Details:
+  - PlayStatusにcountdownを追加
+  - 3 → 2 → 1 → Go のカウントダウンを追加
+  - StartCountdownコンポーネントを追加
+  - カウントダウン中はNumberPadを表示しない
+  - カウントダウン中はsubmitAnswerが効かない
+  - カウントダウン完了後にstartedAtMsを記録
+  - カウントダウン時間がResult Durationに含まれないよう調整
+  - backlogにPlay-001完了メモを追記
+
+Verification:
+  - cmd /c npm run build: OK
+  - npm.cmd run lint: OK
+
+Impact:
+  - 子どもが開始タイミングを把握しやすくなる
+  - Score / Result保存構造への変更なし
+
+Next:
+  - Play-002
