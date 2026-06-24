@@ -290,6 +290,28 @@ button {
   display: grid;
 }
 
+.dev-tools {
+  background: #fffbeb;
+  border: 1px dashed #f59e0b;
+  border-radius: 8px;
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+  padding: 16px;
+}
+
+.dev-tools__title {
+  color: var(--text-heading);
+  font-weight: 700;
+  margin: 0;
+}
+
+.dev-tools__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 @media (orientation: landscape) and (min-width: 720px) {
   .app-header__inner {
     align-items: center;

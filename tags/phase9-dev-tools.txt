@@ -1,0 +1,29 @@
+Tag: phase9-dev-tools
+
+Phase:
+  Phase 9
+
+Type:
+  [ ] Settings Storage
+  [ ] Question Logic
+  [ ] Play Core
+  [ ] Result / Score
+  [x] Dev Tools
+
+Summary:
+  開発確認用に設定とスコアを初期化できるDev Toolsを追加した。
+
+Details:
+  - DevToolsコンポーネントを追加
+  - 開発環境のみDev Toolsを表示
+  - 設定リセット処理を追加
+  - スコアリセット処理を追加
+  - Phase planにPhase 9完了メモを追記
+
+Verification:
+  - cmd /c npm run build: OK
+  - npm.cmd run lint: OK
+
+Impact:
+  - 開発中の確認作業で保存状態を戻しやすくなった
+  - 本番表示、Play判定、Result/Score構造への変更なし

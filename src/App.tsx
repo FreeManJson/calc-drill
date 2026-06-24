@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { MouseEvent } from 'react'
+import { DevTools } from './components/dev/DevTools'
+import { DEFAULT_SCORE_SUMMARY, DEFAULT_SETTINGS } from './constants/defaults'
 import { ROUTES } from './constants/routes'
 import type { AppRoute } from './constants/routes'
 import { AppLayout } from './layouts/AppLayout'
@@ -115,6 +117,16 @@ function App() {
     navigateTo(ROUTES.result)
   }
 
+  const handleResetSettings = () => {
+    setSettings(DEFAULT_SETTINGS)
+    saveSettings(DEFAULT_SETTINGS)
+  }
+
+  const handleResetScore = () => {
+    setScoreSummary(DEFAULT_SCORE_SUMMARY)
+    saveScoreSummary(DEFAULT_SCORE_SUMMARY)
+  }
+
   return (
     <AppLayout
       currentRoute={currentRoute}
@@ -127,6 +139,12 @@ function App() {
         setSettings,
         scoreSummary,
         handlePlayComplete,
+      )}
+      {import.meta.env.DEV && (
+        <DevTools
+          onResetScore={handleResetScore}
+          onResetSettings={handleResetSettings}
+        />
       )}
     </AppLayout>
   )
