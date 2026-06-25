@@ -5,8 +5,13 @@ import {
 } from '../constants/operations'
 import { LANGUAGES } from '../i18n/messages'
 import type { AppMessages, Language } from '../i18n/messages'
-import { NUMBER_PAD_LAYOUTS, OPERATION_TYPES } from '../types/drill'
+import {
+  BACKGROUND_THEMES,
+  NUMBER_PAD_LAYOUTS,
+  OPERATION_TYPES,
+} from '../types/drill'
 import type {
+  BackgroundTheme,
   DrillSettings,
   NumberPadLayout,
   OperationType,
@@ -60,6 +65,10 @@ export function SettingsPage({
     updateSettings({ numberPadLayout })
   }
 
+  const handleBackgroundThemeChange = (backgroundTheme: BackgroundTheme) => {
+    updateSettings({ backgroundTheme })
+  }
+
   const getNumberPadLayoutLabel = (numberPadLayout: NumberPadLayout) => {
     switch (numberPadLayout) {
       case 'auto':
@@ -68,6 +77,21 @@ export function SettingsPage({
         return t.settings.numberPadLayoutBottom
       case 'side':
         return t.settings.numberPadLayoutSide
+    }
+  }
+
+  const getBackgroundThemeLabel = (backgroundTheme: BackgroundTheme) => {
+    switch (backgroundTheme) {
+      case 'none':
+        return t.settings.backgroundThemeNone
+      case 'wood':
+        return t.settings.backgroundThemeWood
+      case 'classroom':
+        return t.settings.backgroundThemeClassroom
+      case 'notebook':
+        return t.settings.backgroundThemeNotebook
+      case 'blackboard':
+        return t.settings.backgroundThemeBlackboard
     }
   }
 
@@ -106,6 +130,22 @@ export function SettingsPage({
                   ? t.settings.languageJapanese
                   : t.settings.languageEnglish}
               </span>
+            </label>
+          ))}
+        </fieldset>
+
+        <fieldset className="field-group">
+          <legend>{t.settings.backgroundTheme}</legend>
+          {BACKGROUND_THEMES.map((backgroundTheme) => (
+            <label className="check-field" key={backgroundTheme}>
+              <input
+                checked={settings.backgroundTheme === backgroundTheme}
+                name="backgroundTheme"
+                onChange={() => handleBackgroundThemeChange(backgroundTheme)}
+                type="radio"
+                value={backgroundTheme}
+              />
+              <span>{getBackgroundThemeLabel(backgroundTheme)}</span>
             </label>
           ))}
         </fieldset>

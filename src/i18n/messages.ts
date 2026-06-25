@@ -40,6 +40,12 @@ export type AppMessages = {
     numberPadLayoutAuto: string
     numberPadLayoutBottom: string
     numberPadLayoutSide: string
+    backgroundTheme: string
+    backgroundThemeNone: string
+    backgroundThemeWood: string
+    backgroundThemeClassroom: string
+    backgroundThemeNotebook: string
+    backgroundThemeBlackboard: string
     operations: string
     negativeAnswersOff: string
   }
@@ -127,6 +133,12 @@ export const messages = {
       numberPadLayoutAuto: '自動',
       numberPadLayoutBottom: '下に表示',
       numberPadLayoutSide: '右に表示',
+      backgroundTheme: '背景テーマ',
+      backgroundThemeNone: '背景なし',
+      backgroundThemeWood: '木目風',
+      backgroundThemeClassroom: '教室風',
+      backgroundThemeNotebook: 'ノート風',
+      backgroundThemeBlackboard: '黒板風',
       operations: 'もんだい',
       negativeAnswersOff: 'マイナスの答えは出ません。',
     },
@@ -212,6 +224,12 @@ export const messages = {
       numberPadLayoutAuto: 'Auto',
       numberPadLayoutBottom: 'Bottom',
       numberPadLayoutSide: 'Right side',
+      backgroundTheme: 'Background theme',
+      backgroundThemeNone: 'None',
+      backgroundThemeWood: 'Wood',
+      backgroundThemeClassroom: 'Classroom',
+      backgroundThemeNotebook: 'Notebook',
+      backgroundThemeBlackboard: 'Blackboard',
       operations: 'Operations',
       negativeAnswersOff: 'Negative answers are off.',
     },

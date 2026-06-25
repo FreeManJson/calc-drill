@@ -4,12 +4,14 @@ import { STORAGE_KEYS } from '../constants/storageKeys'
 import { DEFAULT_LANGUAGE, LANGUAGES } from '../i18n/messages'
 import type { Language } from '../i18n/messages'
 import {
+  BACKGROUND_THEMES,
   DIFFICULTIES,
   GAME_MODES,
   NUMBER_PAD_LAYOUTS,
   OPERATION_TYPES,
 } from '../types/drill'
 import type {
+  BackgroundTheme,
   Difficulty,
   DrillSettings,
   GameMode,
@@ -39,6 +41,10 @@ function isOperationType(value: unknown): value is OperationType {
 
 function isNumberPadLayout(value: unknown): value is NumberPadLayout {
   return NUMBER_PAD_LAYOUTS.includes(value as NumberPadLayout)
+}
+
+function isBackgroundTheme(value: unknown): value is BackgroundTheme {
+  return BACKGROUND_THEMES.includes(value as BackgroundTheme)
 }
 
 function parseOperations(value: unknown): OperationType[] {
@@ -71,6 +77,9 @@ function parseSettings(value: unknown): DrillSettings {
     numberPadLayout: isNumberPadLayout(value.numberPadLayout)
       ? value.numberPadLayout
       : DEFAULT_SETTINGS.numberPadLayout,
+    backgroundTheme: isBackgroundTheme(value.backgroundTheme)
+      ? value.backgroundTheme
+      : DEFAULT_SETTINGS.backgroundTheme,
     allowNegativeAnswers:
       typeof value.allowNegativeAnswers === 'boolean'
         ? value.allowNegativeAnswers

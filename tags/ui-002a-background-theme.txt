@@ -1,0 +1,14 @@
+UI-002A: 背景テーマ設定を追加
+
+- 背景テーマ none / wood / classroom / notebook / blackboard を追加
+- 既定値を none に設定
+- Settings 画面に背景テーマ選択 UI を追加
+- 既存保存データで背景テーマが無い場合は none として扱う
+- AppLayout に背景テーマ class を付与
+- CSS のみで軽量な背景テーマを追加
+- 日本語 / English の表示文言を追加
+- docs/codex/06_IMPROVEMENT_BACKLOG.md に完了メモを追記
+
+確認:
+- npm run lint: OK
+- npm run build: OK

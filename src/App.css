@@ -1,5 +1,53 @@
 .app-layout {
+  background: var(--theme-background, var(--bg));
+  color: var(--text);
   min-height: 100svh;
+}
+
+.app-layout--theme-wood {
+  --bg: #fff8ed;
+  --surface: rgba(255, 253, 248, 0.96);
+  --border: #e7d2b8;
+  --theme-background:
+    repeating-linear-gradient(90deg, rgba(153, 101, 49, 0.08) 0 18px, rgba(255, 255, 255, 0.08) 18px 36px),
+    linear-gradient(135deg, #fff5e6, #f5dec0);
+}
+
+.app-layout--theme-classroom {
+  --bg: #eef8f3;
+  --surface: rgba(255, 255, 255, 0.96);
+  --border: #c9e3d8;
+  --theme-background:
+    linear-gradient(180deg, rgba(186, 223, 239, 0.55), rgba(255, 250, 230, 0.72)),
+    linear-gradient(90deg, rgba(122, 94, 58, 0.08), transparent 35%);
+}
+
+.app-layout--theme-notebook {
+  --bg: #fbfdff;
+  --surface: rgba(255, 255, 255, 0.96);
+  --border: #d8e4f2;
+  --theme-background:
+    linear-gradient(90deg, rgba(239, 68, 68, 0.16) 0 2px, transparent 2px 100%),
+    repeating-linear-gradient(0deg, #fbfdff 0 31px, rgba(96, 165, 250, 0.22) 31px 32px);
+  background-size: auto, 100% 32px;
+}
+
+.app-layout--theme-blackboard {
+  --text: #f3f7ee;
+  --text-muted: #d3dfcc;
+  --text-heading: #ffffff;
+  --bg: #173f35;
+  --surface: rgba(21, 55, 47, 0.96);
+  --border: #5f7f73;
+  --theme-background:
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.08), transparent 26%),
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.025) 0 2px, transparent 2px 9px),
+    linear-gradient(135deg, #173f35, #0f2f28);
+}
+
+.app-layout--theme-blackboard .primary-button,
+.app-layout--theme-blackboard .app-nav__link[aria-current='page'] {
+  color: #173f35;
 }
 
 .app-header {

@@ -17,6 +17,15 @@ export type OperationType = (typeof OPERATION_TYPES)[number]
 export const NUMBER_PAD_LAYOUTS = ['auto', 'bottom', 'side'] as const
 export type NumberPadLayout = (typeof NUMBER_PAD_LAYOUTS)[number]
 
+export const BACKGROUND_THEMES = [
+  'none',
+  'wood',
+  'classroom',
+  'notebook',
+  'blackboard',
+] as const
+export type BackgroundTheme = (typeof BACKGROUND_THEMES)[number]
+
 export type DrillSettings = {
   mode: GameMode
   timeLimitSeconds: number
@@ -24,6 +33,7 @@ export type DrillSettings = {
   difficulty: Difficulty
   operations: OperationType[]
   numberPadLayout: NumberPadLayout
+  backgroundTheme: BackgroundTheme
   allowNegativeAnswers: boolean
 }
 

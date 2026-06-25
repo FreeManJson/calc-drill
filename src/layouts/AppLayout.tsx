@@ -1,6 +1,7 @@
 import type { MouseEvent, ReactNode } from 'react'
 import type { AppRoute } from '../constants/routes'
 import type { AppMessages } from '../i18n/messages'
+import type { BackgroundTheme } from '../types/drill'
 
 type NavItem = {
   label: string
@@ -8,6 +9,7 @@ type NavItem = {
 }
 
 type AppLayoutProps = {
+  backgroundTheme: BackgroundTheme
   children: ReactNode
   currentRoute: AppRoute
   messages: AppMessages
@@ -19,6 +21,7 @@ type AppLayoutProps = {
 }
 
 export function AppLayout({
+  backgroundTheme,
   children,
   currentRoute,
   messages,
@@ -26,7 +29,10 @@ export function AppLayout({
   onNavigate,
 }: AppLayoutProps) {
   return (
-    <div className="app-layout notranslate" translate="no">
+    <div
+      className={`app-layout app-layout--theme-${backgroundTheme} notranslate`}
+      translate="no"
+    >
       <header className="app-header">
         <div className="app-header__inner">
           <p className="app-title">{messages.appTitle}</p>

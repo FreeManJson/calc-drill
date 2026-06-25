@@ -150,6 +150,7 @@ function App() {
 
   return (
       <AppLayout
+        backgroundTheme={settings.backgroundTheme}
         currentRoute={currentRoute}
         messages={t}
         navItems={navItems}
