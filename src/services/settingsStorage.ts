@@ -3,11 +3,17 @@ import { getUnlockedOperations } from '../constants/operations'
 import { STORAGE_KEYS } from '../constants/storageKeys'
 import { DEFAULT_LANGUAGE, LANGUAGES } from '../i18n/messages'
 import type { Language } from '../i18n/messages'
-import { DIFFICULTIES, GAME_MODES, OPERATION_TYPES } from '../types/drill'
+import {
+  DIFFICULTIES,
+  GAME_MODES,
+  NUMBER_PAD_LAYOUTS,
+  OPERATION_TYPES,
+} from '../types/drill'
 import type {
   Difficulty,
   DrillSettings,
   GameMode,
+  NumberPadLayout,
   OperationType,
 } from '../types/drill'
 
@@ -29,6 +35,10 @@ function isLanguage(value: unknown): value is Language {
 
 function isOperationType(value: unknown): value is OperationType {
   return OPERATION_TYPES.includes(value as OperationType)
+}
+
+function isNumberPadLayout(value: unknown): value is NumberPadLayout {
+  return NUMBER_PAD_LAYOUTS.includes(value as NumberPadLayout)
 }
 
 function parseOperations(value: unknown): OperationType[] {
@@ -58,6 +68,9 @@ function parseSettings(value: unknown): DrillSettings {
       ? value.difficulty
       : DEFAULT_SETTINGS.difficulty,
     operations: parseOperations(value.operations),
+    numberPadLayout: isNumberPadLayout(value.numberPadLayout)
+      ? value.numberPadLayout
+      : DEFAULT_SETTINGS.numberPadLayout,
     allowNegativeAnswers:
       typeof value.allowNegativeAnswers === 'boolean'
         ? value.allowNegativeAnswers

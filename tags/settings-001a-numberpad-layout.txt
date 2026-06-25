@@ -1,0 +1,16 @@
+Settings-001A: 数字タイル配置設定を追加
+
+- 数字タイル配置設定 auto / bottom / side を追加
+- 既定値を auto に設定
+- Settings 画面に数字タイル配置の選択 UI を追加
+- 既存保存データで配置設定が無い場合は auto として扱う
+- Play 画面で配置設定を反映
+- auto は既存の自動レイアウトを維持
+- bottom は数字タイルを下側に固定
+- side は数字タイルを右側に固定
+- 日本語 / English の表示文言を追加
+- docs/codex/06_IMPROVEMENT_BACKLOG.md に完了メモを追記
+
+確認:
+- npm run lint: OK
+- npm run build: OK

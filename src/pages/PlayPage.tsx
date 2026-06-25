@@ -14,6 +14,14 @@ type PlayPageProps = {
 
 export function PlayPage({ messages: t, onComplete, settings }: PlayPageProps) {
   const play = useTimedPlay(settings, { messages: t, onComplete })
+  const answerFormClassName = [
+    'answer-form',
+    `answer-form--layout-${settings.numberPadLayout}`,
+    play.answerEffect === null ? null : `answer-form--${play.answerEffect}`,
+  ]
+    .filter(Boolean)
+    .join(' ')
+
   const handleNumberPadOk = () => {
     play.submitAnswer()
   }
@@ -51,13 +59,7 @@ export function PlayPage({ messages: t, onComplete, settings }: PlayPageProps) {
         )}
 
         {play.status === 'playing' && play.currentQuestion !== null && (
-          <div
-            className={
-              play.answerEffect === null
-                ? 'answer-form'
-                : `answer-form answer-form--${play.answerEffect}`
-            }
-          >
+          <div className={answerFormClassName}>
             <div className="play-question-area">
               <QuestionLane
                 currentQuestion={play.currentQuestion}

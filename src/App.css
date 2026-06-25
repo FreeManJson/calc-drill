@@ -183,6 +183,26 @@
   transition: background-color 120ms ease;
 }
 
+.answer-form--layout-side {
+  align-items: start;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 320px);
+}
+
+.answer-form--layout-side .play-question-area,
+.answer-form--layout-side .play-input-area {
+  display: grid;
+  gap: 16px;
+}
+
+.answer-form--layout-side .feedback,
+.answer-form--layout-side .play-actions {
+  grid-column: 1 / -1;
+}
+
+.answer-form--layout-bottom {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .answer-form--correct {
   background: #ecfdf5;
 }
@@ -408,5 +428,9 @@ button {
 
   .question-card--current .question-card__formula {
     font-size: 56px;
+  }
+
+  .answer-form--layout-bottom {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

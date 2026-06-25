@@ -5,8 +5,12 @@ import {
 } from '../constants/operations'
 import { LANGUAGES } from '../i18n/messages'
 import type { AppMessages, Language } from '../i18n/messages'
-import { OPERATION_TYPES } from '../types/drill'
-import type { DrillSettings, OperationType } from '../types/drill'
+import { NUMBER_PAD_LAYOUTS, OPERATION_TYPES } from '../types/drill'
+import type {
+  DrillSettings,
+  NumberPadLayout,
+  OperationType,
+} from '../types/drill'
 
 type SettingsPageProps = {
   messages: AppMessages
@@ -52,6 +56,21 @@ export function SettingsPage({
     updateSettings({ language })
   }
 
+  const handleNumberPadLayoutChange = (numberPadLayout: NumberPadLayout) => {
+    updateSettings({ numberPadLayout })
+  }
+
+  const getNumberPadLayoutLabel = (numberPadLayout: NumberPadLayout) => {
+    switch (numberPadLayout) {
+      case 'auto':
+        return t.settings.numberPadLayoutAuto
+      case 'bottom':
+        return t.settings.numberPadLayoutBottom
+      case 'side':
+        return t.settings.numberPadLayoutSide
+    }
+  }
+
   return (
     <section className="page">
       <h1>{t.settings.title}</h1>
@@ -87,6 +106,24 @@ export function SettingsPage({
                   ? t.settings.languageJapanese
                   : t.settings.languageEnglish}
               </span>
+            </label>
+          ))}
+        </fieldset>
+
+        <fieldset className="field-group">
+          <legend>{t.settings.numberPadLayout}</legend>
+          {NUMBER_PAD_LAYOUTS.map((numberPadLayout) => (
+            <label className="check-field" key={numberPadLayout}>
+              <input
+                checked={settings.numberPadLayout === numberPadLayout}
+                name="numberPadLayout"
+                onChange={() =>
+                  handleNumberPadLayoutChange(numberPadLayout)
+                }
+                type="radio"
+                value={numberPadLayout}
+              />
+              <span>{getNumberPadLayoutLabel(numberPadLayout)}</span>
             </label>
           ))}
         </fieldset>

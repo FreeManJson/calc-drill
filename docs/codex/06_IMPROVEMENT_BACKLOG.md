@@ -88,3 +88,4 @@ Phase 9 以降は、改善チケット方式で進める。
 - UI-001B: Added persisted language setting and runtime ja/en message switching.
 - Deploy-001: Added Netlify build and SPA fallback configuration.
 - MobileQA-001: Added browser translation suppression and temporary QA unlock for multiplication/division.
+- Settings-001A: Added persisted number pad layout setting for auto/bottom/side play layouts.

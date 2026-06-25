@@ -14,12 +14,16 @@ export const OPERATION_TYPES = [
 ] as const
 export type OperationType = (typeof OPERATION_TYPES)[number]
 
+export const NUMBER_PAD_LAYOUTS = ['auto', 'bottom', 'side'] as const
+export type NumberPadLayout = (typeof NUMBER_PAD_LAYOUTS)[number]
+
 export type DrillSettings = {
   mode: GameMode
   timeLimitSeconds: number
   language: Language
   difficulty: Difficulty
   operations: OperationType[]
+  numberPadLayout: NumberPadLayout
   allowNegativeAnswers: boolean
 }
 

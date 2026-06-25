@@ -10,6 +10,7 @@ export const DEFAULT_SETTINGS: DrillSettings = {
   language: DEFAULT_LANGUAGE,
   difficulty: 'beginner',
   operations: [...FREE_OPERATION_TYPES],
+  numberPadLayout: 'auto',
   allowNegativeAnswers: false,
 }
 

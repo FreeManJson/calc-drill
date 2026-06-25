@@ -36,6 +36,10 @@ export type AppMessages = {
     language: string
     languageJapanese: string
     languageEnglish: string
+    numberPadLayout: string
+    numberPadLayoutAuto: string
+    numberPadLayoutBottom: string
+    numberPadLayoutSide: string
     operations: string
     negativeAnswersOff: string
   }
@@ -119,6 +123,10 @@ export const messages = {
       language: 'ことば',
       languageJapanese: '日本語',
       languageEnglish: 'English',
+      numberPadLayout: '数字タイルの配置',
+      numberPadLayoutAuto: '自動',
+      numberPadLayoutBottom: '下に表示',
+      numberPadLayoutSide: '右に表示',
       operations: 'もんだい',
       negativeAnswersOff: 'マイナスの答えは出ません。',
     },
@@ -200,6 +208,10 @@ export const messages = {
       language: 'Language',
       languageJapanese: '日本語',
       languageEnglish: 'English',
+      numberPadLayout: 'Number pad layout',
+      numberPadLayoutAuto: 'Auto',
+      numberPadLayoutBottom: 'Bottom',
+      numberPadLayoutSide: 'Right side',
       operations: 'Operations',
       negativeAnswersOff: 'Negative answers are off.',
     },
