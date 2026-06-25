@@ -1,0 +1,11 @@
+Deploy-001: Netlify デプロイ設定を追加
+
+- netlify.toml を repository root に追加
+- Netlify build command を npm run build に設定
+- publish directory を dist に設定
+- SPA fallback redirect を追加
+- .gitignore の node_modules / dist / .env / .env.local を確認
+- docs/codex/06_IMPROVEMENT_BACKLOG.md に完了メモを追記
+
+確認:
+- npm run build: OK
