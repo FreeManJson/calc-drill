@@ -60,6 +60,21 @@ export function PlayPage({ messages: t, onComplete, settings }: PlayPageProps) {
 
         {play.status === 'playing' && play.currentQuestion !== null && (
           <div className={answerFormClassName}>
+            {play.answerEffect !== null && (
+              <p
+                className={`answer-effect-badge answer-effect-badge--${play.answerEffect}`}
+                role="status"
+              >
+                <span className="answer-effect-badge__mark">
+                  {play.answerEffect === 'correct' ? '○' : '×'}
+                </span>
+                <span>
+                  {play.answerEffect === 'correct'
+                    ? t.play.correctFeedback
+                    : t.play.tryAgainFeedback}
+                </span>
+              </p>
+            )}
             <div className="play-question-area">
               <QuestionLane
                 currentQuestion={play.currentQuestion}

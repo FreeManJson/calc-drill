@@ -13,7 +13,7 @@ import type {
 } from '../types/drill'
 
 const INCORRECT_FEEDBACK_MS = 700
-const ANSWER_EFFECT_MS = 220
+const ANSWER_EFFECT_MS = 360
 const COUNTDOWN_STEP_MS = 400
 const COUNTDOWN_VALUES = ['3', '2', '1', 'Go'] as const
 

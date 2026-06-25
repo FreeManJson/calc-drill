@@ -65,6 +65,8 @@ export type AppMessages = {
     currentQuestion: string
     nextQuestion: string
     questionPreview: string
+    correctFeedback: string
+    tryAgainFeedback: string
     enterInteger: string
     incorrectAnswer: (answer: number) => string
   }
@@ -158,6 +160,8 @@ export const messages = {
       currentQuestion: 'いまのもんだい',
       nextQuestion: 'つぎのもんだい',
       questionPreview: 'もんだい',
+      correctFeedback: 'せいかい！',
+      tryAgainFeedback: 'もういちど',
       enterInteger: '数字で答えてね。',
       incorrectAnswer: (answer) => `もういちど。答え: ${answer}`,
     },
@@ -249,6 +253,8 @@ export const messages = {
       currentQuestion: 'Current Question',
       nextQuestion: 'Next Question',
       questionPreview: 'Question preview',
+      correctFeedback: 'Correct!',
+      tryAgainFeedback: 'Try again',
       enterInteger: 'Enter an integer.',
       incorrectAnswer: (answer) => `Incorrect. Answer: ${answer}`,
     },
