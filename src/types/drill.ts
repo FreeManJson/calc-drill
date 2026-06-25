@@ -34,6 +34,7 @@ export type DrillSettings = {
   operations: OperationType[]
   numberPadLayout: NumberPadLayout
   backgroundTheme: BackgroundTheme
+  soundEffectsEnabled: boolean
   allowNegativeAnswers: boolean
 }
 

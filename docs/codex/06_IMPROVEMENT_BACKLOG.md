@@ -92,3 +92,4 @@ Phase 9 以降は、改善チケット方式で進める。
 - UI-002A: Added persisted CSS background theme setting for none/wood/classroom/notebook/blackboard.
 - UI-002B: Improved blackboard theme contrast for controls, play content, and dev tools.
 - Play-003A: Added lightweight correct/incorrect visual feedback during play.
+- Play-003B: Added persisted sound effects setting and guarded correct/incorrect tones.

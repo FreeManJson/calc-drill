@@ -80,6 +80,10 @@ function parseSettings(value: unknown): DrillSettings {
     backgroundTheme: isBackgroundTheme(value.backgroundTheme)
       ? value.backgroundTheme
       : DEFAULT_SETTINGS.backgroundTheme,
+    soundEffectsEnabled:
+      typeof value.soundEffectsEnabled === 'boolean'
+        ? value.soundEffectsEnabled
+        : DEFAULT_SETTINGS.soundEffectsEnabled,
     allowNegativeAnswers:
       typeof value.allowNegativeAnswers === 'boolean'
         ? value.allowNegativeAnswers

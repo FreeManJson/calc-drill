@@ -46,6 +46,9 @@ export type AppMessages = {
     backgroundThemeClassroom: string
     backgroundThemeNotebook: string
     backgroundThemeBlackboard: string
+    soundEffects: string
+    soundEffectsOn: string
+    soundEffectsOff: string
     operations: string
     negativeAnswersOff: string
   }
@@ -141,6 +144,9 @@ export const messages = {
       backgroundThemeClassroom: '教室風',
       backgroundThemeNotebook: 'ノート風',
       backgroundThemeBlackboard: '黒板風',
+      soundEffects: '効果音',
+      soundEffectsOn: 'ON',
+      soundEffectsOff: 'OFF',
       operations: 'もんだい',
       negativeAnswersOff: 'マイナスの答えは出ません。',
     },
@@ -234,6 +240,9 @@ export const messages = {
       backgroundThemeClassroom: 'Classroom',
       backgroundThemeNotebook: 'Notebook',
       backgroundThemeBlackboard: 'Blackboard',
+      soundEffects: 'Sound effects',
+      soundEffectsOn: 'ON',
+      soundEffectsOff: 'OFF',
       operations: 'Operations',
       negativeAnswersOff: 'Negative answers are off.',
     },

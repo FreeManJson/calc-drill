@@ -1,0 +1,13 @@
+Play-003B: 正解・不正解の効果音を追加
+
+- Web Audio API による軽量な正解音・不正解音を追加
+- Settings 画面に効果音 ON / OFF 設定を追加
+- 効果音設定を保存し、既存保存データでは ON を既定値として扱う
+- 効果音 OFF 時は正解・不正解ともに音を鳴らさない
+- 音声再生がブロックまたは未対応でもアプリが落ちないよう保護
+- 日本語 / English の表示文言を追加
+- docs/codex/06_IMPROVEMENT_BACKLOG.md に完了メモを追記
+
+Verification:
+- cmd /c npm run build
+- cmd /c npm run lint

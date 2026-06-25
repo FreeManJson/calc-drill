@@ -69,6 +69,10 @@ export function SettingsPage({
     updateSettings({ backgroundTheme })
   }
 
+  const handleSoundEffectsChange = (soundEffectsEnabled: boolean) => {
+    updateSettings({ soundEffectsEnabled })
+  }
+
   const getNumberPadLayoutLabel = (numberPadLayout: NumberPadLayout) => {
     switch (numberPadLayout) {
       case 'auto':
@@ -132,6 +136,30 @@ export function SettingsPage({
               </span>
             </label>
           ))}
+        </fieldset>
+
+        <fieldset className="field-group">
+          <legend>{t.settings.soundEffects}</legend>
+          <label className="check-field">
+            <input
+              checked={settings.soundEffectsEnabled}
+              name="soundEffectsEnabled"
+              onChange={() => handleSoundEffectsChange(true)}
+              type="radio"
+              value="on"
+            />
+            <span>{t.settings.soundEffectsOn}</span>
+          </label>
+          <label className="check-field">
+            <input
+              checked={!settings.soundEffectsEnabled}
+              name="soundEffectsEnabled"
+              onChange={() => handleSoundEffectsChange(false)}
+              type="radio"
+              value="off"
+            />
+            <span>{t.settings.soundEffectsOff}</span>
+          </label>
         </fieldset>
 
         <fieldset className="field-group">

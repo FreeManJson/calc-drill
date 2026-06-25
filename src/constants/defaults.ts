@@ -12,6 +12,7 @@ export const DEFAULT_SETTINGS: DrillSettings = {
   operations: [...FREE_OPERATION_TYPES],
   numberPadLayout: 'auto',
   backgroundTheme: 'none',
+  soundEffectsEnabled: true,
   allowNegativeAnswers: false,
 }
 

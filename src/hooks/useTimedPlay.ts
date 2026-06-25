@@ -233,7 +233,9 @@ export function useTimedPlay(
 
     if (!Number.isInteger(userAnswer)) {
       setAnswerEffect('incorrect')
-      playIncorrectSound()
+      if (settings.soundEffectsEnabled) {
+        playIncorrectSound()
+      }
       pauseStartedAtMsRef.current = Date.now()
       setFeedback({ isCorrect: false, message: t.play.enterInteger })
       return
@@ -256,14 +258,18 @@ export function useTimedPlay(
 
     if (isCorrect) {
       setAnswerEffect('correct')
-      playCorrectSound()
+      if (settings.soundEffectsEnabled) {
+        playCorrectSound()
+      }
       setCurrentQuestion(nextQuestion ?? generateQuestion(settings))
       setNextQuestion(generateQuestion(settings))
       return
     }
 
     setAnswerEffect('incorrect')
-    playIncorrectSound()
+    if (settings.soundEffectsEnabled) {
+      playIncorrectSound()
+    }
     pauseStartedAtMsRef.current = Date.now()
     setAnswerInput('')
     setFeedback({
