@@ -1,0 +1,12 @@
+UI-002B: 黒板テーマの文字表示を改善
+
+- 黒板テーマ用の control / number pad 色変数を追加
+- 数字タイルの数字が読めるよう背景・文字色・境界線を調整
+- Settings 画面の input と通常ボタンの視認性を改善
+- Play 画面の正解/不正解フィードバック背景を黒板テーマ向けに調整
+- Dev tools の枠内文字とボタンが読めるように調整
+- docs/codex/06_IMPROVEMENT_BACKLOG.md に完了メモを追記
+
+確認:
+- npm run lint: OK
+- npm run build: OK

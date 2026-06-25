@@ -1,5 +1,11 @@
 .app-layout {
   background: var(--theme-background, var(--bg));
+  --control-bg: var(--surface);
+  --control-text: var(--text);
+  --control-border: var(--border);
+  --number-pad-bg: var(--surface);
+  --number-pad-text: var(--text-heading);
+  --number-pad-border: var(--border);
   color: var(--text);
   min-height: 100svh;
 }
@@ -33,12 +39,18 @@
 }
 
 .app-layout--theme-blackboard {
-  --text: #f3f7ee;
-  --text-muted: #d3dfcc;
+  --text: #edf7e8;
+  --text-muted: #cddfca;
   --text-heading: #ffffff;
   --bg: #173f35;
-  --surface: rgba(21, 55, 47, 0.96);
-  --border: #5f7f73;
+  --surface: rgba(22, 64, 54, 0.96);
+  --border: #7fa094;
+  --control-bg: #f8fbf3;
+  --control-text: #12352d;
+  --control-border: #b6d0c5;
+  --number-pad-bg: #f8fbf3;
+  --number-pad-text: #12352d;
+  --number-pad-border: #c4d8cf;
   --theme-background:
     radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.08), transparent 26%),
     repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.025) 0 2px, transparent 2px 9px),
@@ -48,6 +60,24 @@
 .app-layout--theme-blackboard .primary-button,
 .app-layout--theme-blackboard .app-nav__link[aria-current='page'] {
   color: #173f35;
+}
+
+.app-layout--theme-blackboard .answer-form--correct {
+  background: rgba(20, 83, 45, 0.9);
+}
+
+.app-layout--theme-blackboard .answer-form--incorrect {
+  background: rgba(127, 29, 29, 0.86);
+}
+
+.app-layout--theme-blackboard .dev-tools {
+  background: rgba(248, 251, 243, 0.96);
+  border-color: #eab308;
+  color: #12352d;
+}
+
+.app-layout--theme-blackboard .dev-tools__title {
+  color: #12352d;
 }
 
 .app-header {
@@ -176,7 +206,8 @@
 .field input {
   border: 1px solid var(--border);
   border-radius: 8px;
-  color: var(--text);
+  background: var(--control-bg);
+  color: var(--control-text);
   font: inherit;
   padding: 8px 10px;
 }
@@ -287,6 +318,10 @@
 }
 
 .number-pad__button {
+  background: var(--number-pad-bg);
+  border-color: var(--number-pad-border);
+  color: var(--number-pad-text);
+  font-weight: 700;
   min-height: 48px;
 }
 
@@ -351,9 +386,10 @@
 }
 
 button {
+  background: var(--control-bg);
   border: 1px solid var(--border);
   border-radius: 8px;
-  color: var(--text);
+  color: var(--control-text);
   cursor: pointer;
   font: inherit;
   padding: 8px 12px;

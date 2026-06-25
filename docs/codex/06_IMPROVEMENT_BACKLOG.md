@@ -90,3 +90,4 @@ Phase 9 以降は、改善チケット方式で進める。
 - MobileQA-001: Added browser translation suppression and temporary QA unlock for multiplication/division.
 - Settings-001A: Added persisted number pad layout setting for auto/bottom/side play layouts.
 - UI-002A: Added persisted CSS background theme setting for none/wood/classroom/notebook/blackboard.
+- UI-002B: Improved blackboard theme contrast for controls, play content, and dev tools.
