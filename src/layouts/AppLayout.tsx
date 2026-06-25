@@ -26,7 +26,7 @@ export function AppLayout({
   onNavigate,
 }: AppLayoutProps) {
   return (
-    <div className="app-layout">
+    <div className="app-layout notranslate" translate="no">
       <header className="app-header">
         <div className="app-header__inner">
           <p className="app-title">{messages.appTitle}</p>

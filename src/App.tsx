@@ -93,6 +93,12 @@ function App() {
   }, [settings])
 
   useEffect(() => {
+    document.documentElement.lang = settings.language
+    document.documentElement.setAttribute('translate', 'no')
+    document.documentElement.classList.add('notranslate')
+  }, [settings.language])
+
+  useEffect(() => {
     saveScoreSummary(scoreSummary)
   }, [scoreSummary])
 

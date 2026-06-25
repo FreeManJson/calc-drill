@@ -1,0 +1,13 @@
+MobileQA-001: 自動翻訳抑止と四則演算の一時アンロックを追加
+
+- index.html に translate="no" と google notranslate meta を追加
+- 初期 html lang を ja に設定
+- アプリ言語に合わせて document.documentElement.lang を ja / en へ更新
+- App root に notranslate / translate="no" を付与
+- 掛け算・割り算を QA 用に一時アンロック
+- 一時アンロック用の TEMP_UNLOCK_PREMIUM_OPERATIONS_FOR_QA を追加
+- docs/codex/06_IMPROVEMENT_BACKLOG.md に完了メモを追記
+
+確認:
+- npm run lint: OK
+- npm run build: OK
