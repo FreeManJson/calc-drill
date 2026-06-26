@@ -1,0 +1,13 @@
+Play-001B: カウントダウンを問題欄に表示
+
+- 開始カウントダウンを現在問題カード内に表示
+- カウントダウン中も通常プレイ時と同じ問題・解答・数字タイル領域を使用
+- カウントダウン中は実際の1問目・2問目を表示しない
+- 次問題欄には ja/en の「まもなく / Soon」を表示
+- カウントダウン中の数字タイルを disabled にして入力を抑止
+- タイマー開始、Duration 集計、問題生成・進行ロジックは変更なし
+- docs/codex/06_IMPROVEMENT_BACKLOG.md に完了メモを追記
+
+Verification:
+- cmd /c npm run build: OK
+- cmd /c npm run lint: OK

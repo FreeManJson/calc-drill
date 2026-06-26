@@ -3,6 +3,7 @@ import type { AppMessages } from '../../i18n/messages'
 const NUMBER_PAD_DIGITS = ['7', '8', '9', '4', '5', '6', '1', '2', '3', '0']
 
 type NumberPadProps = {
+  disabled?: boolean
   messages: AppMessages
   onClear: () => void
   onDigit: (digit: string) => void
@@ -10,6 +11,7 @@ type NumberPadProps = {
 }
 
 export function NumberPad({
+  disabled = false,
   messages: t,
   onClear,
   onDigit,
@@ -20,6 +22,7 @@ export function NumberPad({
       {NUMBER_PAD_DIGITS.map((digit) => (
         <button
           className="number-pad__button"
+          disabled={disabled}
           key={digit}
           onClick={() => onDigit(digit)}
           type="button"
@@ -27,11 +30,17 @@ export function NumberPad({
           {digit}
         </button>
       ))}
-      <button className="number-pad__button" onClick={onClear} type="button">
+      <button
+        className="number-pad__button"
+        disabled={disabled}
+        onClick={onClear}
+        type="button"
+      >
         C
       </button>
       <button
         className="number-pad__button primary-button"
+        disabled={disabled}
         onClick={onOk}
         type="button"
       >

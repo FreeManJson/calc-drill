@@ -95,3 +95,4 @@ Phase 9 以降は、改善チケット方式で進める。
 - Play-003B: Added persisted sound effects setting and guarded correct/incorrect tones.
 - Play-002B: Adjusted next question preview to a smaller supporting position.
 - Play-003C: Simplified answer feedback effects so play layout stays stable.
+- Play-001B: Moved start countdown into the current question card without revealing questions.

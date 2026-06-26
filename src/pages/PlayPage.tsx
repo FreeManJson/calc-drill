@@ -1,7 +1,6 @@
 import { AnswerDisplay } from '../components/play/AnswerDisplay'
 import { NumberPad } from '../components/play/NumberPad'
 import { QuestionLane } from '../components/play/QuestionLane'
-import { StartCountdown } from '../components/play/StartCountdown'
 import { useTimedPlay } from '../hooks/useTimedPlay'
 import type { AppMessages } from '../i18n/messages'
 import type { DrillSettings, PlayResult } from '../types/drill'
@@ -45,17 +44,28 @@ export function PlayPage({ messages: t, onComplete, settings }: PlayPageProps) {
           </button>
         )}
 
-        {play.status === 'countdown' &&
-          play.countdownValue !== null &&
-          play.currentQuestion !== null && (
-            <div className="countdown-panel">
-              <StartCountdown value={play.countdownValue} />
+        {play.status === 'countdown' && play.countdownValue !== null && (
+          <div className={answerFormClassName}>
+            <div className="play-question-area">
               <QuestionLane
-                currentQuestion={play.currentQuestion}
+                currentDisplay={play.countdownValue}
+                currentQuestion={null}
                 messages={t}
-                nextQuestion={play.nextQuestion}
+                nextDisplay={t.play.startingSoon}
+                nextQuestion={null}
+              />
+              <AnswerDisplay messages={t} value="" />
+            </div>
+            <div className="play-input-area">
+              <NumberPad
+                disabled
+                messages={t}
+                onClear={play.clearAnswerInput}
+                onDigit={play.appendAnswerDigit}
+                onOk={handleNumberPadOk}
               />
             </div>
+          </div>
         )}
 
         {play.status === 'playing' && play.currentQuestion !== null && (
