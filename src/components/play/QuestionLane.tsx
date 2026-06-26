@@ -23,12 +23,15 @@ export function QuestionLane({
       </section>
 
       {nextQuestion !== null && (
-        <section className="question-card question-card--next">
+        <aside
+          className="question-card question-card--next"
+          aria-label={t.play.nextQuestion}
+        >
           <span className="question-card__label">{t.play.nextQuestion}</span>
           <span className="question-card__formula">
             {formatQuestion(nextQuestion)}
           </span>
-        </section>
+        </aside>
       )}
     </div>
   )

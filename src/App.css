@@ -6,6 +6,14 @@
   --number-pad-bg: var(--surface);
   --number-pad-text: var(--text-heading);
   --number-pad-border: var(--border);
+  --question-next-bg: var(--bg);
+  --question-next-text: var(--text-heading);
+  --question-next-label: var(--text-muted);
+  --question-next-border: var(--border);
+  --answer-correct-flash-bg: rgba(34, 197, 94, 0.1);
+  --answer-correct-flash-border: rgba(34, 197, 94, 0.38);
+  --answer-incorrect-flash-bg: rgba(239, 68, 68, 0.08);
+  --answer-incorrect-flash-border: rgba(239, 68, 68, 0.32);
   color: var(--text);
   min-height: 100svh;
 }
@@ -51,6 +59,14 @@
   --number-pad-bg: #f8fbf3;
   --number-pad-text: #12352d;
   --number-pad-border: #c4d8cf;
+  --question-next-bg: #f8fbf3;
+  --question-next-text: #12352d;
+  --question-next-label: #4b6b60;
+  --question-next-border: #c4d8cf;
+  --answer-correct-flash-bg: rgba(134, 239, 172, 0.14);
+  --answer-correct-flash-border: rgba(187, 247, 208, 0.52);
+  --answer-incorrect-flash-bg: rgba(254, 202, 202, 0.12);
+  --answer-incorrect-flash-border: rgba(254, 202, 202, 0.46);
   --theme-background:
     radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.08), transparent 26%),
     repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.025) 0 2px, transparent 2px 9px),
@@ -60,26 +76,6 @@
 .app-layout--theme-blackboard .primary-button,
 .app-layout--theme-blackboard .app-nav__link[aria-current='page'] {
   color: #173f35;
-}
-
-.app-layout--theme-blackboard .answer-form--correct {
-  background: rgba(20, 83, 45, 0.9);
-}
-
-.app-layout--theme-blackboard .answer-form--incorrect {
-  background: rgba(127, 29, 29, 0.86);
-}
-
-.app-layout--theme-blackboard .answer-effect-badge--correct {
-  background: #f0fdf4;
-  border-color: #bbf7d0;
-  color: #14532d;
-}
-
-.app-layout--theme-blackboard .answer-effect-badge--incorrect {
-  background: #fff1f2;
-  border-color: #fecdd3;
-  color: #881337;
 }
 
 .app-layout--theme-blackboard .dev-tools {
@@ -295,45 +291,17 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
-.answer-form--correct {
-  animation: answer-correct-flash 360ms ease-out;
-  background: #ecfdf5;
+.answer-form--correct .answer-display {
+  animation: answer-correct-flash 240ms ease-out;
 }
 
 .answer-form--incorrect {
-  animation: answer-incorrect-shake 280ms ease-out;
-  background: #fef2f2;
+  animation: answer-incorrect-shake 220ms ease-out;
 }
 
-.answer-effect-badge {
-  align-items: center;
-  animation: answer-badge-pop 360ms ease-out;
-  border: 2px solid transparent;
-  border-radius: 999px;
-  box-shadow: 0 10px 24px rgba(17, 24, 39, 0.16);
-  display: inline-flex;
-  font-weight: 800;
-  gap: 8px;
-  justify-self: start;
-  line-height: 1;
-  margin: 0;
-  padding: 10px 14px;
-}
-
-.answer-effect-badge--correct {
-  background: #dcfce7;
-  border-color: #86efac;
-  color: #166534;
-}
-
-.answer-effect-badge--incorrect {
-  background: #fee2e2;
-  border-color: #fca5a5;
-  color: #991b1b;
-}
-
-.answer-effect-badge__mark {
-  font-size: 20px;
+.answer-form--incorrect .answer-display,
+.answer-form--incorrect .question-card--current {
+  animation: answer-incorrect-flash 240ms ease-out;
 }
 
 .answer-display {
@@ -388,8 +356,8 @@
 }
 
 .question-lane {
-  display: grid;
-  gap: 12px;
+  display: block;
+  position: relative;
 }
 
 .question-card {
@@ -400,8 +368,26 @@
   padding: 16px;
 }
 
+.question-card--current {
+  min-height: 148px;
+  padding: 52px 16px 20px;
+  place-content: center;
+  text-align: center;
+}
+
 .question-card--next {
-  background: var(--bg);
+  background: var(--question-next-bg);
+  border-color: var(--question-next-border);
+  box-shadow: 0 8px 18px rgba(17, 24, 39, 0.12);
+  gap: 2px;
+  max-width: min(44%, 160px);
+  padding: 8px 10px;
+  pointer-events: none;
+  position: absolute;
+  right: 10px;
+  text-align: center;
+  top: 10px;
+  z-index: 1;
 }
 
 .question-card__label {
@@ -416,8 +402,21 @@
   line-height: 1.2;
 }
 
+.question-card--current .question-card__formula {
+  font-size: clamp(48px, 13vw, 72px);
+}
+
+.question-card--next .question-card__label {
+  color: var(--question-next-label);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
 .question-card--next .question-card__formula {
-  font-size: 24px;
+  color: var(--question-next-text);
+  font-size: clamp(16px, 4vw, 20px);
+  line-height: 1.15;
 }
 
 .feedback {
@@ -533,34 +532,43 @@ button {
   gap: 8px;
 }
 
-@keyframes answer-badge-pop {
+@keyframes answer-correct-flash {
   0% {
-    opacity: 0;
-    transform: scale(0.86) translateY(6px);
+    background-color: transparent;
+    border-color: var(--border);
+    box-shadow: 0 0 0 rgba(34, 197, 94, 0);
   }
 
   35% {
-    opacity: 1;
-    transform: scale(1.04) translateY(0);
+    background-color: var(--answer-correct-flash-bg);
+    border-color: var(--answer-correct-flash-border);
+    box-shadow: 0 0 0 6px var(--answer-correct-flash-border);
   }
 
   100% {
-    opacity: 0;
-    transform: scale(1) translateY(-4px);
+    background-color: transparent;
+    border-color: var(--border);
+    box-shadow: 0 0 0 rgba(34, 197, 94, 0);
   }
 }
 
-@keyframes answer-correct-flash {
+@keyframes answer-incorrect-flash {
   0% {
-    box-shadow: 0 0 0 rgba(34, 197, 94, 0);
+    background-color: transparent;
+    border-color: var(--border);
+    box-shadow: 0 0 0 rgba(239, 68, 68, 0);
   }
 
-  45% {
-    box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.2);
+  35% {
+    background-color: var(--answer-incorrect-flash-bg);
+    border-color: var(--answer-incorrect-flash-border);
+    box-shadow: 0 0 0 6px var(--answer-incorrect-flash-border);
   }
 
   100% {
-    box-shadow: 0 0 0 rgba(34, 197, 94, 0);
+    background-color: transparent;
+    border-color: var(--border);
+    box-shadow: 0 0 0 rgba(239, 68, 68, 0);
   }
 }
 
@@ -606,8 +614,19 @@ button {
     grid-column: 1 / -1;
   }
 
+  .question-card--current {
+    min-height: 180px;
+    padding: 56px 20px 24px;
+  }
+
   .question-card--current .question-card__formula {
-    font-size: 56px;
+    font-size: 72px;
+  }
+
+  .question-card--next {
+    max-width: 168px;
+    right: 12px;
+    top: 12px;
   }
 
   .answer-form--layout-bottom {

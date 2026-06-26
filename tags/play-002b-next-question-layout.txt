@@ -1,0 +1,12 @@
+Play-002B: 次の問題表示を控えめな配置に調整
+
+- 現在問題を大きく表示し、解答対象として目立つレイアウトに調整
+- 次の問題を右上付近の小さな補助カードとして表示
+- 次問題ラベルを ja/en ともに短く調整
+- 黒板テーマでも次問題カードが読めるよう CSS 変数を追加
+- 問題生成・進行・正誤判定・効果音ロジックは変更なし
+- docs/codex/06_IMPROVEMENT_BACKLOG.md に完了メモを追記
+
+Verification:
+- cmd /c npm run build: OK
+- cmd /c npm run lint: OK

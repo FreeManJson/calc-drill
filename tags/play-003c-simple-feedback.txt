@@ -1,0 +1,13 @@
+Play-003C: 正解エフェクトを簡素化して表示崩れを修正
+
+- 正解・不正解時の大きなフィードバックバッジを削除
+- 正解時は解答欄の短い緑フラッシュに簡素化
+- 正解後に次問へ即進む挙動を維持
+- 正解エフェクト中に問題カードが別レイアウトへ見える問題を修正
+- 不正解時は通常レイアウトを維持しつつ短い赤フラッシュを表示
+- 効果音 ON/OFF、判定、Result / Score 集計は変更なし
+- docs/codex/06_IMPROVEMENT_BACKLOG.md に完了メモを追記
+
+Verification:
+- cmd /c npm run build: OK
+- cmd /c npm run lint: OK
