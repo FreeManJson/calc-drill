@@ -243,7 +243,9 @@ export function useTimedPlay(
 
     const isCorrect = userAnswer === currentQuestion.answer
     const answeredAtMs =
-      startedAtMs === null ? 0 : Math.max(Date.now() - startedAtMs, 0)
+      startedAtMs === null
+        ? 0
+        : Math.max(Date.now() - startedAtMs - getPausedDurationMs(), 0)
     const answerRecord: AnswerRecord = {
       question: currentQuestion,
       userAnswer,

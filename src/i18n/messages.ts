@@ -83,6 +83,16 @@ export type AppMessages = {
     answers: string
     noAnswers: string
     yourAnswer: (answer: number | null) => string
+    answerHistory: string
+    historyNumber: string
+    historyQuestion: string
+    historyYourAnswer: string
+    historyCorrectAnswer: string
+    historyResult: string
+    historyTime: string
+    formatAnswerTime: (durationMs: number) => string
+    resultOk: string
+    resultNg: string
     correct: string
     incorrect: string
   }
@@ -182,6 +192,17 @@ export const messages = {
       answers: '答えたもんだい',
       noAnswers: 'まだ答えたもんだいがありません。',
       yourAnswer: (answer) => `あなたの答え: ${answer}`,
+      answerHistory: '解答履歴',
+      historyNumber: 'No.',
+      historyQuestion: '問題',
+      historyYourAnswer: 'あなたの答え',
+      historyCorrectAnswer: '正解',
+      historyResult: '判定',
+      historyTime: '解答時間',
+      formatAnswerTime: (durationMs) =>
+        `${(durationMs / 1000).toFixed(1)}秒`,
+      resultOk: '〇',
+      resultNg: '×',
       correct: 'せいかい',
       incorrect: 'もういちど',
     },
@@ -279,6 +300,17 @@ export const messages = {
       answers: 'Answers',
       noAnswers: 'No answers submitted.',
       yourAnswer: (answer) => `Your answer: ${answer}`,
+      answerHistory: 'Answer History',
+      historyNumber: 'No.',
+      historyQuestion: 'Question',
+      historyYourAnswer: 'Your Answer',
+      historyCorrectAnswer: 'Correct Answer',
+      historyResult: 'Result',
+      historyTime: 'Time',
+      formatAnswerTime: (durationMs) =>
+        `${(durationMs / 1000).toFixed(1)} sec`,
+      resultOk: 'OK',
+      resultNg: 'NG',
       correct: 'Correct',
       incorrect: 'Incorrect',
     },

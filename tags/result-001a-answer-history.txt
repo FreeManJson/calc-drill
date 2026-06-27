@@ -1,0 +1,13 @@
+Result-001A: 結果画面に解答履歴を追加
+
+- Result 画面に問題ごとの解答履歴カードを追加
+- 問題、ユーザー回答、正解、判定、解答時間を表示
+- 正解 / 不正解を視覚的に区別できるスタイルを追加
+- スマホ縦画面でも読めるカード形式に調整
+- 解答時刻を feedback 停止時間を除いた有効プレイ時間で記録
+- 既存の Score 集計、Total Plays、保存構造は変更なし
+- docs/codex/06_IMPROVEMENT_BACKLOG.md に完了メモを追記
+
+Verification:
+- cmd /c npm run build: OK
+- cmd /c npm run lint: OK

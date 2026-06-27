@@ -97,3 +97,4 @@ Phase 9 以降は、改善チケット方式で進める。
 - Play-003C: Simplified answer feedback effects so play layout stays stable.
 - Play-001B: Moved start countdown into the current question card without revealing questions.
 - Docs-002: Added game mode, difficulty, ranking, insight, and lock planning notes.
+- Result-001A: Added detailed answer history cards to the result screen.

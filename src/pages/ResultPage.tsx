@@ -11,6 +11,21 @@ function formatDuration(durationMs: number, t: AppMessages) {
   return t.common.formatSeconds(Math.round(durationMs / 1000))
 }
 
+function getAnswerElapsedMs(
+  answers: PlayResult['answers'],
+  index: number,
+) {
+  const currentAnsweredAtMs = answers[index]?.answeredAtMs ?? 0
+  const previousAnsweredAtMs =
+    index === 0 ? 0 : answers[index - 1]?.answeredAtMs ?? 0
+
+  return Math.max(currentAnsweredAtMs - previousAnsweredAtMs, 0)
+}
+
+function formatNullableAnswer(answer: number | null, t: AppMessages) {
+  return answer === null ? t.common.noData : String(answer)
+}
+
 export function ResultPage({ messages: t, result }: ResultPageProps) {
   return (
     <section className="page">
@@ -39,18 +54,66 @@ export function ResultPage({ messages: t, result }: ResultPageProps) {
           </dl>
 
           <div className="answer-history">
-            <h2>{t.result.answers}</h2>
+            <h2>{t.result.answerHistory}</h2>
             {result.answers.length === 0 ? (
               <p className="empty-message">{t.result.noAnswers}</p>
             ) : (
-              <ol>
+              <ol className="answer-history__list">
                 {result.answers.map((answer, index) => (
-                  <li key={`${answer.answeredAtMs}-${index}`}>
-                    <span>{formatQuestion(answer.question)}</span>
-                    <span>{t.result.yourAnswer(answer.userAnswer)}</span>
-                    <span>
-                      {answer.isCorrect ? t.result.correct : t.result.incorrect}
-                    </span>
+                  <li
+                    className={[
+                      'answer-history__item',
+                      answer.isCorrect
+                        ? 'answer-history__item--correct'
+                        : 'answer-history__item--incorrect',
+                    ].join(' ')}
+                    key={`${answer.answeredAtMs}-${index}`}
+                  >
+                    <div className="answer-history__header">
+                      <span className="answer-history__number">
+                        {t.result.historyNumber} {index + 1}
+                      </span>
+                      <span
+                        className={[
+                          'answer-history__badge',
+                          answer.isCorrect
+                            ? 'answer-history__badge--correct'
+                            : 'answer-history__badge--incorrect',
+                        ].join(' ')}
+                      >
+                        {answer.isCorrect ? t.result.resultOk : t.result.resultNg}
+                      </span>
+                    </div>
+                    <dl className="answer-history__details">
+                      <div>
+                        <dt>{t.result.historyQuestion}</dt>
+                        <dd>{formatQuestion(answer.question)}</dd>
+                      </div>
+                      <div>
+                        <dt>{t.result.historyYourAnswer}</dt>
+                        <dd>{formatNullableAnswer(answer.userAnswer, t)}</dd>
+                      </div>
+                      <div>
+                        <dt>{t.result.historyCorrectAnswer}</dt>
+                        <dd>{answer.question.answer}</dd>
+                      </div>
+                      <div>
+                        <dt>{t.result.historyResult}</dt>
+                        <dd>
+                          {answer.isCorrect
+                            ? t.result.correct
+                            : t.result.incorrect}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt>{t.result.historyTime}</dt>
+                        <dd>
+                          {t.result.formatAnswerTime(
+                            getAnswerElapsedMs(result.answers, index),
+                          )}
+                        </dd>
+                      </div>
+                    </dl>
                   </li>
                 ))}
               </ol>
