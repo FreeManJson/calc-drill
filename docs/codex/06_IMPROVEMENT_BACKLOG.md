@@ -98,3 +98,4 @@ Phase 9 以降は、改善チケット方式で進める。
 - Play-001B: Moved start countdown into the current question card without revealing questions.
 - Docs-002: Added game mode, difficulty, ranking, insight, and lock planning notes.
 - Result-001A: Added detailed answer history cards to the result screen.
+- Result-001B: Changed result history to a per-question summary table with mistake counts.

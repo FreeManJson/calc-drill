@@ -80,6 +80,10 @@ export type AppMessages = {
     score: string
     duration: string
     timeLimit: string
+    totalAnswers: string
+    mistakes: string
+    accuracy: string
+    averageAnswerTime: string
     answers: string
     noAnswers: string
     yourAnswer: (answer: number | null) => string
@@ -189,6 +193,10 @@ export const messages = {
       score: 'せいかい',
       duration: '時間',
       timeLimit: 'じかん',
+      totalAnswers: '回答数',
+      mistakes: 'ミス数',
+      accuracy: '正答率',
+      averageAnswerTime: '平均解答時間',
       answers: '答えたもんだい',
       noAnswers: 'まだ答えたもんだいがありません。',
       yourAnswer: (answer) => `あなたの答え: ${answer}`,
@@ -297,6 +305,10 @@ export const messages = {
       score: 'Score',
       duration: 'Duration',
       timeLimit: 'Time limit',
+      totalAnswers: 'Answers',
+      mistakes: 'Mistakes',
+      accuracy: 'Accuracy',
+      averageAnswerTime: 'Average Time',
       answers: 'Answers',
       noAnswers: 'No answers submitted.',
       yourAnswer: (answer) => `Your answer: ${answer}`,

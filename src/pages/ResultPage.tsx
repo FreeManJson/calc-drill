@@ -1,6 +1,6 @@
 import type { AppMessages } from '../i18n/messages'
 import { formatQuestion } from '../services/questionGenerator'
-import type { PlayResult } from '../types/drill'
+import type { AnswerRecord, DrillQuestion, PlayResult } from '../types/drill'
 
 type ResultPageProps = {
   messages: AppMessages
@@ -11,22 +11,96 @@ function formatDuration(durationMs: number, t: AppMessages) {
   return t.common.formatSeconds(Math.round(durationMs / 1000))
 }
 
-function getAnswerElapsedMs(
-  answers: PlayResult['answers'],
-  index: number,
-) {
-  const currentAnsweredAtMs = answers[index]?.answeredAtMs ?? 0
-  const previousAnsweredAtMs =
-    index === 0 ? 0 : answers[index - 1]?.answeredAtMs ?? 0
-
-  return Math.max(currentAnsweredAtMs - previousAnsweredAtMs, 0)
-}
-
 function formatNullableAnswer(answer: number | null, t: AppMessages) {
   return answer === null ? t.common.noData : String(answer)
 }
 
+type QuestionResultRow = {
+  answers: string[]
+  correctAnswer: string
+  elapsedMs: number
+  mistakeCount: number
+  question: DrillQuestion
+}
+
+function isSameQuestion(left: DrillQuestion, right: DrillQuestion) {
+  return (
+    left.left === right.left &&
+    left.right === right.right &&
+    left.operation === right.operation &&
+    left.answer === right.answer
+  )
+}
+
+function createQuestionResultRow(
+  records: AnswerRecord[],
+  previousAnsweredAtMs: number,
+  t: AppMessages,
+): QuestionResultRow {
+  const lastRecord = records[records.length - 1]
+
+  return {
+    answers: records.map((record) => formatNullableAnswer(record.userAnswer, t)),
+    correctAnswer: String(lastRecord.question.answer),
+    elapsedMs: Math.max(lastRecord.answeredAtMs - previousAnsweredAtMs, 0),
+    mistakeCount: records.filter((record) => !record.isCorrect).length,
+    question: lastRecord.question,
+  }
+}
+
+function createQuestionResultRows(
+  answers: PlayResult['answers'],
+  t: AppMessages,
+) {
+  const rows: QuestionResultRow[] = []
+  let currentRecords: AnswerRecord[] = []
+  let previousAnsweredAtMs = 0
+
+  answers.forEach((answer) => {
+    const currentQuestion = currentRecords[0]?.question
+
+    if (
+      currentQuestion !== undefined &&
+      !isSameQuestion(currentQuestion, answer.question)
+    ) {
+      rows.push(createQuestionResultRow(currentRecords, previousAnsweredAtMs, t))
+      previousAnsweredAtMs =
+        currentRecords[currentRecords.length - 1]?.answeredAtMs ?? previousAnsweredAtMs
+      currentRecords = []
+    }
+
+    currentRecords.push(answer)
+
+    if (answer.isCorrect) {
+      rows.push(createQuestionResultRow(currentRecords, previousAnsweredAtMs, t))
+      previousAnsweredAtMs = answer.answeredAtMs
+      currentRecords = []
+    }
+  })
+
+  if (currentRecords.length > 0) {
+    rows.push(createQuestionResultRow(currentRecords, previousAnsweredAtMs, t))
+  }
+
+  return rows
+}
+
 export function ResultPage({ messages: t, result }: ResultPageProps) {
+  const questionResultRows =
+    result === null ? [] : createQuestionResultRows(result.answers, t)
+  const mistakeCount =
+    result === null
+      ? 0
+      : result.answers.filter((answer) => !answer.isCorrect).length
+  const accuracy =
+    result === null || result.totalCount === 0
+      ? t.common.noData
+      : `${Math.round((result.correctCount / result.totalCount) * 100)}%`
+  const averageAnswerTime =
+    result === null || result.totalCount === 0
+      ? t.common.noData
+      : t.result.formatAnswerTime(result.durationMs / result.totalCount)
+
   return (
     <section className="page">
       <h1>{t.result.title}</h1>
@@ -42,81 +116,73 @@ export function ResultPage({ messages: t, result }: ResultPageProps) {
               </dd>
             </div>
             <div>
+              <dt>{t.result.totalAnswers}</dt>
+              <dd>{result.totalCount}</dd>
+            </div>
+            <div>
+              <dt>{t.result.mistakes}</dt>
+              <dd>{mistakeCount}</dd>
+            </div>
+            <div>
+              <dt>{t.result.accuracy}</dt>
+              <dd>{accuracy}</dd>
+            </div>
+            <div>
               <dt>{t.result.duration}</dt>
               <dd>{formatDuration(result.durationMs, t)}</dd>
             </div>
             <div>
-              <dt>{t.result.timeLimit}</dt>
-              <dd>
-                {t.common.formatSeconds(result.settings.timeLimitSeconds)}
-              </dd>
+              <dt>{t.result.averageAnswerTime}</dt>
+              <dd>{averageAnswerTime}</dd>
             </div>
           </dl>
 
           <div className="answer-history">
             <h2>{t.result.answerHistory}</h2>
-            {result.answers.length === 0 ? (
+            {questionResultRows.length === 0 ? (
               <p className="empty-message">{t.result.noAnswers}</p>
             ) : (
-              <ol className="answer-history__list">
-                {result.answers.map((answer, index) => (
-                  <li
-                    className={[
-                      'answer-history__item',
-                      answer.isCorrect
-                        ? 'answer-history__item--correct'
-                        : 'answer-history__item--incorrect',
-                    ].join(' ')}
-                    key={`${answer.answeredAtMs}-${index}`}
-                  >
-                    <div className="answer-history__header">
-                      <span className="answer-history__number">
-                        {t.result.historyNumber} {index + 1}
-                      </span>
-                      <span
-                        className={[
-                          'answer-history__badge',
-                          answer.isCorrect
-                            ? 'answer-history__badge--correct'
-                            : 'answer-history__badge--incorrect',
-                        ].join(' ')}
+              <div className="answer-history__table-scroll">
+                <table className="answer-history__table">
+                  <thead>
+                    <tr>
+                      <th scope="col">{t.result.historyNumber}</th>
+                      <th scope="col">{t.result.historyQuestion}</th>
+                      <th scope="col">{t.result.historyYourAnswer}</th>
+                      <th scope="col">{t.result.historyCorrectAnswer}</th>
+                      <th scope="col">{t.result.mistakes}</th>
+                      <th scope="col">{t.result.historyTime}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {questionResultRows.map((row, index) => (
+                      <tr
+                        className={
+                          row.mistakeCount > 0
+                            ? 'answer-history__row--missed'
+                            : 'answer-history__row--clear'
+                        }
+                        key={`${formatQuestion(row.question)}-${index}`}
                       >
-                        {answer.isCorrect ? t.result.resultOk : t.result.resultNg}
-                      </span>
-                    </div>
-                    <dl className="answer-history__details">
-                      <div>
-                        <dt>{t.result.historyQuestion}</dt>
-                        <dd>{formatQuestion(answer.question)}</dd>
-                      </div>
-                      <div>
-                        <dt>{t.result.historyYourAnswer}</dt>
-                        <dd>{formatNullableAnswer(answer.userAnswer, t)}</dd>
-                      </div>
-                      <div>
-                        <dt>{t.result.historyCorrectAnswer}</dt>
-                        <dd>{answer.question.answer}</dd>
-                      </div>
-                      <div>
-                        <dt>{t.result.historyResult}</dt>
-                        <dd>
-                          {answer.isCorrect
-                            ? t.result.correct
-                            : t.result.incorrect}
-                        </dd>
-                      </div>
-                      <div>
-                        <dt>{t.result.historyTime}</dt>
-                        <dd>
-                          {t.result.formatAnswerTime(
-                            getAnswerElapsedMs(result.answers, index),
-                          )}
-                        </dd>
-                      </div>
-                    </dl>
-                  </li>
-                ))}
-              </ol>
+                        <td>{index + 1}</td>
+                        <td>{formatQuestion(row.question)}</td>
+                        <td>
+                          <span className="answer-history__answer-flow">
+                            {row.answers.map((answer, answerIndex) => (
+                              <span key={`${answer}-${answerIndex}`}>
+                                {answerIndex === 0 ? answer : `→ ${answer}`}
+                              </span>
+                            ))}
+                          </span>
+                        </td>
+                        <td>{row.correctAnswer}</td>
+                        <td>{row.mistakeCount}</td>
+                        <td>{t.result.formatAnswerTime(row.elapsedMs)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
           </div>
         </div>

@@ -1,0 +1,15 @@
+Result-001B: 解答履歴を問題別一覧に変更
+
+- Result 画面の解答履歴を1回答カード形式から問題別一覧表へ変更
+- 同じ問題への回答推移を1行に集約
+- あなたの答え欄で回答推移をセル内改行表示
+- ミス数列を追加し、判定列を削除
+- ミスした問題を背景色と左ボーダーで視覚的に強調
+- 上部サマリーに回答数、ミス数、正答率、平均解答時間を追加
+- スマホでは横スクロール可能な表形式で表示
+- Score 集計、Total Plays、保存構造、Play 進行ロジックは変更なし
+- docs/codex/06_IMPROVEMENT_BACKLOG.md に完了メモを追記
+
+Verification:
+- cmd /c npm run build: OK
+- cmd /c npm run lint: OK
