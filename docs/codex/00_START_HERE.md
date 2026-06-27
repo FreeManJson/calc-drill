@@ -38,3 +38,4 @@
 
 ## Improvement Backlog
 - Phase 9 以降の改善チケット運用は `docs/codex/06_IMPROVEMENT_BACKLOG.md` を参照する
+- 今後のゲームモード・難易度・ランキング計画は `docs/codex/07_GAME_MODE_PLAN.md` を参照する

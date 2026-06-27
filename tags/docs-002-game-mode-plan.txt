@@ -1,0 +1,11 @@
+Docs-002: ゲームモードと難易度計画を追加
+
+- docs/codex/07_GAME_MODE_PLAN.md を新規追加
+- 今後のゲームモード、難易度、ルール、ひらめき、サバイバル、ランキング、ロック要素案を整理
+- 未決定事項を未決定として明記
+- 00_START_HERE.md に 07_GAME_MODE_PLAN.md への参照を追加
+- 06_IMPROVEMENT_BACKLOG.md に Docs-002 の完了メモを追記
+- アプリコード、UI、設定保存、localStorage 構造は変更なし
+
+Verification:
+- cmd /c npm run build: OK
