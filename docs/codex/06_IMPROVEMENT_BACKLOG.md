@@ -99,3 +99,4 @@ Phase 9 以降は、改善チケット方式で進める。
 - Docs-002: Added game mode, difficulty, ranking, insight, and lock planning notes.
 - Result-001A: Added detailed answer history cards to the result screen.
 - Result-001B: Changed result history to a per-question summary table with mistake counts.
+- Difficulty-001A: Added four difficulty levels to settings, storage, and display labels.

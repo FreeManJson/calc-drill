@@ -8,7 +8,7 @@ export const DEFAULT_SETTINGS: DrillSettings = {
   mode: 'timeLimit',
   timeLimitSeconds: DEFAULT_TIME_LIMIT_SECONDS,
   language: DEFAULT_LANGUAGE,
-  difficulty: 'beginner',
+  difficulty: 'easy',
   operations: [...FREE_OPERATION_TYPES],
   numberPadLayout: 'auto',
   backgroundTheme: 'none',

@@ -31,6 +31,28 @@ function isDifficulty(value: unknown): value is Difficulty {
   return DIFFICULTIES.includes(value as Difficulty)
 }
 
+function parseDifficulty(value: unknown): Difficulty {
+  if (isDifficulty(value)) {
+    return value
+  }
+
+  switch (value) {
+    case 'beginner':
+    case 'basic':
+    case '初級':
+      return 'easy'
+    case 'intermediate':
+    case 'middle':
+    case '中級':
+      return 'normal'
+    case 'advanced':
+    case '上級':
+      return 'hard'
+    default:
+      return DEFAULT_SETTINGS.difficulty
+  }
+}
+
 function isLanguage(value: unknown): value is Language {
   return LANGUAGES.includes(value as Language)
 }
@@ -70,9 +92,7 @@ function parseSettings(value: unknown): DrillSettings {
         ? Math.trunc(value.timeLimitSeconds)
         : DEFAULT_SETTINGS.timeLimitSeconds,
     language: isLanguage(value.language) ? value.language : DEFAULT_LANGUAGE,
-    difficulty: isDifficulty(value.difficulty)
-      ? value.difficulty
-      : DEFAULT_SETTINGS.difficulty,
+    difficulty: parseDifficulty(value.difficulty),
     operations: parseOperations(value.operations),
     numberPadLayout: isNumberPadLayout(value.numberPadLayout)
       ? value.numberPadLayout

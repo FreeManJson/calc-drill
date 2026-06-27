@@ -1,0 +1,14 @@
+Difficulty-001A: 難易度4段階の土台を追加
+
+- Difficulty 型を easy / normal / hard / expert に変更
+- デフォルト難易度を easy に変更
+- Settings 画面に4段階の難易度選択を追加
+- Top 画面の難易度表示を辞書ラベル化
+- ja/en の難易度表示文言を追加
+- 旧 localStorage 難易度値を新しい難易度へ安全にマッピング
+- 出題範囲、Result、Score 集計仕様は変更なし
+- docs/codex/06_IMPROVEMENT_BACKLOG.md に完了メモを追記
+
+Verification:
+- cmd /c npm run build: OK
+- cmd /c npm run lint: OK

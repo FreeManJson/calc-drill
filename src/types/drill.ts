@@ -3,7 +3,7 @@ import type { Language } from '../i18n/messages'
 export const GAME_MODES = ['timeLimit'] as const
 export type GameMode = (typeof GAME_MODES)[number]
 
-export const DIFFICULTIES = ['beginner'] as const
+export const DIFFICULTIES = ['easy', 'normal', 'hard', 'expert'] as const
 export type Difficulty = (typeof DIFFICULTIES)[number]
 
 export const OPERATION_TYPES = [

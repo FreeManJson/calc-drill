@@ -27,7 +27,7 @@ export function TopPage({ messages: t, settings }: TopPageProps) {
         </div>
         <div>
           <dt>{t.top.difficulty}</dt>
-          <dd>{settings.difficulty}</dd>
+          <dd>{t.difficultyLabels[settings.difficulty]}</dd>
         </div>
         <div>
           <dt>{t.top.operations}</dt>

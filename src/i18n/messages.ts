@@ -1,4 +1,4 @@
-import type { OperationType } from '../types/drill'
+import type { Difficulty, OperationType } from '../types/drill'
 
 export const LANGUAGES = ['ja', 'en'] as const
 export type Language = (typeof LANGUAGES)[number]
@@ -21,6 +21,7 @@ export type AppMessages = {
     devUnlock: string
     noData: string
   }
+  difficultyLabels: Record<Difficulty, string>
   operationLabels: Record<OperationType, string>
   top: {
     title: string
@@ -33,6 +34,7 @@ export type AppMessages = {
     title: string
     description: (seconds: number) => string
     timeLimitSeconds: string
+    difficulty: string
     language: string
     languageJapanese: string
     languageEnglish: string
@@ -135,6 +137,12 @@ export const messages = {
       multiplication: 'かけ算',
       division: 'わり算',
     },
+    difficultyLabels: {
+      easy: 'かんたん',
+      normal: 'ふつう',
+      hard: 'むずかしい',
+      expert: 'たつじん',
+    },
     top: {
       title: 'トップへ',
       description: (seconds) => `${seconds}秒で、けいさんにチャレンジしよう。`,
@@ -146,6 +154,7 @@ export const messages = {
       title: 'くわしい設定',
       description: (seconds) => `いまは ${seconds}秒ドリルがきほんです。`,
       timeLimitSeconds: 'じかん（秒）',
+      difficulty: 'むずかしさ',
       language: 'ことば',
       languageJapanese: '日本語',
       languageEnglish: 'English',
@@ -245,6 +254,12 @@ export const messages = {
       multiplication: 'Multiplication',
       division: 'Division',
     },
+    difficultyLabels: {
+      easy: 'Easy',
+      normal: 'Normal',
+      hard: 'Hard',
+      expert: 'Expert',
+    },
     top: {
       title: 'Top',
       description: (seconds) =>
@@ -258,6 +273,7 @@ export const messages = {
       description: (seconds) =>
         `The MVP default is a ${seconds}-second drill.`,
       timeLimitSeconds: 'Time limit seconds',
+      difficulty: 'Difficulty',
       language: 'Language',
       languageJapanese: '日本語',
       languageEnglish: 'English',

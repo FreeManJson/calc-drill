@@ -7,11 +7,13 @@ import { LANGUAGES } from '../i18n/messages'
 import type { AppMessages, Language } from '../i18n/messages'
 import {
   BACKGROUND_THEMES,
+  DIFFICULTIES,
   NUMBER_PAD_LAYOUTS,
   OPERATION_TYPES,
 } from '../types/drill'
 import type {
   BackgroundTheme,
+  Difficulty,
   DrillSettings,
   NumberPadLayout,
   OperationType,
@@ -59,6 +61,10 @@ export function SettingsPage({
 
   const handleLanguageChange = (language: Language) => {
     updateSettings({ language })
+  }
+
+  const handleDifficultyChange = (difficulty: Difficulty) => {
+    updateSettings({ difficulty })
   }
 
   const handleNumberPadLayoutChange = (numberPadLayout: NumberPadLayout) => {
@@ -117,6 +123,22 @@ export function SettingsPage({
             value={settings.timeLimitSeconds}
           />
         </label>
+
+        <fieldset className="field-group">
+          <legend>{t.settings.difficulty}</legend>
+          {DIFFICULTIES.map((difficulty) => (
+            <label className="check-field" key={difficulty}>
+              <input
+                checked={settings.difficulty === difficulty}
+                name="difficulty"
+                onChange={() => handleDifficultyChange(difficulty)}
+                type="radio"
+                value={difficulty}
+              />
+              <span>{t.difficultyLabels[difficulty]}</span>
+            </label>
+          ))}
+        </fieldset>
 
         <fieldset className="field-group">
           <legend>{t.settings.language}</legend>
