@@ -1,0 +1,34 @@
+Tag: difficulty-001b-question-ranges
+
+Type:
+  [x] Question Generation
+  [x] Difficulty
+  [ ] UI
+  [ ] Storage
+
+Summary:
+  4段階の難易度に応じて、四則演算の出題範囲を変更した。
+  暗算ドリルとして破綻しないよう、負の数・余りあり割り算・一般的な2桁×2桁掛け算を避けた。
+
+Details:
+  - easy / normal / hard / expert ごとの出題生成を追加
+  - 足し算・引き算の桁範囲を難易度別に調整
+  - 掛け算で九九、桁ずらし、12×12 ベースを扱えるように変更
+  - 割り算は割り切れる問題だけを生成
+  - Difficulty-001B の完了メモを backlog に追記
+
+Files:
+  - docs/codex/06_IMPROVEMENT_BACKLOG.md
+  - src/services/questionGenerator.ts
+
+Verification:
+  - npm run lint: OK
+  - npm run build: OK
+  - question generator sample check: OK
+
+Impact:
+  - Play の出題内容が難易度設定に応じて変化する
+  - Result / Score の保存形式や集計仕様は変更なし
+
+Next:
+  - Mode-001A 以降のモード追加、または難易度別バランスの実機確認

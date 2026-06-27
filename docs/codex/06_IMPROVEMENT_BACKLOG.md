@@ -100,3 +100,4 @@ Phase 9 以降は、改善チケット方式で進める。
 - Result-001A: Added detailed answer history cards to the result screen.
 - Result-001B: Changed result history to a per-question summary table with mistake counts.
 - Difficulty-001A: Added four difficulty levels to settings, storage, and display labels.
+- Difficulty-001B: Added difficulty-based question ranges for all four operations.
