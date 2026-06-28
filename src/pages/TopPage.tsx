@@ -111,24 +111,28 @@ export function TopPage({
       <p className="page-description">
         {settings.mode === 'questionGoal'
           ? t.top.questionGoalDescription(settings.targetQuestionCount)
-          : t.top.description(settings.timeLimitSeconds)}
+          : settings.mode === 'survival'
+            ? t.top.survivalDescription
+            : t.top.description(settings.timeLimitSeconds)}
       </p>
       <dl className="settings-summary">
         <div>
           <dt>{t.top.mode}</dt>
           <dd>{t.gameModeLabels[settings.mode]}</dd>
         </div>
-        <div>
-          <dt>{t.top.timeLimit}</dt>
-          <dd>
-            {settings.mode === 'timeLimit'
-              ? t.common.formatSeconds(settings.timeLimitSeconds)
-              : formatQuestionGoalTimeLimit(
-                  settings.questionGoalTimeLimitSeconds ?? 0,
-                  t,
-                )}
-          </dd>
-        </div>
+        {settings.mode !== 'survival' && (
+          <div>
+            <dt>{t.top.timeLimit}</dt>
+            <dd>
+              {settings.mode === 'timeLimit'
+                ? t.common.formatSeconds(settings.timeLimitSeconds)
+                : formatQuestionGoalTimeLimit(
+                    settings.questionGoalTimeLimitSeconds ?? 0,
+                    t,
+                  )}
+            </dd>
+          </div>
+        )}
         {settings.mode === 'questionGoal' && (
           <div>
             <dt>{t.top.targetQuestionCount}</dt>
@@ -230,7 +234,7 @@ export function TopPage({
               ))}
             </div>
           </fieldset>
-        ) : (
+        ) : settings.mode === 'questionGoal' ? (
           <>
             <fieldset className="field-group">
               <legend>{t.top.targetQuestionCount}</legend>
@@ -294,7 +298,7 @@ export function TopPage({
               </div>
             </fieldset>
           </>
-        )}
+        ) : null}
 
         <button className="primary-button" onClick={onStartPlay} type="button">
           {t.top.start}

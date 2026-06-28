@@ -16,6 +16,9 @@ const INCORRECT_FEEDBACK_MS = 700
 const ANSWER_EFFECT_MS = 240
 const COUNTDOWN_STEP_MS = 400
 const COUNTDOWN_VALUES = ['3', '2', '1', 'Go'] as const
+const SURVIVAL_INITIAL_TIME_MS = 10_000
+const SURVIVAL_CORRECT_BONUS_MS = 3_000
+const SURVIVAL_MAX_TIME_MS = 30_000
 
 export type PlayStatus = 'idle' | 'countdown' | 'playing' | 'finished'
 export type AnswerEffect = 'correct' | 'incorrect' | null
@@ -45,6 +48,12 @@ function getActiveTimeLimitMs(settings: DrillSettings) {
   return null
 }
 
+function getInitialRemainingMs(settings: DrillSettings) {
+  return settings.mode === 'survival'
+    ? SURVIVAL_INITIAL_TIME_MS
+    : (getActiveTimeLimitMs(settings) ?? 0)
+}
+
 export function useTimedPlay(
   settings: DrillSettings,
   { messages: t, onComplete }: UseTimedPlayOptions,
@@ -62,6 +71,9 @@ export function useTimedPlay(
   const [remainingSecondsState, setRemainingSeconds] = useState(
     Math.ceil((getActiveTimeLimitMs(settings) ?? 0) / 1000),
   )
+  const [survivalRemainingMs, setSurvivalRemainingMs] = useState(
+    getInitialRemainingMs(settings),
+  )
   const [elapsedMs, setElapsedMs] = useState(0)
   const [answerEffect, setAnswerEffect] = useState<AnswerEffect>(null)
   const [feedback, setFeedback] = useState<Feedback>(null)
@@ -73,6 +85,8 @@ export function useTimedPlay(
   const pausedDurationMsRef = useRef(0)
   const settingsRef = useRef(settings)
   const startedAtMsRef = useRef<number | null>(null)
+  const survivalRemainingMsRef = useRef(getInitialRemainingMs(settings))
+  const survivalLastTickMsRef = useRef<number | null>(null)
 
   const correctCount = answers.filter((answer) => answer.isCorrect).length
 
@@ -111,6 +125,7 @@ export function useTimedPlay(
       (answer) => answer.isCorrect,
     ).length
     const isQuestionGoal = settingsRef.current.mode === 'questionGoal'
+    const isSurvival = settingsRef.current.mode === 'survival'
     const isCleared =
       isQuestionGoal &&
       resultCorrectCount >= settingsRef.current.targetQuestionCount &&
@@ -126,6 +141,15 @@ export function useTimedPlay(
       createdAtMs: Date.now(),
       isCleared,
       isTimeUp,
+      survivalTimeMs: isSurvival ? durationMs : undefined,
+      initialTimeSeconds: isSurvival ? SURVIVAL_INITIAL_TIME_MS / 1000 : undefined,
+      remainingTimeSeconds: isSurvival
+        ? Math.max(survivalRemainingMsRef.current / 1000, 0)
+        : undefined,
+      maxTimeSeconds: isSurvival ? SURVIVAL_MAX_TIME_MS / 1000 : undefined,
+      correctBonusSeconds: isSurvival
+        ? SURVIVAL_CORRECT_BONUS_MS / 1000
+        : undefined,
     })
   }, [getPausedDurationMs])
 
@@ -146,6 +170,7 @@ export function useTimedPlay(
         const now = Date.now()
         setStartedAtMs(now)
         startedAtMsRef.current = now
+        survivalLastTickMsRef.current = now
         return
       }
 
@@ -158,7 +183,10 @@ export function useTimedPlay(
   }, [status])
 
   useEffect(() => {
-    if (status !== 'playing' || feedback !== null) {
+    if (
+      status !== 'playing' ||
+      (feedback !== null && settingsRef.current.mode !== 'survival')
+    ) {
       return
     }
 
@@ -170,6 +198,27 @@ export function useTimedPlay(
           : Math.max(Date.now() - startedAt - getPausedDurationMs(), 0)
 
       setElapsedMs(activeDurationMs)
+
+      if (settingsRef.current.mode === 'survival') {
+        const previousTickMs = survivalLastTickMsRef.current ?? Date.now()
+        const now = Date.now()
+        const tickDurationMs = Math.max(now - previousTickMs, 0)
+        survivalLastTickMsRef.current = now
+        const nextRemainingMs = Math.max(
+          survivalRemainingMsRef.current - tickDurationMs,
+          0,
+        )
+        survivalRemainingMsRef.current = nextRemainingMs
+        setSurvivalRemainingMs(nextRemainingMs)
+        setRemainingSeconds(Math.ceil(nextRemainingMs / 1000))
+
+        if (nextRemainingMs <= 0) {
+          setStatus('finished')
+          completePlay('timeUp')
+        }
+
+        return
+      }
 
       const maxDurationMs = getActiveTimeLimitMs(settingsRef.current)
 
@@ -243,7 +292,11 @@ export function useTimedPlay(
     completedRef.current = false
     pauseStartedAtMsRef.current = null
     pausedDurationMsRef.current = 0
-    setRemainingSeconds(Math.ceil((getActiveTimeLimitMs(settings) ?? 0) / 1000))
+    const initialRemainingMs = getInitialRemainingMs(settings)
+    setRemainingSeconds(Math.ceil(initialRemainingMs / 1000))
+    setSurvivalRemainingMs(initialRemainingMs)
+    survivalRemainingMsRef.current = initialRemainingMs
+    survivalLastTickMsRef.current = null
     setElapsedMs(0)
     setAnswerEffect(null)
     setCountdownValue(COUNTDOWN_VALUES[0])
@@ -309,6 +362,15 @@ export function useTimedPlay(
       if (settings.soundEffectsEnabled) {
         playCorrectSound()
       }
+      if (settings.mode === 'survival') {
+        const nextRemainingMs = Math.min(
+          survivalRemainingMsRef.current + SURVIVAL_CORRECT_BONUS_MS,
+          SURVIVAL_MAX_TIME_MS,
+        )
+        survivalRemainingMsRef.current = nextRemainingMs
+        setSurvivalRemainingMs(nextRemainingMs)
+        setRemainingSeconds(Math.ceil(nextRemainingMs / 1000))
+      }
       if (
         settings.mode === 'questionGoal' &&
         nextAnswers.filter((answer) => answer.isCorrect).length >=
@@ -328,7 +390,9 @@ export function useTimedPlay(
     if (settings.soundEffectsEnabled) {
       playIncorrectSound()
     }
-    pauseStartedAtMsRef.current = Date.now()
+    if (settings.mode !== 'survival') {
+      pauseStartedAtMsRef.current = Date.now()
+    }
     setAnswerInput('')
     setFeedback({
       isCorrect: false,
@@ -349,8 +413,12 @@ export function useTimedPlay(
     nextQuestion,
     remainingSeconds:
       status === 'idle'
-        ? Math.ceil((getActiveTimeLimitMs(settings) ?? 0) / 1000)
+        ? Math.ceil(getInitialRemainingMs(settings) / 1000)
         : remainingSecondsState,
+    survivalRemainingSeconds:
+      status === 'idle'
+        ? SURVIVAL_INITIAL_TIME_MS / 1000
+        : survivalRemainingMs / 1000,
     elapsedMs,
     setAnswerInput,
     start,

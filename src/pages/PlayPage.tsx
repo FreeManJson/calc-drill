@@ -23,6 +23,7 @@ export function PlayPage({
 }: PlayPageProps) {
   const play = useTimedPlay(settings, { messages: t, onComplete })
   const isQuestionGoalMode = settings.mode === 'questionGoal'
+  const isSurvivalMode = settings.mode === 'survival'
   const hasQuestionGoalTimeLimit =
     isQuestionGoalMode && settings.questionGoalTimeLimitSeconds > 0
   const answerFormClassName = [
@@ -52,13 +53,17 @@ export function PlayPage({
       <div className="play-panel">
         <div className="play-stats" aria-label={t.play.statusLabel}>
           <p>
-            {hasQuestionGoalTimeLimit || !isQuestionGoalMode
+            {isSurvivalMode
+              ? `${t.play.timeLeft}: ${t.result.formatAnswerTime(
+                  Math.max(play.survivalRemainingSeconds, 0) * 1000,
+                )}`
+              : hasQuestionGoalTimeLimit || !isQuestionGoalMode
               ? `${t.play.time}: ${t.common.formatSeconds(play.remainingSeconds)}`
               : `${t.play.elapsedTime}: ${t.result.formatAnswerTime(play.elapsedMs)}`}
           </p>
           <p>
-            {t.play.score}: {play.correctCount} /{' '}
-            {isQuestionGoalMode ? settings.targetQuestionCount : play.totalCount}
+            {t.play.score}: {play.correctCount}
+            {isQuestionGoalMode ? ` / ${settings.targetQuestionCount}` : ''}
           </p>
         </div>
 
@@ -66,7 +71,9 @@ export function PlayPage({
           <button className="primary-button" onClick={play.start} type="button">
             {isQuestionGoalMode
               ? t.play.startQuestionGoal(settings.targetQuestionCount)
-              : t.play.start(settings.timeLimitSeconds)}
+              : isSurvivalMode
+                ? t.play.startSurvival
+                : t.play.start(settings.timeLimitSeconds)}
           </button>
         )}
 
@@ -129,8 +136,8 @@ export function PlayPage({
           <div className="play-finished">
             <p>{t.play.finished}</p>
             <p>
-              {t.play.score}: {play.correctCount} /{' '}
-              {isQuestionGoalMode ? settings.targetQuestionCount : play.totalCount}
+              {t.play.score}: {play.correctCount}
+              {isQuestionGoalMode ? ` / ${settings.targetQuestionCount}` : ''}
             </p>
             <button className="primary-button" onClick={play.start} type="button">
               {t.play.retry}

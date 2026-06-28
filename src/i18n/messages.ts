@@ -28,6 +28,7 @@ export type AppMessages = {
     title: string
     description: (seconds: number) => string
     questionGoalDescription: (count: number) => string
+    survivalDescription: string
     playSettings: string
     start: string
     mode: string
@@ -76,10 +77,12 @@ export type AppMessages = {
     title: string
     statusLabel: string
     time: string
+    timeLeft: string
     elapsedTime: string
     score: string
     start: (seconds: number) => string
     startQuestionGoal: (count: number) => string
+    startSurvival: string
     finish: string
     finished: string
     retry: string
@@ -103,6 +106,8 @@ export type AppMessages = {
     duration: string
     clearTime: string
     clearQuestionCount: string
+    survivalResult: string
+    survivalTime: string
     timeLimit: string
     status: string
     clear: string
@@ -140,9 +145,12 @@ export type AppMessages = {
     noModeScore: string
     timeLimitMode: string
     questionGoalMode: string
+    survivalMode: string
     bestCorrectCount: string
+    longestSurvivalTime: string
     bestClearTime: string
     averageCorrectCount: string
+    averageSurvivalTime: string
     averageClearTime: string
     plays: string
     mistakes: string
@@ -188,12 +196,15 @@ export const messages = {
     gameModeLabels: {
       timeLimit: '時間制限',
       questionGoal: '問題数達成',
+      survival: 'サバイバル',
     },
     top: {
       title: 'トップへ',
       description: (seconds) => `${seconds}秒で、けいさんにチャレンジしよう。`,
       questionGoalDescription: (count) =>
         `${count}問クリアをめざして、けいさんにチャレンジしよう。`,
+      survivalDescription:
+        '持ち時間がなくなるまで、せいかいをつないでいこう。',
       playSettings: 'プレイ設定',
       start: '開始',
       mode: 'モード',
@@ -242,10 +253,12 @@ export const messages = {
       title: 'プレイ',
       statusLabel: 'プレイのようす',
       time: 'のこり',
+      timeLeft: '残り時間',
       elapsedTime: '経過時間',
       score: 'せいかい',
       start: (seconds) => `${seconds}秒ドリルをスタート`,
       startQuestionGoal: (count) => `${count}問チャレンジをスタート`,
+      startSurvival: 'サバイバルをスタート',
       finish: 'おわる',
       finished: 'おしまい',
       retry: 'もういちど',
@@ -269,6 +282,8 @@ export const messages = {
       duration: '時間',
       clearTime: 'クリア時間',
       clearQuestionCount: 'クリア問題数',
+      survivalResult: 'サバイバル結果',
+      survivalTime: '生存時間',
       timeLimit: 'じかん',
       status: '状態',
       clear: 'クリア',
@@ -307,9 +322,12 @@ export const messages = {
       noModeScore: 'このモードの成績はまだありません。',
       timeLimitMode: '時間制限モード',
       questionGoalMode: '問題数達成モード',
+      survivalMode: 'サバイバルモード',
       bestCorrectCount: 'ベスト正解数',
+      longestSurvivalTime: '最長生存時間',
       bestClearTime: 'ベストクリア時間',
       averageCorrectCount: '平均正解数',
+      averageSurvivalTime: '平均生存時間',
       averageClearTime: '平均クリア時間',
       plays: 'プレイ回数',
       mistakes: 'ミス数',
@@ -351,6 +369,7 @@ export const messages = {
     gameModeLabels: {
       timeLimit: 'Time Limit',
       questionGoal: 'Question Goal',
+      survival: 'Survival',
     },
     top: {
       title: 'Top',
@@ -358,6 +377,8 @@ export const messages = {
         `Practice quick arithmetic in a ${seconds}-second drill.`,
       questionGoalDescription: (count) =>
         `Practice quick arithmetic until you clear ${count} questions.`,
+      survivalDescription:
+        'Keep solving until your survival time runs out.',
       playSettings: 'Play Settings',
       start: 'Start',
       mode: 'Mode',
@@ -407,10 +428,12 @@ export const messages = {
       title: 'Play',
       statusLabel: 'Play status',
       time: 'Time',
+      timeLeft: 'Time Left',
       elapsedTime: 'Elapsed Time',
       score: 'Score',
       start: (seconds) => `Start ${seconds}-second drill`,
       startQuestionGoal: (count) => `Start ${count}-question challenge`,
+      startSurvival: 'Start survival',
       finish: 'Finish',
       finished: 'Finished',
       retry: 'Retry',
@@ -434,6 +457,8 @@ export const messages = {
       duration: 'Duration',
       clearTime: 'Clear Time',
       clearQuestionCount: 'Goal',
+      survivalResult: 'Survival Result',
+      survivalTime: 'Survival Time',
       timeLimit: 'Time limit',
       status: 'Status',
       clear: 'Clear',
@@ -472,9 +497,12 @@ export const messages = {
       noModeScore: 'No records for this mode yet.',
       timeLimitMode: 'Time Limit Mode',
       questionGoalMode: 'Question Goal Mode',
+      survivalMode: 'Survival Mode',
       bestCorrectCount: 'Best Correct Count',
+      longestSurvivalTime: 'Longest Survival Time',
       bestClearTime: 'Best Clear Time',
       averageCorrectCount: 'Average Correct Count',
+      averageSurvivalTime: 'Average Survival Time',
       averageClearTime: 'Average Clear Time',
       plays: 'Plays',
       mistakes: 'Mistakes',

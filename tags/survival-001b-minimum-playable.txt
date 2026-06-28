@@ -1,0 +1,11 @@
+Survival-001B: サバイバルモードを最小実装
+
+- playMode に survival を追加
+- PlayStart からサバイバルを選択できるように変更
+- 初期持ち時間10秒、正解+3秒、最大30秒のサバイバルタイマーを実装
+- 不正解時は同じ問題に戻り、サバイバル時間は回復しない
+- 時間切れで Result へ遷移し、サバイバル結果を表示
+- Score にサバイバルタブと最小集計表示を追加
+- ja/en 文言を追加
+- docs/codex/06_IMPROVEMENT_BACKLOG.md に完了メモを追記
+- npm run build 成功

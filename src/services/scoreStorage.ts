@@ -51,7 +51,9 @@ export function createScoreCategoryKey(settings: DrillSettings): string {
   const modePart =
     settings.mode === 'timeLimit'
       ? `time:${settings.timeLimitSeconds}`
-      : `goal:${settings.targetQuestionCount}:limit:${questionGoalTimeLimitSeconds}`
+      : settings.mode === 'questionGoal'
+        ? `goal:${settings.targetQuestionCount}:limit:${questionGoalTimeLimitSeconds}`
+        : 'survival'
 
   return [
     settings.mode,
@@ -180,8 +182,13 @@ export function recordPlayResult(
     currentCategory.totalClearTimeMs + resultWithCreatedAt.durationMs
   const mistakeCount = currentCategory.mistakeCount + getMistakeCount(resultWithCreatedAt)
   const isQuestionGoalClear = isClearedQuestionGoal(resultWithCreatedAt)
+  const isSurvival = resultWithCreatedAt.settings.mode === 'survival'
   const bestClearTimeMs =
-    isQuestionGoalClear
+    isSurvival
+      ? currentCategory.bestClearTimeMs === null
+        ? resultWithCreatedAt.durationMs
+        : Math.max(currentCategory.bestClearTimeMs, resultWithCreatedAt.durationMs)
+      : isQuestionGoalClear
       ? currentCategory.bestClearTimeMs === null
         ? resultWithCreatedAt.durationMs
         : Math.min(currentCategory.bestClearTimeMs, resultWithCreatedAt.durationMs)
@@ -189,17 +196,22 @@ export function recordPlayResult(
   const nextCategory: ScoreCategorySummary = {
     ...currentCategory,
     averageClearTimeMs:
-      resultWithCreatedAt.settings.mode === 'questionGoal'
+      resultWithCreatedAt.settings.mode === 'questionGoal' || isSurvival
         ? totalClearTimeMs / playCount
         : currentCategory.averageClearTimeMs,
     averageCorrectCount: totalCorrectCount / playCount,
     averageAnswerMs:
       totalAnswerCount > 0 ? totalClearTimeMs / totalAnswerCount : null,
     bestClearTimeMs,
-    bestCorrectCount: Math.max(
-      currentCategory.bestCorrectCount,
-      resultWithCreatedAt.correctCount,
-    ),
+    bestCorrectCount: isSurvival
+      ? Math.max(
+          currentCategory.bestCorrectCount,
+          resultWithCreatedAt.correctCount,
+        )
+      : Math.max(
+          currentCategory.bestCorrectCount,
+          resultWithCreatedAt.correctCount,
+        ),
     latestResult: resultWithCreatedAt,
     mistakeCount,
     playCount,

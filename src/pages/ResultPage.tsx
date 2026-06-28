@@ -102,6 +102,7 @@ export function ResultPage({ messages: t, result }: ResultPageProps) {
   const questionResultRows =
     result === null ? [] : createQuestionResultRows(result.answers, t)
   const isQuestionGoalResult = result?.settings.mode === 'questionGoal'
+  const isSurvivalResult = result?.settings.mode === 'survival'
   const isQuestionGoalTimed =
     result !== null &&
     isQuestionGoalResult &&
@@ -144,9 +145,17 @@ export function ResultPage({ messages: t, result }: ResultPageProps) {
             <div>
               <dt>{t.result.score}</dt>
               <dd>
-                {result.correctCount} / {result.totalCount}
+                {isSurvivalResult
+                  ? result.correctCount
+                  : `${result.correctCount} / ${result.totalCount}`}
               </dd>
             </div>
+            {isSurvivalResult && (
+              <div>
+                <dt>{t.result.status}</dt>
+                <dd>{t.result.survivalResult}</dd>
+              </div>
+            )}
             {isQuestionGoalResult && (
               <div>
                 <dt>{t.result.clearQuestionCount}</dt>
@@ -187,6 +196,8 @@ export function ResultPage({ messages: t, result }: ResultPageProps) {
                   ? isCleared
                     ? t.result.clearTime
                     : t.play.elapsedTime
+                  : isSurvivalResult
+                    ? t.result.survivalTime
                   : t.result.duration}
               </dt>
               <dd>{formatDuration(result.durationMs, t)}</dd>

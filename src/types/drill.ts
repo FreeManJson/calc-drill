@@ -1,6 +1,6 @@
 import type { Language } from '../i18n/messages'
 
-export const GAME_MODES = ['timeLimit', 'questionGoal'] as const
+export const GAME_MODES = ['timeLimit', 'questionGoal', 'survival'] as const
 export type GameMode = (typeof GAME_MODES)[number]
 
 export const TARGET_QUESTION_COUNTS = [10, 30, 100] as const
@@ -70,6 +70,11 @@ export type PlayResult = {
   createdAtMs?: number
   isCleared?: boolean
   isTimeUp?: boolean
+  survivalTimeMs?: number
+  initialTimeSeconds?: number
+  remainingTimeSeconds?: number
+  maxTimeSeconds?: number
+  correctBonusSeconds?: number
 }
 
 export type ScoreCategorySummary = {

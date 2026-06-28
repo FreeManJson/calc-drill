@@ -15,7 +15,7 @@ type ScorePageProps = {
   settings: DrillSettings
 }
 
-const SCORE_MODE_TABS = ['timeLimit', 'questionGoal'] as const
+const SCORE_MODE_TABS = ['timeLimit', 'questionGoal', 'survival'] as const
 
 function formatDurationMs(durationMs: number | null, t: AppMessages) {
   return durationMs === null
@@ -44,6 +44,10 @@ function formatOperations(settings: DrillSettings, t: AppMessages) {
 function formatModeSetting(settings: DrillSettings, t: AppMessages) {
   if (settings.mode === 'timeLimit') {
     return t.common.formatSeconds(settings.timeLimitSeconds)
+  }
+
+  if (settings.mode === 'survival') {
+    return t.gameModeLabels.survival
   }
 
   const questionCount = t.settings.fixedTargetQuestionCount(
@@ -108,6 +112,7 @@ function ScoreCategoryCard({
   messages: AppMessages
 }) {
   const isQuestionGoal = category.latestResult?.settings.mode === 'questionGoal'
+  const isSurvival = category.latestResult?.settings.mode === 'survival'
 
   return (
     <article className="score-card">
@@ -118,13 +123,27 @@ function ScoreCategoryCard({
           <dd>{formatBest(category, t)}</dd>
         </div>
         <div>
-          <dt>{isQuestionGoal ? t.score.averageClearTime : t.score.averageCorrectCount}</dt>
+          <dt>
+            {isSurvival
+              ? t.score.longestSurvivalTime
+              : isQuestionGoal
+                ? t.score.averageClearTime
+                : t.score.averageCorrectCount}
+          </dt>
           <dd>
-            {isQuestionGoal
+            {isSurvival
+              ? formatDurationMs(category.bestClearTimeMs, t)
+              : isQuestionGoal
               ? formatDurationMs(category.averageClearTimeMs, t)
               : formatDecimal(category.averageCorrectCount)}
           </dd>
         </div>
+        {isSurvival && (
+          <div>
+            <dt>{t.score.averageSurvivalTime}</dt>
+            <dd>{formatDurationMs(category.averageClearTimeMs, t)}</dd>
+          </div>
+        )}
         <div>
           <dt>{t.score.plays}</dt>
           <dd>{category.playCount}</dd>
@@ -168,11 +187,19 @@ function getInitialScoreMode(
 ): GameMode {
   const latestMode = scoreSummary.latestResult?.settings.mode
 
-  if (latestMode === 'timeLimit' || latestMode === 'questionGoal') {
+  if (
+    latestMode === 'timeLimit' ||
+    latestMode === 'questionGoal' ||
+    latestMode === 'survival'
+  ) {
     return latestMode
   }
 
-  if (settings.mode === 'timeLimit' || settings.mode === 'questionGoal') {
+  if (
+    settings.mode === 'timeLimit' ||
+    settings.mode === 'questionGoal' ||
+    settings.mode === 'survival'
+  ) {
     return settings.mode
   }
 
@@ -180,7 +207,14 @@ function getInitialScoreMode(
 }
 
 function getModeTitle(mode: GameMode, t: AppMessages) {
-  return mode === 'timeLimit' ? t.score.timeLimitMode : t.score.questionGoalMode
+  switch (mode) {
+    case 'timeLimit':
+      return t.score.timeLimitMode
+    case 'questionGoal':
+      return t.score.questionGoalMode
+    case 'survival':
+      return t.score.survivalMode
+  }
 }
 
 export function ScorePage({
@@ -211,7 +245,9 @@ export function ScorePage({
               <dt>
                 {settings.mode === 'timeLimit'
                   ? t.top.timeLimit
-                  : t.top.targetQuestionCount}
+                  : settings.mode === 'questionGoal'
+                    ? t.top.targetQuestionCount
+                    : t.top.mode}
               </dt>
               <dd>{formatModeSetting(settings, t)}</dd>
             </div>
