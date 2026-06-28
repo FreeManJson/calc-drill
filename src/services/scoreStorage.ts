@@ -9,6 +9,8 @@ import type {
   ScoreSummary,
 } from '../types/drill'
 
+const MAX_RECENT_RESULTS = 30
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null
 }
@@ -130,11 +132,15 @@ function parseScoreSummary(value: unknown): ScoreSummary {
   const latestResult = isPlayResult(value.latestResult)
     ? value.latestResult
     : DEFAULT_SCORE_SUMMARY.latestResult
+  const recentResults = Array.isArray(value.recentResults)
+    ? value.recentResults.filter(isPlayResult).slice(0, MAX_RECENT_RESULTS)
+    : DEFAULT_SCORE_SUMMARY.recentResults
   const byCategory = parseScoreCategories(value.byCategory)
 
   return {
     bestCorrectCount,
     byCategory,
+    recentResults,
     totalPlayCount,
     latestResult,
   }
@@ -229,6 +235,10 @@ export function recordPlayResult(
       ...currentSummary.byCategory,
       [categoryKey]: nextCategory,
     },
+    recentResults: [
+      resultWithCreatedAt,
+      ...(currentSummary.recentResults ?? []),
+    ].slice(0, MAX_RECENT_RESULTS),
     totalPlayCount: currentSummary.totalPlayCount + 1,
     latestResult: resultWithCreatedAt,
   }

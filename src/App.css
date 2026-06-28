@@ -568,6 +568,57 @@ button:disabled {
   padding: 16px;
 }
 
+.score-card h4,
+.survival-score h4 {
+  color: var(--text-heading);
+  font-size: 16px;
+  margin: 0;
+}
+
+.survival-score {
+  display: grid;
+  gap: 16px;
+}
+
+.score-history__table-scroll {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+.score-history__table {
+  border-collapse: collapse;
+  min-width: 760px;
+  width: 100%;
+}
+
+.score-history__table th,
+.score-history__table td {
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.score-history__table th {
+  background: var(--bg);
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.score-history__table td {
+  background: var(--surface);
+  font-weight: 700;
+}
+
+.score-history__table tr:last-child td {
+  border-bottom: 0;
+}
+
 .result-summary {
   display: grid;
   gap: 12px;

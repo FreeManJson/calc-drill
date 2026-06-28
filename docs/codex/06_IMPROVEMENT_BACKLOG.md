@@ -122,3 +122,4 @@ Phase 9 以降は、改善チケット方式で進める。
 - Docs-003: Added play start flow and Settings role planning notes.
 - Survival-001A: Documented survival mode rules, timing, result/score direction, and future tickets.
 - Survival-001B: Added minimum playable survival mode with time recovery, result display, and score tab support.
+- Survival-001C: Improved survival score summaries, best record display, and recent survival history.

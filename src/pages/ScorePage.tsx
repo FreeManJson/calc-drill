@@ -5,6 +5,7 @@ import { OPERATION_TYPES } from '../types/drill'
 import type {
   DrillSettings,
   GameMode,
+  PlayResult,
   ScoreCategorySummary,
   ScoreSummary,
 } from '../types/drill'
@@ -27,6 +28,37 @@ function formatDecimal(value: number) {
   return value.toFixed(1)
 }
 
+function getMistakeCount(result: PlayResult) {
+  return result.answers.filter((answer) => !answer.isCorrect).length
+}
+
+function getResultDurationMs(result: PlayResult) {
+  return result.settings.mode === 'survival'
+    ? (result.survivalTimeMs ?? result.durationMs)
+    : result.durationMs
+}
+
+function getAverageAnswerMs(result: PlayResult) {
+  return result.totalCount > 0 ? getResultDurationMs(result) / result.totalCount : null
+}
+
+function formatResultAccuracy(result: PlayResult, t: AppMessages) {
+  return result.totalCount === 0
+    ? t.common.noData
+    : `${Math.round((result.correctCount / result.totalCount) * 100)}%`
+}
+
+function formatCreatedAt(result: PlayResult, t: AppMessages) {
+  if (
+    typeof result.createdAtMs !== 'number' ||
+    !Number.isFinite(result.createdAtMs)
+  ) {
+    return t.common.noData
+  }
+
+  return new Date(result.createdAtMs).toLocaleString()
+}
+
 function formatAccuracy(category: ScoreCategorySummary, t: AppMessages) {
   return category.totalAnswerCount === 0
     ? t.common.noData
@@ -34,11 +66,19 @@ function formatAccuracy(category: ScoreCategorySummary, t: AppMessages) {
 }
 
 function formatOperations(settings: DrillSettings, t: AppMessages) {
+  if (!Array.isArray(settings.operations)) {
+    return t.common.noData
+  }
+
   return OPERATION_TYPES.filter((operation) =>
     settings.operations.includes(operation),
   )
     .map((operation) => t.operationLabels[operation])
-    .join(' / ')
+    .join(' / ') || t.common.noData
+}
+
+function formatDifficulty(settings: DrillSettings, t: AppMessages) {
+  return t.difficultyLabels[settings.difficulty] ?? t.common.noData
 }
 
 function formatModeSetting(settings: DrillSettings, t: AppMessages) {
@@ -91,6 +131,10 @@ function formatQuestionGoalStatus(category: ScoreCategorySummary, t: AppMessages
 }
 
 function getCategoryTitle(category: ScoreCategorySummary, t: AppMessages) {
+  if (category.categoryKey === 'survival-total') {
+    return t.score.survivalScores
+  }
+
   const settings = category.latestResult?.settings
 
   if (settings === undefined) {
@@ -99,7 +143,7 @@ function getCategoryTitle(category: ScoreCategorySummary, t: AppMessages) {
 
   return [
     formatModeSetting(settings, t),
-    t.difficultyLabels[settings.difficulty],
+    formatDifficulty(settings, t),
     formatOperations(settings, t),
   ].join(' / ')
 }
@@ -122,6 +166,12 @@ function ScoreCategoryCard({
           <dt>{isQuestionGoal ? t.score.bestClearTime : t.score.bestCorrectCount}</dt>
           <dd>{formatBest(category, t)}</dd>
         </div>
+        {isSurvival && (
+          <div>
+            <dt>{t.score.averageCorrectCount}</dt>
+            <dd>{formatDecimal(category.averageCorrectCount)}</dd>
+          </div>
+        )}
         <div>
           <dt>
             {isSurvival
@@ -179,6 +229,241 @@ function getCategoriesByMode(scoreSummary: ScoreSummary, mode: GameMode) {
         (right.latestResult?.createdAtMs ?? 0) -
         (left.latestResult?.createdAtMs ?? 0),
     )
+}
+
+function getSurvivalResults(scoreSummary: ScoreSummary) {
+  const resultsByKey = new Map<string, PlayResult>()
+  const addResult = (result: PlayResult | null | undefined) => {
+    if (result?.settings.mode !== 'survival') {
+      return
+    }
+
+    const key = [
+      result.createdAtMs ?? 'unknown',
+      result.correctCount,
+      result.totalCount,
+      result.durationMs,
+      result.settings.difficulty,
+      Array.isArray(result.settings.operations)
+        ? result.settings.operations.join('+')
+        : 'unknown',
+    ].join('|')
+    resultsByKey.set(key, result)
+  }
+
+  ;(scoreSummary.recentResults ?? []).forEach(addResult)
+  Object.values(scoreSummary.byCategory).forEach((category) => {
+    addResult(category.latestResult)
+  })
+
+  return Array.from(resultsByKey.values()).sort(
+    (left, right) => (right.createdAtMs ?? 0) - (left.createdAtMs ?? 0),
+  )
+}
+
+function compareSurvivalBest(left: PlayResult, right: PlayResult) {
+  if (left.correctCount !== right.correctCount) {
+    return right.correctCount - left.correctCount
+  }
+
+  const leftDurationMs = getResultDurationMs(left)
+  const rightDurationMs = getResultDurationMs(right)
+
+  if (leftDurationMs !== rightDurationMs) {
+    return rightDurationMs - leftDurationMs
+  }
+
+  const leftMistakes = getMistakeCount(left)
+  const rightMistakes = getMistakeCount(right)
+
+  if (leftMistakes !== rightMistakes) {
+    return leftMistakes - rightMistakes
+  }
+
+  return (getAverageAnswerMs(left) ?? Number.POSITIVE_INFINITY) -
+    (getAverageAnswerMs(right) ?? Number.POSITIVE_INFINITY)
+}
+
+function createSurvivalTotalCategory(
+  categories: ScoreCategorySummary[],
+): ScoreCategorySummary {
+  const playCount = categories.reduce((total, category) => total + category.playCount, 0)
+  const totalCorrectCount = categories.reduce(
+    (total, category) => total + category.totalCorrectCount,
+    0,
+  )
+  const totalAnswerCount = categories.reduce(
+    (total, category) => total + category.totalAnswerCount,
+    0,
+  )
+  const totalClearTimeMs = categories.reduce(
+    (total, category) => total + category.totalClearTimeMs,
+    0,
+  )
+  const mistakeCount = categories.reduce(
+    (total, category) => total + category.mistakeCount,
+    0,
+  )
+  const longestSurvivalMs = categories.reduce(
+    (longest, category) => Math.max(longest, category.bestClearTimeMs ?? 0),
+    0,
+  )
+  const bestCorrectCount = categories.reduce(
+    (best, category) => Math.max(best, category.bestCorrectCount),
+    0,
+  )
+
+  return {
+    averageClearTimeMs: playCount > 0 ? totalClearTimeMs / playCount : null,
+    averageCorrectCount: playCount > 0 ? totalCorrectCount / playCount : 0,
+    averageAnswerMs:
+      totalAnswerCount > 0 ? totalClearTimeMs / totalAnswerCount : null,
+    bestClearTimeMs: longestSurvivalMs > 0 ? longestSurvivalMs : null,
+    bestCorrectCount,
+    categoryKey: 'survival-total',
+    latestResult: null,
+    mistakeCount,
+    playCount,
+    totalAnswerCount,
+    totalClearTimeMs,
+    totalCorrectCount,
+  }
+}
+
+function SurvivalBestRecord({
+  messages: t,
+  result,
+}: {
+  messages: AppMessages
+  result: PlayResult
+}) {
+  const averageAnswerMs = getAverageAnswerMs(result)
+
+  return (
+    <article className="score-card">
+      <h4>{t.score.bestRecord}</h4>
+      <dl className="result-summary">
+        <div>
+          <dt>{t.score.bestCorrectCount}</dt>
+          <dd>{result.correctCount}</dd>
+        </div>
+        <div>
+          <dt>{t.result.survivalTime}</dt>
+          <dd>{formatDurationMs(getResultDurationMs(result), t)}</dd>
+        </div>
+        <div>
+          <dt>{t.score.mistakes}</dt>
+          <dd>{getMistakeCount(result)}</dd>
+        </div>
+        <div>
+          <dt>{t.score.accuracy}</dt>
+          <dd>{formatResultAccuracy(result, t)}</dd>
+        </div>
+        <div>
+          <dt>{t.score.averageAnswerTime}</dt>
+          <dd>{formatDurationMs(averageAnswerMs, t)}</dd>
+        </div>
+        <div>
+          <dt>{t.top.difficulty}</dt>
+          <dd>{formatDifficulty(result.settings, t)}</dd>
+        </div>
+        <div>
+          <dt>{t.top.operations}</dt>
+          <dd>{formatOperations(result.settings, t)}</dd>
+        </div>
+      </dl>
+    </article>
+  )
+}
+
+function SurvivalRecentTable({
+  messages: t,
+  results,
+}: {
+  messages: AppMessages
+  results: PlayResult[]
+}) {
+  return (
+    <div className="score-history__table-scroll">
+      <table className="score-history__table">
+        <thead>
+          <tr>
+            <th scope="col">{t.score.dateTime}</th>
+            <th scope="col">{t.top.difficulty}</th>
+            <th scope="col">{t.top.operations}</th>
+            <th scope="col">{t.result.score}</th>
+            <th scope="col">{t.result.survivalTime}</th>
+            <th scope="col">{t.score.mistakes}</th>
+            <th scope="col">{t.score.accuracy}</th>
+            <th scope="col">{t.score.averageAnswerTime}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {results.map((result, index) => (
+            <tr key={`${result.createdAtMs ?? 'unknown'}-${index}`}>
+              <td>{formatCreatedAt(result, t)}</td>
+              <td>{formatDifficulty(result.settings, t)}</td>
+              <td>{formatOperations(result.settings, t)}</td>
+              <td>{result.correctCount}</td>
+              <td>{formatDurationMs(getResultDurationMs(result), t)}</td>
+              <td>{getMistakeCount(result)}</td>
+              <td>{formatResultAccuracy(result, t)}</td>
+              <td>{formatDurationMs(getAverageAnswerMs(result), t)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+function SurvivalScorePanel({
+  categories,
+  messages: t,
+  scoreSummary,
+}: {
+  categories: ScoreCategorySummary[]
+  messages: AppMessages
+  scoreSummary: ScoreSummary
+}) {
+  const totalCategory = createSurvivalTotalCategory(categories)
+  const survivalResults = getSurvivalResults(scoreSummary)
+  const bestRecord = [...survivalResults].sort(compareSurvivalBest)[0] ?? null
+  const displayTotalCategory = {
+    ...totalCategory,
+    latestResult: bestRecord,
+  }
+
+  if (categories.length === 0) {
+    return <p className="empty-message">{t.score.noModeScore}</p>
+  }
+
+  return (
+    <div className="survival-score">
+      <section className="score-section">
+        <h4>{t.score.survivalScores}</h4>
+        <ScoreCategoryCard category={displayTotalCategory} messages={t} />
+      </section>
+
+      {bestRecord !== null && (
+        <section className="score-section">
+          <SurvivalBestRecord messages={t} result={bestRecord} />
+        </section>
+      )}
+
+      <section className="score-section">
+        <h4>{t.score.recent}</h4>
+        {survivalResults.length === 0 ? (
+          <p className="empty-message">{t.score.noModeScore}</p>
+        ) : (
+          <SurvivalRecentTable
+            messages={t}
+            results={survivalResults.slice(0, 10)}
+          />
+        )}
+      </section>
+    </div>
+  )
 }
 
 function getInitialScoreMode(
@@ -253,7 +538,7 @@ export function ScorePage({
             </div>
             <div>
               <dt>{t.top.difficulty}</dt>
-              <dd>{t.difficultyLabels[settings.difficulty]}</dd>
+              <dd>{formatDifficulty(settings, t)}</dd>
             </div>
             <div>
               <dt>{t.top.operations}</dt>
@@ -292,6 +577,12 @@ export function ScorePage({
             <h3>{getModeTitle(activeMode, t)}</h3>
             {activeModeCategories.length === 0 ? (
               <p className="empty-message">{t.score.noModeScore}</p>
+            ) : activeMode === 'survival' ? (
+              <SurvivalScorePanel
+                categories={activeModeCategories}
+                messages={t}
+                scoreSummary={scoreSummary}
+              />
             ) : (
               <div className="score-card-list">
                 {activeModeCategories.map((category) => (

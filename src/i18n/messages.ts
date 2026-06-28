@@ -143,6 +143,8 @@ export type AppMessages = {
     scoresByMode: string
     noCurrentScore: string
     noModeScore: string
+    survivalScores: string
+    bestRecord: string
     timeLimitMode: string
     questionGoalMode: string
     survivalMode: string
@@ -156,6 +158,7 @@ export type AppMessages = {
     mistakes: string
     accuracy: string
     averageAnswerTime: string
+    dateTime: string
     recent: string
   }
 }
@@ -320,6 +323,8 @@ export const messages = {
       scoresByMode: 'モード別成績',
       noCurrentScore: 'この設定の成績はまだありません。',
       noModeScore: 'このモードの成績はまだありません。',
+      survivalScores: 'サバイバル成績',
+      bestRecord: 'ベスト記録',
       timeLimitMode: '時間制限モード',
       questionGoalMode: '問題数達成モード',
       survivalMode: 'サバイバルモード',
@@ -333,6 +338,7 @@ export const messages = {
       mistakes: 'ミス数',
       accuracy: '正答率',
       averageAnswerTime: '平均解答時間',
+      dateTime: '日時',
       recent: '直近',
     },
   },
@@ -495,6 +501,8 @@ export const messages = {
       scoresByMode: 'Scores by Mode',
       noCurrentScore: 'No score for this setting yet.',
       noModeScore: 'No records for this mode yet.',
+      survivalScores: 'Survival Scores',
+      bestRecord: 'Best Record',
       timeLimitMode: 'Time Limit Mode',
       questionGoalMode: 'Question Goal Mode',
       survivalMode: 'Survival Mode',
@@ -508,6 +516,7 @@ export const messages = {
       mistakes: 'Mistakes',
       accuracy: 'Accuracy',
       averageAnswerTime: 'Average Answer Time',
+      dateTime: 'Date',
       recent: 'Recent',
     },
   },

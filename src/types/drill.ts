@@ -95,6 +95,7 @@ export type ScoreCategorySummary = {
 export type ScoreSummary = {
   bestCorrectCount: number
   byCategory: Record<string, ScoreCategorySummary>
+  recentResults: PlayResult[]
   totalPlayCount: number
   latestResult: PlayResult | null
 }
