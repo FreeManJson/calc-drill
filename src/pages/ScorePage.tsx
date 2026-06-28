@@ -296,52 +296,6 @@ function getSurvivalRankMap(results: PlayResult[]) {
   )
 }
 
-function createSurvivalTotalCategory(
-  categories: ScoreCategorySummary[],
-): ScoreCategorySummary {
-  const playCount = categories.reduce((total, category) => total + category.playCount, 0)
-  const totalCorrectCount = categories.reduce(
-    (total, category) => total + category.totalCorrectCount,
-    0,
-  )
-  const totalAnswerCount = categories.reduce(
-    (total, category) => total + category.totalAnswerCount,
-    0,
-  )
-  const totalClearTimeMs = categories.reduce(
-    (total, category) => total + category.totalClearTimeMs,
-    0,
-  )
-  const mistakeCount = categories.reduce(
-    (total, category) => total + category.mistakeCount,
-    0,
-  )
-  const longestSurvivalMs = categories.reduce(
-    (longest, category) => Math.max(longest, category.bestClearTimeMs ?? 0),
-    0,
-  )
-  const bestCorrectCount = categories.reduce(
-    (best, category) => Math.max(best, category.bestCorrectCount),
-    0,
-  )
-
-  return {
-    averageClearTimeMs: playCount > 0 ? totalClearTimeMs / playCount : null,
-    averageCorrectCount: playCount > 0 ? totalCorrectCount / playCount : 0,
-    averageAnswerMs:
-      totalAnswerCount > 0 ? totalClearTimeMs / totalAnswerCount : null,
-    bestClearTimeMs: longestSurvivalMs > 0 ? longestSurvivalMs : null,
-    bestCorrectCount,
-    categoryKey: 'survival-total',
-    latestResult: null,
-    mistakeCount,
-    playCount,
-    totalAnswerCount,
-    totalClearTimeMs,
-    totalCorrectCount,
-  }
-}
-
 type SurvivalRecordRow = {
   rank: number | null
   result: PlayResult
@@ -402,15 +356,10 @@ function SurvivalScorePanel({
   messages: AppMessages
   scoreSummary: ScoreSummary
 }) {
-  const totalCategory = createSurvivalTotalCategory(categories)
   const survivalResults = getSurvivalResults(scoreSummary)
   const rankedSurvivalResults = [...survivalResults].sort(compareSurvivalBest)
   const rankMap = getSurvivalRankMap(survivalResults)
   const bestRecord = rankedSurvivalResults[0] ?? null
-  const displayTotalCategory = {
-    ...totalCategory,
-    latestResult: bestRecord,
-  }
   const recentRows: SurvivalRecordRow[] = survivalResults
     .slice(0, 10)
     .map((result, index) => ({
@@ -443,11 +392,6 @@ function SurvivalScorePanel({
     <div className="survival-score">
       <section className="score-section">
         <h4>{t.score.survivalScores}</h4>
-        <ScoreCategoryCard category={displayTotalCategory} messages={t} />
-      </section>
-
-      <section className="score-section">
-        <h4>{t.score.recent}</h4>
         {tableRows.length === 0 ? (
           <p className="empty-message">{t.score.noModeScore}</p>
         ) : (
@@ -539,14 +483,16 @@ export function ScorePage({
           </dl>
         </section>
 
-        <section className="score-section">
-          <h2>{t.score.currentSettingScore}</h2>
-          {activeCurrentCategory === null ? (
-            <p className="empty-message">{t.score.noCurrentScore}</p>
-          ) : (
-            <ScoreCategoryCard category={activeCurrentCategory} messages={t} />
-          )}
-        </section>
+        {settings.mode !== 'survival' && (
+          <section className="score-section">
+            <h2>{t.score.currentSettingScore}</h2>
+            {activeCurrentCategory === null ? (
+              <p className="empty-message">{t.score.noCurrentScore}</p>
+            ) : (
+              <ScoreCategoryCard category={activeCurrentCategory} messages={t} />
+            )}
+          </section>
+        )}
 
         <section className="score-section">
           <h2>{t.score.scoresByMode}</h2>
