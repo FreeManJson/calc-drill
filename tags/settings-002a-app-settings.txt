@@ -1,0 +1,8 @@
+Settings-002A: 設定画面をアプリ設定中心に整理
+
+- Settings から PlayStart で選べるプレイ条件を削除
+- 言語、背景テーマ、数字タイル配置、効果音を表示と音の設定として整理
+- 演算セットは PlayStart 未対応のためプレイ設定（暫定）として維持
+- Settings の日本語 / English 文言をアプリ設定向けに更新
+- docs/codex/06_IMPROVEMENT_BACKLOG.md に完了メモを追記
+- npm run lint / npm run build 成功

@@ -1,4 +1,3 @@
-import { DEFAULT_TIME_LIMIT_SECONDS } from '../constants/defaults'
 import {
   isLockedOperation,
   isOperationUnlocked,
@@ -7,22 +6,14 @@ import { LANGUAGES } from '../i18n/messages'
 import type { AppMessages, Language } from '../i18n/messages'
 import {
   BACKGROUND_THEMES,
-  DIFFICULTIES,
-  GAME_MODES,
   NUMBER_PAD_LAYOUTS,
   OPERATION_TYPES,
-  QUESTION_GOAL_TIME_LIMIT_SECONDS,
-  TARGET_QUESTION_COUNTS,
 } from '../types/drill'
 import type {
   BackgroundTheme,
-  Difficulty,
   DrillSettings,
-  GameMode,
   NumberPadLayout,
   OperationType,
-  QuestionGoalTimeLimitSeconds,
-  TargetQuestionCount,
 } from '../types/drill'
 
 type SettingsPageProps = {
@@ -38,30 +29,6 @@ export function SettingsPage({
 }: SettingsPageProps) {
   const updateSettings = (nextSettings: Partial<DrillSettings>) => {
     onSettingsChange({ ...settings, ...nextSettings })
-  }
-
-  const handleTimeLimitChange = (value: string) => {
-    const timeLimitSeconds = Number(value)
-
-    if (Number.isFinite(timeLimitSeconds) && timeLimitSeconds > 0) {
-      updateSettings({ timeLimitSeconds: Math.trunc(timeLimitSeconds) })
-    }
-  }
-
-  const handleModeChange = (mode: GameMode) => {
-    updateSettings({ mode })
-  }
-
-  const handleTargetQuestionCountChange = (
-    targetQuestionCount: TargetQuestionCount,
-  ) => {
-    updateSettings({ targetQuestionCount })
-  }
-
-  const handleQuestionGoalTimeLimitChange = (
-    questionGoalTimeLimitSeconds: QuestionGoalTimeLimitSeconds,
-  ) => {
-    updateSettings({ questionGoalTimeLimitSeconds })
   }
 
   const handleOperationChange = (
@@ -83,10 +50,6 @@ export function SettingsPage({
 
   const handleLanguageChange = (language: Language) => {
     updateSettings({ language })
-  }
-
-  const handleDifficultyChange = (difficulty: Difficulty) => {
-    updateSettings({ difficulty })
   }
 
   const handleNumberPadLayoutChange = (numberPadLayout: NumberPadLayout) => {
@@ -127,246 +90,134 @@ export function SettingsPage({
     }
   }
 
-  const getQuestionGoalTimeLimitLabel = (
-    questionGoalTimeLimitSeconds: QuestionGoalTimeLimitSeconds,
-  ) => {
-    switch (questionGoalTimeLimitSeconds) {
-      case 0:
-        return t.settings.questionGoalNoTimeLimit
-      case 60:
-        return t.settings.questionGoalTimeLimit1Minute
-      case 180:
-        return t.settings.questionGoalTimeLimit3Minutes
-      case 600:
-        return t.settings.questionGoalTimeLimit10Minutes
-    }
-  }
-
   return (
     <section className="page">
       <h1>{t.settings.title}</h1>
-      <p className="page-description">
-        {t.settings.description(DEFAULT_TIME_LIMIT_SECONDS)}
-      </p>
+      <p className="page-description">{t.settings.description}</p>
       <div className="settings-form">
-        <fieldset className="field-group">
-          <legend>{t.settings.mode}</legend>
-          {GAME_MODES.map((mode) => (
-            <label className="check-field" key={mode}>
-              <input
-                checked={settings.mode === mode}
-                name="mode"
-                onChange={() => handleModeChange(mode)}
-                type="radio"
-                value={mode}
-              />
-              <span>{t.gameModeLabels[mode]}</span>
-            </label>
-          ))}
-        </fieldset>
+        <section className="settings-section">
+          <h2>{t.settings.displayAndSound}</h2>
 
-        {settings.mode === 'timeLimit' && (
-          <label className="field">
-            <span>{t.settings.timeLimitSeconds}</span>
-            <input
-              min="1"
-              onChange={(event) =>
-                handleTimeLimitChange(event.currentTarget.value)
-              }
-              type="number"
-              value={settings.timeLimitSeconds}
-            />
-          </label>
-        )}
-
-        {settings.mode === 'questionGoal' && (
-          <>
-            <fieldset className="field-group">
-              <legend>{t.settings.targetQuestionCount}</legend>
-              {TARGET_QUESTION_COUNTS.map((targetQuestionCount) => (
-                <label className="check-field" key={targetQuestionCount}>
-                  <input
-                    checked={
-                      settings.targetQuestionCount === targetQuestionCount
-                    }
-                    name="targetQuestionCount"
-                    onChange={() =>
-                      handleTargetQuestionCountChange(targetQuestionCount)
-                    }
-                    type="radio"
-                    value={targetQuestionCount}
-                  />
-                  <span>
-                    {t.settings.fixedTargetQuestionCount(targetQuestionCount)}
-                  </span>
-                </label>
-              ))}
-            </fieldset>
-
-            <fieldset className="field-group">
-              <legend>{t.settings.questionGoalTimeLimit}</legend>
-              {QUESTION_GOAL_TIME_LIMIT_SECONDS.map(
-                (questionGoalTimeLimitSeconds) => (
-                  <label
-                    className="check-field"
-                    key={questionGoalTimeLimitSeconds}
-                  >
-                    <input
-                      checked={
-                        settings.questionGoalTimeLimitSeconds ===
-                        questionGoalTimeLimitSeconds
-                      }
-                      name="questionGoalTimeLimitSeconds"
-                      onChange={() =>
-                        handleQuestionGoalTimeLimitChange(
-                          questionGoalTimeLimitSeconds,
-                        )
-                      }
-                      type="radio"
-                      value={questionGoalTimeLimitSeconds}
-                    />
-                    <span>
-                      {getQuestionGoalTimeLimitLabel(
-                        questionGoalTimeLimitSeconds,
-                      )}
-                    </span>
-                  </label>
-                ),
-              )}
-            </fieldset>
-          </>
-        )}
-
-        <fieldset className="field-group">
-          <legend>{t.settings.difficulty}</legend>
-          {DIFFICULTIES.map((difficulty) => (
-            <label className="check-field" key={difficulty}>
-              <input
-                checked={settings.difficulty === difficulty}
-                name="difficulty"
-                onChange={() => handleDifficultyChange(difficulty)}
-                type="radio"
-                value={difficulty}
-              />
-              <span>{t.difficultyLabels[difficulty]}</span>
-            </label>
-          ))}
-        </fieldset>
-
-        <fieldset className="field-group">
-          <legend>{t.settings.language}</legend>
-          {LANGUAGES.map((language) => (
-            <label className="check-field" key={language}>
-              <input
-                checked={settings.language === language}
-                name="language"
-                onChange={() => handleLanguageChange(language)}
-                type="radio"
-                value={language}
-              />
-              <span>
-                {language === 'ja'
-                  ? t.settings.languageJapanese
-                  : t.settings.languageEnglish}
-              </span>
-            </label>
-          ))}
-        </fieldset>
-
-        <fieldset className="field-group">
-          <legend>{t.settings.soundEffects}</legend>
-          <label className="check-field">
-            <input
-              checked={settings.soundEffectsEnabled}
-              name="soundEffectsEnabled"
-              onChange={() => handleSoundEffectsChange(true)}
-              type="radio"
-              value="on"
-            />
-            <span>{t.settings.soundEffectsOn}</span>
-          </label>
-          <label className="check-field">
-            <input
-              checked={!settings.soundEffectsEnabled}
-              name="soundEffectsEnabled"
-              onChange={() => handleSoundEffectsChange(false)}
-              type="radio"
-              value="off"
-            />
-            <span>{t.settings.soundEffectsOff}</span>
-          </label>
-        </fieldset>
-
-        <fieldset className="field-group">
-          <legend>{t.settings.backgroundTheme}</legend>
-          {BACKGROUND_THEMES.map((backgroundTheme) => (
-            <label className="check-field" key={backgroundTheme}>
-              <input
-                checked={settings.backgroundTheme === backgroundTheme}
-                name="backgroundTheme"
-                onChange={() => handleBackgroundThemeChange(backgroundTheme)}
-                type="radio"
-                value={backgroundTheme}
-              />
-              <span>{getBackgroundThemeLabel(backgroundTheme)}</span>
-            </label>
-          ))}
-        </fieldset>
-
-        <fieldset className="field-group">
-          <legend>{t.settings.numberPadLayout}</legend>
-          {NUMBER_PAD_LAYOUTS.map((numberPadLayout) => (
-            <label className="check-field" key={numberPadLayout}>
-              <input
-                checked={settings.numberPadLayout === numberPadLayout}
-                name="numberPadLayout"
-                onChange={() =>
-                  handleNumberPadLayoutChange(numberPadLayout)
-                }
-                type="radio"
-                value={numberPadLayout}
-              />
-              <span>{getNumberPadLayoutLabel(numberPadLayout)}</span>
-            </label>
-          ))}
-        </fieldset>
-
-        <fieldset className="field-group">
-          <legend>{t.settings.operations}</legend>
-          {OPERATION_TYPES.map((operation) => {
-            const isUnlocked = isOperationUnlocked(operation)
-
-            return (
-              <label
-                className={
-                  isUnlocked ? 'check-field' : 'check-field check-field--locked'
-                }
-                key={operation}
-              >
+          <fieldset className="field-group">
+            <legend>{t.settings.language}</legend>
+            {LANGUAGES.map((language) => (
+              <label className="check-field" key={language}>
                 <input
-                  checked={settings.operations.includes(operation)}
-                  disabled={!isUnlocked}
-                  onChange={(event) =>
-                    handleOperationChange(
-                      operation,
-                      event.currentTarget.checked,
-                    )
-                  }
-                  type="checkbox"
+                  checked={settings.language === language}
+                  name="language"
+                  onChange={() => handleLanguageChange(language)}
+                  type="radio"
+                  value={language}
                 />
-                <span>{t.operationLabels[operation]}</span>
-                {!isUnlocked && (
-                  <span className="lock-badge">{t.common.locked}</span>
-                )}
-                {isUnlocked &&
-                  import.meta.env.DEV &&
-                  isLockedOperation(operation) && (
-                    <span className="lock-badge">{t.common.devUnlock}</span>
-                  )}
+                <span>
+                  {language === 'ja'
+                    ? t.settings.languageJapanese
+                    : t.settings.languageEnglish}
+                </span>
               </label>
-            )
-          })}
-        </fieldset>
+            ))}
+          </fieldset>
+
+          <fieldset className="field-group">
+            <legend>{t.settings.soundEffects}</legend>
+            <label className="check-field">
+              <input
+                checked={settings.soundEffectsEnabled}
+                name="soundEffectsEnabled"
+                onChange={() => handleSoundEffectsChange(true)}
+                type="radio"
+                value="on"
+              />
+              <span>{t.settings.soundEffectsOn}</span>
+            </label>
+            <label className="check-field">
+              <input
+                checked={!settings.soundEffectsEnabled}
+                name="soundEffectsEnabled"
+                onChange={() => handleSoundEffectsChange(false)}
+                type="radio"
+                value="off"
+              />
+              <span>{t.settings.soundEffectsOff}</span>
+            </label>
+          </fieldset>
+
+          <fieldset className="field-group">
+            <legend>{t.settings.backgroundTheme}</legend>
+            {BACKGROUND_THEMES.map((backgroundTheme) => (
+              <label className="check-field" key={backgroundTheme}>
+                <input
+                  checked={settings.backgroundTheme === backgroundTheme}
+                  name="backgroundTheme"
+                  onChange={() => handleBackgroundThemeChange(backgroundTheme)}
+                  type="radio"
+                  value={backgroundTheme}
+                />
+                <span>{getBackgroundThemeLabel(backgroundTheme)}</span>
+              </label>
+            ))}
+          </fieldset>
+
+          <fieldset className="field-group">
+            <legend>{t.settings.numberPadLayout}</legend>
+            {NUMBER_PAD_LAYOUTS.map((numberPadLayout) => (
+              <label className="check-field" key={numberPadLayout}>
+                <input
+                  checked={settings.numberPadLayout === numberPadLayout}
+                  name="numberPadLayout"
+                  onChange={() =>
+                    handleNumberPadLayoutChange(numberPadLayout)
+                  }
+                  type="radio"
+                  value={numberPadLayout}
+                />
+                <span>{getNumberPadLayoutLabel(numberPadLayout)}</span>
+              </label>
+            ))}
+          </fieldset>
+        </section>
+
+        <section className="settings-section">
+          <h2>{t.settings.temporaryPlaySettings}</h2>
+          <p className="settings-note">{t.settings.playStartScreenNote}</p>
+
+          <fieldset className="field-group">
+            <legend>{t.settings.operations}</legend>
+            {OPERATION_TYPES.map((operation) => {
+              const isUnlocked = isOperationUnlocked(operation)
+
+              return (
+                <label
+                  className={
+                    isUnlocked ? 'check-field' : 'check-field check-field--locked'
+                  }
+                  key={operation}
+                >
+                  <input
+                    checked={settings.operations.includes(operation)}
+                    disabled={!isUnlocked}
+                    onChange={(event) =>
+                      handleOperationChange(
+                        operation,
+                        event.currentTarget.checked,
+                      )
+                    }
+                    type="checkbox"
+                  />
+                  <span>{t.operationLabels[operation]}</span>
+                  {!isUnlocked && (
+                    <span className="lock-badge">{t.common.locked}</span>
+                  )}
+                  {isUnlocked &&
+                    import.meta.env.DEV &&
+                    isLockedOperation(operation) && (
+                      <span className="lock-badge">{t.common.devUnlock}</span>
+                    )}
+                </label>
+              )
+            })}
+          </fieldset>
+        </section>
 
         <p className="settings-note">{t.settings.negativeAnswersOff}</p>
       </div>

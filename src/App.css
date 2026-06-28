@@ -243,6 +243,17 @@
   margin-top: 20px;
 }
 
+.settings-section {
+  display: grid;
+  gap: 16px;
+}
+
+.settings-section h2 {
+  color: var(--text-heading);
+  font-size: 20px;
+  margin: 0;
+}
+
 .field,
 .field-group {
   display: grid;

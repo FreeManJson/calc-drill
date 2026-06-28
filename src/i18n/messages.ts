@@ -39,7 +39,10 @@ export type AppMessages = {
   }
   settings: {
     title: string
-    description: (seconds: number) => string
+    description: string
+    displayAndSound: string
+    temporaryPlaySettings: string
+    playStartScreenNote: string
     mode: string
     timeLimitSeconds: string
     targetQuestionCount: string
@@ -200,8 +203,11 @@ export const messages = {
       currentBest: 'いまの設定のベスト',
     },
     settings: {
-      title: 'くわしい設定',
-      description: (seconds) => `いまは ${seconds}秒ドリルがきほんです。`,
+      title: 'アプリ設定',
+      description: 'ことば、見た目、音、操作の好みを変えられます。',
+      displayAndSound: '表示と音',
+      temporaryPlaySettings: 'プレイ設定（暫定）',
+      playStartScreenNote: 'モード、むずかしさ、時間、問題数はトップのプレイ設定で選べます。',
       mode: 'モード',
       timeLimitSeconds: 'じかん（秒）',
       targetQuestionCount: '問題数',
@@ -360,9 +366,12 @@ export const messages = {
       currentBest: 'Current setting best',
     },
     settings: {
-      title: 'Settings',
-      description: (seconds) =>
-        `The MVP default is a ${seconds}-second drill.`,
+      title: 'App Settings',
+      description: 'Change app-wide preferences for language, display, sound, and controls.',
+      displayAndSound: 'Display and Sound',
+      temporaryPlaySettings: 'Play Settings (Temporary)',
+      playStartScreenNote:
+        'Mode, difficulty, time, and question count can be set on the play start screen.',
       mode: 'Mode',
       timeLimitSeconds: 'Time limit seconds',
       targetQuestionCount: 'Questions',
