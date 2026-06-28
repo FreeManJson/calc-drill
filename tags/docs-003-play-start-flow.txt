@@ -1,0 +1,19 @@
+Tag: docs-003-play-start-flow
+
+Summary:
+  今後の UI 方針として、プレイ開始時に選ぶ項目と Settings に残す項目を整理した。
+
+Details:
+  - 07_GAME_MODE_PLAN.md にプレイ開始導線の将来方針を追記
+  - モード、難易度、時間、問題数、演算セットは将来的に Play 開始画面へ移す方針を明記
+  - Settings は言語、背景テーマ、数字タイル配置、効果音などのアプリ設定中心にする方針を明記
+  - 現在の Settings の既知課題を記録
+  - PlayStart-001A / PlayStart-001B / Settings-002A / Score-001B を将来チケット候補として整理
+  - 06_IMPROVEMENT_BACKLOG.md に Docs-003 の完了メモを追記
+
+Verification:
+  - npm run build: OK
+
+Impact:
+  - アプリコードの UI 挙動変更なし
+  - 今後の Play 開始導線実装と Settings 整理の判断材料を追加

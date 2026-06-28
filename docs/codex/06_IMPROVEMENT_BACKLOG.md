@@ -34,6 +34,8 @@ Phase 9 以降は、改善チケット方式で進める。
 - Stabilize-001: 二重完了を防ぐ
 - Play-001: 開始カウントダウン追加
 - Play-002: 次の問題表示
+- PlayStart-001A: プレイ開始導線の土台を追加する
+- PlayStart-001B: モード別コース選択 UI を追加する
 - Question-001: 掛け算・割り算追加
 
 ## Result
@@ -44,6 +46,7 @@ Phase 9 以降は、改善チケット方式で進める。
 ## Score
 
 - Stabilize-001: Total Plays が1プレイにつき2回増える問題を修正する
+- Score-001B: Score 画面をモードタブ表示に変更する
 - 詳細成績は有料候補として扱い、無料MVPでは最小集計に留める
 
 ## Settings
@@ -51,6 +54,7 @@ Phase 9 以降は、改善チケット方式で進める。
 - Settings-001: 言語設定を追加する
 - Settings-001: 背景設定を追加する
 - Settings-001: 数字タイル配置設定を追加する
+- Settings-002A: Play 開始導線実装後、Settings をアプリ設定中心に整理する
 - 設定項目追加時は localStorage 構造変更の影響を明示する
 
 ## Unlock Candidates
@@ -105,3 +109,4 @@ Phase 9 以降は、改善チケット方式で進める。
 - Mode-001A: Added a 10-question goal mode foundation alongside time limit mode.
 - Score-001A: Added mode-based score categories and current-setting score display.
 - Mode-001B: Added 10/30/100 question goal count selection.
+- Docs-003: Added play start flow and Settings role planning notes.
