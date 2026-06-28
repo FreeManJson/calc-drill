@@ -1,0 +1,16 @@
+Tag: difficulty-001c-division-from-multiply
+
+Summary:
+  難易度別の出題範囲を暗算向けに調整し、割り算を同難易度の掛け算ペアから生成する方式へ変更した。
+
+Details:
+  - 難易度別の出題範囲を src/config/questionRanges.ts に集約
+  - 掛け算ペア生成を共通化
+  - 割り算を掛け算ペアの逆算として生成
+  - hard で 1072 ÷ 4 のような想定外問題が出ないように修正
+  - Result / Score の保存・集計構造は変更なし
+
+Verification:
+  - npm run lint: OK
+  - npm run build: OK
+  - question generator range sample check: OK
