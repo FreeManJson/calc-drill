@@ -9,6 +9,7 @@ import {
   GAME_MODES,
   NUMBER_PAD_LAYOUTS,
   OPERATION_TYPES,
+  TARGET_QUESTION_COUNTS,
 } from '../types/drill'
 import type {
   BackgroundTheme,
@@ -17,6 +18,7 @@ import type {
   GameMode,
   NumberPadLayout,
   OperationType,
+  TargetQuestionCount,
 } from '../types/drill'
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -25,6 +27,24 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function isGameMode(value: unknown): value is GameMode {
   return GAME_MODES.includes(value as GameMode)
+}
+
+function isTargetQuestionCount(
+  value: unknown,
+): value is TargetQuestionCount {
+  return TARGET_QUESTION_COUNTS.includes(value as TargetQuestionCount)
+}
+
+function parseTargetQuestionCount(value: unknown): TargetQuestionCount {
+  if (typeof value !== 'number' || !Number.isFinite(value)) {
+    return DEFAULT_SETTINGS.targetQuestionCount
+  }
+
+  const targetQuestionCount = Math.trunc(value)
+
+  return isTargetQuestionCount(targetQuestionCount)
+    ? targetQuestionCount
+    : DEFAULT_SETTINGS.targetQuestionCount
 }
 
 function isDifficulty(value: unknown): value is Difficulty {
@@ -91,12 +111,7 @@ function parseSettings(value: unknown): DrillSettings {
       value.timeLimitSeconds > 0
         ? Math.trunc(value.timeLimitSeconds)
         : DEFAULT_SETTINGS.timeLimitSeconds,
-    targetQuestionCount:
-      typeof value.targetQuestionCount === 'number' &&
-      Number.isFinite(value.targetQuestionCount) &&
-      value.targetQuestionCount > 0
-        ? Math.trunc(value.targetQuestionCount)
-        : DEFAULT_SETTINGS.targetQuestionCount,
+    targetQuestionCount: parseTargetQuestionCount(value.targetQuestionCount),
     language: isLanguage(value.language) ? value.language : DEFAULT_LANGUAGE,
     difficulty: parseDifficulty(value.difficulty),
     operations: parseOperations(value.operations),

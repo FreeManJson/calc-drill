@@ -1,0 +1,23 @@
+Tag: mode-001b-question-goal-counts
+
+Summary:
+  問題数達成モードで、目標問題数を 10問 / 30問 / 100問 から選択できるようにした。
+
+Details:
+  - TargetQuestionCount 型を追加
+  - Settings に問題数達成モード用の問題数選択 UI を追加
+  - targetQuestionCount の保存読み込みを 10 / 30 / 100 に制限
+  - 旧 localStorage 値や不正値は 10問へフォールバック
+  - Result にクリア問題数を表示
+  - Score-001A のカテゴリ分類で 10問 / 30問 / 100問が別カテゴリになることを確認
+  - Mode-001B の完了メモを backlog に追記
+
+Verification:
+  - npm run lint: OK
+  - npm run build: OK
+  - question goal count category check: OK
+
+Impact:
+  - 時間制限モードの挙動は変更なし
+  - Result-001B の問題別一覧は維持
+  - Score-001A のモード別成績分類を維持

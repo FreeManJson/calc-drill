@@ -3,6 +3,9 @@ import type { Language } from '../i18n/messages'
 export const GAME_MODES = ['timeLimit', 'questionGoal'] as const
 export type GameMode = (typeof GAME_MODES)[number]
 
+export const TARGET_QUESTION_COUNTS = [10, 30, 100] as const
+export type TargetQuestionCount = (typeof TARGET_QUESTION_COUNTS)[number]
+
 export const DIFFICULTIES = ['easy', 'normal', 'hard', 'expert'] as const
 export type Difficulty = (typeof DIFFICULTIES)[number]
 
@@ -29,7 +32,7 @@ export type BackgroundTheme = (typeof BACKGROUND_THEMES)[number]
 export type DrillSettings = {
   mode: GameMode
   timeLimitSeconds: number
-  targetQuestionCount: number
+  targetQuestionCount: TargetQuestionCount
   language: Language
   difficulty: Difficulty
   operations: OperationType[]

@@ -14,6 +14,7 @@ import {
   GAME_MODES,
   NUMBER_PAD_LAYOUTS,
   OPERATION_TYPES,
+  TARGET_QUESTION_COUNTS,
 } from '../types/drill'
 import type {
   BackgroundTheme,
@@ -22,6 +23,7 @@ import type {
   GameMode,
   NumberPadLayout,
   OperationType,
+  TargetQuestionCount,
 } from '../types/drill'
 
 type SettingsPageProps = {
@@ -49,6 +51,12 @@ export function SettingsPage({
 
   const handleModeChange = (mode: GameMode) => {
     updateSettings({ mode })
+  }
+
+  const handleTargetQuestionCountChange = (
+    targetQuestionCount: TargetQuestionCount,
+  ) => {
+    updateSettings({ targetQuestionCount })
   }
 
   const handleOperationChange = (
@@ -151,12 +159,27 @@ export function SettingsPage({
         </label>
 
         {settings.mode === 'questionGoal' && (
-          <p className="settings-note">
-            {t.settings.targetQuestionCount}:{' '}
-            {t.settings.fixedTargetQuestionCount(
-              settings.targetQuestionCount || DEFAULT_TARGET_QUESTION_COUNT,
-            )}
-          </p>
+          <fieldset className="field-group">
+            <legend>{t.settings.targetQuestionCount}</legend>
+            {TARGET_QUESTION_COUNTS.map((targetQuestionCount) => (
+              <label className="check-field" key={targetQuestionCount}>
+                <input
+                  checked={settings.targetQuestionCount === targetQuestionCount}
+                  name="targetQuestionCount"
+                  onChange={() =>
+                    handleTargetQuestionCountChange(targetQuestionCount)
+                  }
+                  type="radio"
+                  value={targetQuestionCount}
+                />
+                <span>
+                  {t.settings.fixedTargetQuestionCount(
+                    targetQuestionCount || DEFAULT_TARGET_QUESTION_COUNT,
+                  )}
+                </span>
+              </label>
+            ))}
+          </fieldset>
         )}
 
         <fieldset className="field-group">

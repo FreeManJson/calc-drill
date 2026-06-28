@@ -116,6 +116,16 @@ export function ResultPage({ messages: t, result }: ResultPageProps) {
                 {result.correctCount} / {result.totalCount}
               </dd>
             </div>
+            {isQuestionGoalResult && (
+              <div>
+                <dt>{t.result.clearQuestionCount}</dt>
+                <dd>
+                  {t.settings.fixedTargetQuestionCount(
+                    result.settings.targetQuestionCount,
+                  )}
+                </dd>
+              </div>
+            )}
             <div>
               <dt>{t.result.totalAnswers}</dt>
               <dd>{result.totalCount}</dd>

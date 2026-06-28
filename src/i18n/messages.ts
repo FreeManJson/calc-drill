@@ -92,6 +92,7 @@ export type AppMessages = {
     score: string
     duration: string
     clearTime: string
+    clearQuestionCount: string
     timeLimit: string
     totalAnswers: string
     mistakes: string
@@ -242,6 +243,7 @@ export const messages = {
       score: 'せいかい',
       duration: '時間',
       clearTime: 'クリア時間',
+      clearQuestionCount: 'クリア問題数',
       timeLimit: 'じかん',
       totalAnswers: '回答数',
       mistakes: 'ミス数',
@@ -391,6 +393,7 @@ export const messages = {
       score: 'Score',
       duration: 'Duration',
       clearTime: 'Clear Time',
+      clearQuestionCount: 'Goal',
       timeLimit: 'Time limit',
       totalAnswers: 'Answers',
       mistakes: 'Mistakes',
