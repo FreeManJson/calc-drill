@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { AnswerDisplay } from '../components/play/AnswerDisplay'
 import { NumberPad } from '../components/play/NumberPad'
 import { QuestionLane } from '../components/play/QuestionLane'
@@ -8,10 +9,18 @@ import type { DrillSettings, PlayResult } from '../types/drill'
 type PlayPageProps = {
   messages: AppMessages
   onComplete: (result: PlayResult) => void
+  onStartSignalConsumed: () => void
+  startSignal: number
   settings: DrillSettings
 }
 
-export function PlayPage({ messages: t, onComplete, settings }: PlayPageProps) {
+export function PlayPage({
+  messages: t,
+  onComplete,
+  onStartSignalConsumed,
+  settings,
+  startSignal,
+}: PlayPageProps) {
   const play = useTimedPlay(settings, { messages: t, onComplete })
   const isQuestionGoalMode = settings.mode === 'questionGoal'
   const hasQuestionGoalTimeLimit =
@@ -27,6 +36,15 @@ export function PlayPage({ messages: t, onComplete, settings }: PlayPageProps) {
   const handleNumberPadOk = () => {
     play.submitAnswer()
   }
+
+  useEffect(() => {
+    if (startSignal <= 0 || play.status !== 'idle') {
+      return
+    }
+
+    play.start()
+    onStartSignalConsumed()
+  })
 
   return (
     <section className="page">

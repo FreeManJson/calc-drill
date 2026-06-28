@@ -28,6 +28,8 @@ export type AppMessages = {
     title: string
     description: (seconds: number) => string
     questionGoalDescription: (count: number) => string
+    playSettings: string
+    start: string
     mode: string
     timeLimit: string
     targetQuestionCount: string
@@ -188,6 +190,8 @@ export const messages = {
       description: (seconds) => `${seconds}秒で、けいさんにチャレンジしよう。`,
       questionGoalDescription: (count) =>
         `${count}問クリアをめざして、けいさんにチャレンジしよう。`,
+      playSettings: 'プレイ設定',
+      start: '開始',
       mode: 'モード',
       timeLimit: 'じかん',
       targetQuestionCount: '問題数',
@@ -346,6 +350,8 @@ export const messages = {
         `Practice quick arithmetic in a ${seconds}-second drill.`,
       questionGoalDescription: (count) =>
         `Practice quick arithmetic until you clear ${count} questions.`,
+      playSettings: 'Play Settings',
+      start: 'Start',
       mode: 'Mode',
       timeLimit: 'Time limit',
       targetQuestionCount: 'Questions',

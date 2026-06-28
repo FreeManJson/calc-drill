@@ -53,6 +53,9 @@ function renderPage(
   onSettingsChange: (settings: DrillSettings) => void,
   scoreSummary: ScoreSummary,
   onPlayComplete: (result: PlayResult) => void,
+  onStartPlay: () => void,
+  playStartSignal: number,
+  onPlayStartSignalConsumed: () => void,
 ) {
   switch (route) {
     case ROUTES.settings:
@@ -68,6 +71,8 @@ function renderPage(
         <PlayPage
           messages={t}
           onComplete={onPlayComplete}
+          onStartSignalConsumed={onPlayStartSignalConsumed}
+          startSignal={playStartSignal}
           settings={settings}
         />
       )
@@ -85,6 +90,8 @@ function renderPage(
       return (
         <TopPage
           messages={t}
+          onSettingsChange={onSettingsChange}
+          onStartPlay={onStartPlay}
           scoreSummary={scoreSummary}
           settings={settings}
         />
@@ -95,6 +102,7 @@ function renderPage(
 function App() {
   const [currentRoute, setCurrentRoute] = useState<AppRoute>(getCurrentRoute)
   const [settings, setSettings] = useState<DrillSettings>(loadSettings)
+  const [playStartSignal, setPlayStartSignal] = useState(0)
   const [scoreSummary, setScoreSummary] =
     useState<ScoreSummary>(loadScoreSummary)
   const t = getMessages(settings.language)
@@ -150,6 +158,11 @@ function App() {
     navigateTo(ROUTES.result)
   }
 
+  const handleStartPlay = () => {
+    setPlayStartSignal((currentSignal) => currentSignal + 1)
+    navigateTo(ROUTES.play)
+  }
+
   const handleResetSettings = () => {
     setSettings(DEFAULT_SETTINGS)
     saveSettings(DEFAULT_SETTINGS)
@@ -175,6 +188,9 @@ function App() {
         setSettings,
         scoreSummary,
         handlePlayComplete,
+        handleStartPlay,
+        playStartSignal,
+        () => setPlayStartSignal(0),
       )}
       {import.meta.env.DEV && (
         <DevTools
