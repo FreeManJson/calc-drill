@@ -88,6 +88,7 @@ function createQuestionResultRows(
 export function ResultPage({ messages: t, result }: ResultPageProps) {
   const questionResultRows =
     result === null ? [] : createQuestionResultRows(result.answers, t)
+  const isQuestionGoalResult = result?.settings.mode === 'questionGoal'
   const mistakeCount =
     result === null
       ? 0
@@ -128,7 +129,9 @@ export function ResultPage({ messages: t, result }: ResultPageProps) {
               <dd>{accuracy}</dd>
             </div>
             <div>
-              <dt>{t.result.duration}</dt>
+              <dt>
+                {isQuestionGoalResult ? t.result.clearTime : t.result.duration}
+              </dt>
               <dd>{formatDuration(result.durationMs, t)}</dd>
             </div>
             <div>

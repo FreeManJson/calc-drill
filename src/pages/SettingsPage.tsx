@@ -1,4 +1,7 @@
-import { DEFAULT_TIME_LIMIT_SECONDS } from '../constants/defaults'
+import {
+  DEFAULT_TARGET_QUESTION_COUNT,
+  DEFAULT_TIME_LIMIT_SECONDS,
+} from '../constants/defaults'
 import {
   isLockedOperation,
   isOperationUnlocked,
@@ -8,6 +11,7 @@ import type { AppMessages, Language } from '../i18n/messages'
 import {
   BACKGROUND_THEMES,
   DIFFICULTIES,
+  GAME_MODES,
   NUMBER_PAD_LAYOUTS,
   OPERATION_TYPES,
 } from '../types/drill'
@@ -15,6 +19,7 @@ import type {
   BackgroundTheme,
   Difficulty,
   DrillSettings,
+  GameMode,
   NumberPadLayout,
   OperationType,
 } from '../types/drill'
@@ -40,6 +45,10 @@ export function SettingsPage({
     if (Number.isFinite(timeLimitSeconds) && timeLimitSeconds > 0) {
       updateSettings({ timeLimitSeconds: Math.trunc(timeLimitSeconds) })
     }
+  }
+
+  const handleModeChange = (mode: GameMode) => {
+    updateSettings({ mode })
   }
 
   const handleOperationChange = (
@@ -112,9 +121,26 @@ export function SettingsPage({
         {t.settings.description(DEFAULT_TIME_LIMIT_SECONDS)}
       </p>
       <div className="settings-form">
+        <fieldset className="field-group">
+          <legend>{t.settings.mode}</legend>
+          {GAME_MODES.map((mode) => (
+            <label className="check-field" key={mode}>
+              <input
+                checked={settings.mode === mode}
+                name="mode"
+                onChange={() => handleModeChange(mode)}
+                type="radio"
+                value={mode}
+              />
+              <span>{t.gameModeLabels[mode]}</span>
+            </label>
+          ))}
+        </fieldset>
+
         <label className="field">
           <span>{t.settings.timeLimitSeconds}</span>
           <input
+            disabled={settings.mode !== 'timeLimit'}
             min="1"
             onChange={(event) =>
               handleTimeLimitChange(event.currentTarget.value)
@@ -123,6 +149,15 @@ export function SettingsPage({
             value={settings.timeLimitSeconds}
           />
         </label>
+
+        {settings.mode === 'questionGoal' && (
+          <p className="settings-note">
+            {t.settings.targetQuestionCount}:{' '}
+            {t.settings.fixedTargetQuestionCount(
+              settings.targetQuestionCount || DEFAULT_TARGET_QUESTION_COUNT,
+            )}
+          </p>
+        )}
 
         <fieldset className="field-group">
           <legend>{t.settings.difficulty}</legend>

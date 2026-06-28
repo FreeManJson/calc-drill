@@ -1,4 +1,4 @@
-import type { Difficulty, OperationType } from '../types/drill'
+import type { Difficulty, GameMode, OperationType } from '../types/drill'
 
 export const LANGUAGES = ['ja', 'en'] as const
 export type Language = (typeof LANGUAGES)[number]
@@ -22,18 +22,25 @@ export type AppMessages = {
     noData: string
   }
   difficultyLabels: Record<Difficulty, string>
+  gameModeLabels: Record<GameMode, string>
   operationLabels: Record<OperationType, string>
   top: {
     title: string
     description: (seconds: number) => string
+    questionGoalDescription: (count: number) => string
+    mode: string
     timeLimit: string
+    targetQuestionCount: string
     difficulty: string
     operations: string
   }
   settings: {
     title: string
     description: (seconds: number) => string
+    mode: string
     timeLimitSeconds: string
+    targetQuestionCount: string
+    fixedTargetQuestionCount: (count: number) => string
     difficulty: string
     language: string
     languageJapanese: string
@@ -58,8 +65,10 @@ export type AppMessages = {
     title: string
     statusLabel: string
     time: string
+    elapsedTime: string
     score: string
     start: (seconds: number) => string
+    startQuestionGoal: (count: number) => string
     finish: string
     finished: string
     retry: string
@@ -81,6 +90,7 @@ export type AppMessages = {
     noResult: string
     score: string
     duration: string
+    clearTime: string
     timeLimit: string
     totalAnswers: string
     mistakes: string
@@ -143,17 +153,28 @@ export const messages = {
       hard: 'むずかしい',
       expert: 'たつじん',
     },
+    gameModeLabels: {
+      timeLimit: '時間制限',
+      questionGoal: '問題数達成',
+    },
     top: {
       title: 'トップへ',
       description: (seconds) => `${seconds}秒で、けいさんにチャレンジしよう。`,
+      questionGoalDescription: (count) =>
+        `${count}問クリアをめざして、けいさんにチャレンジしよう。`,
+      mode: 'モード',
       timeLimit: 'じかん',
+      targetQuestionCount: '問題数',
       difficulty: 'むずかしさ',
       operations: 'もんだい',
     },
     settings: {
       title: 'くわしい設定',
       description: (seconds) => `いまは ${seconds}秒ドリルがきほんです。`,
+      mode: 'モード',
       timeLimitSeconds: 'じかん（秒）',
+      targetQuestionCount: '問題数',
+      fixedTargetQuestionCount: (count) => `${count}問`,
       difficulty: 'むずかしさ',
       language: 'ことば',
       languageJapanese: '日本語',
@@ -178,8 +199,10 @@ export const messages = {
       title: 'プレイ',
       statusLabel: 'プレイのようす',
       time: 'のこり',
+      elapsedTime: '経過時間',
       score: 'せいかい',
       start: (seconds) => `${seconds}秒ドリルをスタート`,
+      startQuestionGoal: (count) => `${count}問チャレンジをスタート`,
       finish: 'おわる',
       finished: 'おしまい',
       retry: 'もういちど',
@@ -201,6 +224,7 @@ export const messages = {
       noResult: 'まだプレイのけっかがありません。',
       score: 'せいかい',
       duration: '時間',
+      clearTime: 'クリア時間',
       timeLimit: 'じかん',
       totalAnswers: '回答数',
       mistakes: 'ミス数',
@@ -260,11 +284,19 @@ export const messages = {
       hard: 'Hard',
       expert: 'Expert',
     },
+    gameModeLabels: {
+      timeLimit: 'Time Limit',
+      questionGoal: 'Question Goal',
+    },
     top: {
       title: 'Top',
       description: (seconds) =>
         `Practice quick arithmetic in a ${seconds}-second drill.`,
+      questionGoalDescription: (count) =>
+        `Practice quick arithmetic until you clear ${count} questions.`,
+      mode: 'Mode',
       timeLimit: 'Time limit',
+      targetQuestionCount: 'Questions',
       difficulty: 'Difficulty',
       operations: 'Operations',
     },
@@ -272,7 +304,10 @@ export const messages = {
       title: 'Settings',
       description: (seconds) =>
         `The MVP default is a ${seconds}-second drill.`,
+      mode: 'Mode',
       timeLimitSeconds: 'Time limit seconds',
+      targetQuestionCount: 'Questions',
+      fixedTargetQuestionCount: (count) => `${count} Questions`,
       difficulty: 'Difficulty',
       language: 'Language',
       languageJapanese: '日本語',
@@ -297,8 +332,10 @@ export const messages = {
       title: 'Play',
       statusLabel: 'Play status',
       time: 'Time',
+      elapsedTime: 'Elapsed Time',
       score: 'Score',
       start: (seconds) => `Start ${seconds}-second drill`,
+      startQuestionGoal: (count) => `Start ${count}-question challenge`,
       finish: 'Finish',
       finished: 'Finished',
       retry: 'Retry',
@@ -320,6 +357,7 @@ export const messages = {
       noResult: 'No play result yet.',
       score: 'Score',
       duration: 'Duration',
+      clearTime: 'Clear Time',
       timeLimit: 'Time limit',
       totalAnswers: 'Answers',
       mistakes: 'Mistakes',

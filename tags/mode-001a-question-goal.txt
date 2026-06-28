@@ -1,0 +1,25 @@
+Tag: mode-001a-question-goal
+
+Summary:
+  時間制限モードに加えて、10問正解で終了する問題数達成モードの土台を追加した。
+
+Details:
+  - play mode に timeLimit / questionGoal を追加
+  - targetQuestionCount の既定値を 10 に設定
+  - Settings でモードを選択可能にした
+  - Top に現在のモードを表示
+  - Play で問題数達成モード時に経過時間と x / 10 の進捗を表示
+  - 10問正解時に Result へ進む完了条件を追加
+  - Result で問題数達成モード時はクリア時間として表示
+  - 日本語 / English の文言を追加
+
+Verification:
+  - npm run lint: OK
+  - npm run build: OK
+
+Impact:
+  - 既存の時間制限モードは既定値として維持
+  - Result-001B の問題別結果一覧と Score 集計形式は変更なし
+
+Next:
+  - 30問 / 100問、制限時間あり、ランキングなどは後続チケットで検討

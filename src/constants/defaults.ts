@@ -3,10 +3,12 @@ import { DEFAULT_LANGUAGE } from '../i18n/messages'
 import type { DrillSettings, ScoreSummary } from '../types/drill'
 
 export const DEFAULT_TIME_LIMIT_SECONDS = 30
+export const DEFAULT_TARGET_QUESTION_COUNT = 10
 
 export const DEFAULT_SETTINGS: DrillSettings = {
   mode: 'timeLimit',
   timeLimitSeconds: DEFAULT_TIME_LIMIT_SECONDS,
+  targetQuestionCount: DEFAULT_TARGET_QUESTION_COUNT,
   language: DEFAULT_LANGUAGE,
   difficulty: 'easy',
   operations: [...FREE_OPERATION_TYPES],

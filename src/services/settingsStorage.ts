@@ -91,6 +91,12 @@ function parseSettings(value: unknown): DrillSettings {
       value.timeLimitSeconds > 0
         ? Math.trunc(value.timeLimitSeconds)
         : DEFAULT_SETTINGS.timeLimitSeconds,
+    targetQuestionCount:
+      typeof value.targetQuestionCount === 'number' &&
+      Number.isFinite(value.targetQuestionCount) &&
+      value.targetQuestionCount > 0
+        ? Math.trunc(value.targetQuestionCount)
+        : DEFAULT_SETTINGS.targetQuestionCount,
     language: isLanguage(value.language) ? value.language : DEFAULT_LANGUAGE,
     difficulty: parseDifficulty(value.difficulty),
     operations: parseOperations(value.operations),

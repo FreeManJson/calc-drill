@@ -13,6 +13,7 @@ type PlayPageProps = {
 
 export function PlayPage({ messages: t, onComplete, settings }: PlayPageProps) {
   const play = useTimedPlay(settings, { messages: t, onComplete })
+  const isQuestionGoalMode = settings.mode === 'questionGoal'
   const answerFormClassName = [
     'answer-form',
     `answer-form--layout-${settings.numberPadLayout}`,
@@ -31,16 +32,21 @@ export function PlayPage({ messages: t, onComplete, settings }: PlayPageProps) {
       <div className="play-panel">
         <div className="play-stats" aria-label={t.play.statusLabel}>
           <p>
-            {t.play.time}: {t.common.formatSeconds(play.remainingSeconds)}
+            {isQuestionGoalMode
+              ? `${t.play.elapsedTime}: ${t.result.formatAnswerTime(play.elapsedMs)}`
+              : `${t.play.time}: ${t.common.formatSeconds(play.remainingSeconds)}`}
           </p>
           <p>
-            {t.play.score}: {play.correctCount} / {play.totalCount}
+            {t.play.score}: {play.correctCount} /{' '}
+            {isQuestionGoalMode ? settings.targetQuestionCount : play.totalCount}
           </p>
         </div>
 
         {play.status === 'idle' && (
           <button className="primary-button" onClick={play.start} type="button">
-            {t.play.start(settings.timeLimitSeconds)}
+            {isQuestionGoalMode
+              ? t.play.startQuestionGoal(settings.targetQuestionCount)
+              : t.play.start(settings.timeLimitSeconds)}
           </button>
         )}
 
@@ -103,7 +109,8 @@ export function PlayPage({ messages: t, onComplete, settings }: PlayPageProps) {
           <div className="play-finished">
             <p>{t.play.finished}</p>
             <p>
-              {t.play.score}: {play.correctCount} / {play.totalCount}
+              {t.play.score}: {play.correctCount} /{' '}
+              {isQuestionGoalMode ? settings.targetQuestionCount : play.totalCount}
             </p>
             <button className="primary-button" onClick={play.start} type="button">
               {t.play.retry}

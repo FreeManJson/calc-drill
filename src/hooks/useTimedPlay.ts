@@ -48,6 +48,7 @@ export function useTimedPlay(
   const [remainingSecondsState, setRemainingSeconds] = useState(
     settings.timeLimitSeconds,
   )
+  const [elapsedMs, setElapsedMs] = useState(0)
   const [answerEffect, setAnswerEffect] = useState<AnswerEffect>(null)
   const [feedback, setFeedback] = useState<Feedback>(null)
   const [startedAtMs, setStartedAtMs] = useState<number | null>(null)
@@ -87,7 +88,10 @@ export function useTimedPlay(
         ? 0
         : Math.max(Date.now() - startedAt - getPausedDurationMs(), 0)
     const maxDurationMs = settingsRef.current.timeLimitSeconds * 1000
-    const durationMs = Math.min(rawDurationMs, maxDurationMs)
+    const durationMs =
+      settingsRef.current.mode === 'timeLimit'
+        ? Math.min(rawDurationMs, maxDurationMs)
+        : rawDurationMs
     const resultAnswers = answersRef.current
 
     onCompleteRef.current({
@@ -133,21 +137,35 @@ export function useTimedPlay(
     }
 
     const intervalId = window.setInterval(() => {
-      setRemainingSeconds((currentSeconds) => {
-        if (currentSeconds <= 1) {
-          setStatus('finished')
-          completePlay()
-          return 0
-        }
+      const startedAt = startedAtMsRef.current
+      const activeDurationMs =
+        startedAt === null
+          ? 0
+          : Math.max(Date.now() - startedAt - getPausedDurationMs(), 0)
 
-        return currentSeconds - 1
-      })
-    }, 1000)
+      setElapsedMs(activeDurationMs)
+
+      if (settingsRef.current.mode !== 'timeLimit') {
+        return
+      }
+
+      const maxDurationMs = settingsRef.current.timeLimitSeconds * 1000
+      const nextRemainingSeconds = Math.max(
+        Math.ceil((maxDurationMs - activeDurationMs) / 1000),
+        0,
+      )
+      setRemainingSeconds(nextRemainingSeconds)
+
+      if (activeDurationMs >= maxDurationMs) {
+        setStatus('finished')
+        completePlay()
+      }
+    }, 100)
 
     return () => {
       window.clearInterval(intervalId)
     }
-  }, [completePlay, feedback, status])
+  }, [completePlay, feedback, getPausedDurationMs, status])
 
   useEffect(() => {
     if (feedback === null) {
@@ -199,6 +217,7 @@ export function useTimedPlay(
     pauseStartedAtMsRef.current = null
     pausedDurationMsRef.current = 0
     setRemainingSeconds(settings.timeLimitSeconds)
+    setElapsedMs(0)
     setAnswerEffect(null)
     setCountdownValue(COUNTDOWN_VALUES[0])
     setFeedback(null)
@@ -263,6 +282,16 @@ export function useTimedPlay(
       if (settings.soundEffectsEnabled) {
         playCorrectSound()
       }
+      if (
+        settings.mode === 'questionGoal' &&
+        nextAnswers.filter((answer) => answer.isCorrect).length >=
+          settings.targetQuestionCount
+      ) {
+        setStatus('finished')
+        completePlay()
+        return
+      }
+
       setCurrentQuestion(nextQuestion ?? generateQuestion(settings))
       setNextQuestion(generateQuestion(settings))
       return
@@ -293,6 +322,7 @@ export function useTimedPlay(
     nextQuestion,
     remainingSeconds:
       status === 'idle' ? settings.timeLimitSeconds : remainingSecondsState,
+    elapsedMs,
     setAnswerInput,
     start,
     status,

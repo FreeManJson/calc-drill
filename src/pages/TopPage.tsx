@@ -16,15 +16,29 @@ export function TopPage({ messages: t, settings }: TopPageProps) {
     <section className="page">
       <h1>{t.top.title}</h1>
       <p className="page-description">
-        {t.top.description(settings.timeLimitSeconds)}
+        {settings.mode === 'questionGoal'
+          ? t.top.questionGoalDescription(settings.targetQuestionCount)
+          : t.top.description(settings.timeLimitSeconds)}
       </p>
       <dl className="settings-summary">
         <div>
+          <dt>{t.top.mode}</dt>
+          <dd>{t.gameModeLabels[settings.mode]}</dd>
+        </div>
+        <div>
           <dt>{t.top.timeLimit}</dt>
           <dd>
-            {t.common.formatSeconds(settings.timeLimitSeconds)}
+            {settings.mode === 'timeLimit'
+              ? t.common.formatSeconds(settings.timeLimitSeconds)
+              : t.common.noData}
           </dd>
         </div>
+        {settings.mode === 'questionGoal' && (
+          <div>
+            <dt>{t.top.targetQuestionCount}</dt>
+            <dd>{t.settings.fixedTargetQuestionCount(settings.targetQuestionCount)}</dd>
+          </div>
+        )}
         <div>
           <dt>{t.top.difficulty}</dt>
           <dd>{t.difficultyLabels[settings.difficulty]}</dd>
