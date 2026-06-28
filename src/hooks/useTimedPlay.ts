@@ -42,7 +42,10 @@ function getActiveTimeLimitMs(settings: DrillSettings) {
     return settings.timeLimitSeconds * 1000
   }
 
-  if (settings.questionGoalTimeLimitSeconds > 0) {
+  if (
+    settings.mode === 'questionGoal' &&
+    settings.questionGoalTimeLimitSeconds > 0
+  ) {
     return settings.questionGoalTimeLimitSeconds * 1000
   }
 
@@ -336,7 +339,9 @@ export function useTimedPlay(
       if (settings.soundEffectsEnabled) {
         playIncorrectSound()
       }
-      pauseStartedAtMsRef.current = Date.now()
+      if (settings.mode !== 'survival') {
+        pauseStartedAtMsRef.current = Date.now()
+      }
       setFeedback({ isCorrect: false, message: t.play.enterInteger })
       return
     }

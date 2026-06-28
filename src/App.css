@@ -589,7 +589,7 @@ button:disabled {
 
 .score-history__table {
   border-collapse: collapse;
-  min-width: 760px;
+  min-width: 980px;
   width: 100%;
 }
 

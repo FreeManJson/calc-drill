@@ -145,6 +145,11 @@ export type AppMessages = {
     noModeScore: string
     survivalScores: string
     bestRecord: string
+    recordType: string
+    recordBest: string
+    recordLatest: string
+    recordPrevious: string
+    rank: string
     timeLimitMode: string
     questionGoalMode: string
     survivalMode: string
@@ -325,6 +330,11 @@ export const messages = {
       noModeScore: 'このモードの成績はまだありません。',
       survivalScores: 'サバイバル成績',
       bestRecord: 'ベスト記録',
+      recordType: '種別',
+      recordBest: 'ベスト',
+      recordLatest: '今回',
+      recordPrevious: '前回',
+      rank: 'Rank',
       timeLimitMode: '時間制限モード',
       questionGoalMode: '問題数達成モード',
       survivalMode: 'サバイバルモード',
@@ -503,6 +513,11 @@ export const messages = {
       noModeScore: 'No records for this mode yet.',
       survivalScores: 'Survival Scores',
       bestRecord: 'Best Record',
+      recordType: 'Type',
+      recordBest: 'Best',
+      recordLatest: 'Latest',
+      recordPrevious: 'Previous',
+      rank: 'Rank',
       timeLimitMode: 'Time Limit Mode',
       questionGoalMode: 'Question Goal Mode',
       survivalMode: 'Survival Mode',

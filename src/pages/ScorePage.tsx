@@ -238,17 +238,7 @@ function getSurvivalResults(scoreSummary: ScoreSummary) {
       return
     }
 
-    const key = [
-      result.createdAtMs ?? 'unknown',
-      result.correctCount,
-      result.totalCount,
-      result.durationMs,
-      result.settings.difficulty,
-      Array.isArray(result.settings.operations)
-        ? result.settings.operations.join('+')
-        : 'unknown',
-    ].join('|')
-    resultsByKey.set(key, result)
+    resultsByKey.set(createSurvivalResultKey(result), result)
   }
 
   ;(scoreSummary.recentResults ?? []).forEach(addResult)
@@ -259,6 +249,20 @@ function getSurvivalResults(scoreSummary: ScoreSummary) {
   return Array.from(resultsByKey.values()).sort(
     (left, right) => (right.createdAtMs ?? 0) - (left.createdAtMs ?? 0),
   )
+}
+
+function createSurvivalResultKey(result: PlayResult) {
+  return [
+    result.createdAtMs ?? 'unknown',
+    result.correctCount,
+    result.totalCount,
+    result.durationMs,
+    getResultDurationMs(result),
+    result.settings.difficulty,
+    Array.isArray(result.settings.operations)
+      ? result.settings.operations.join('+')
+      : 'unknown',
+  ].join('|')
 }
 
 function compareSurvivalBest(left: PlayResult, right: PlayResult) {
@@ -282,6 +286,14 @@ function compareSurvivalBest(left: PlayResult, right: PlayResult) {
 
   return (getAverageAnswerMs(left) ?? Number.POSITIVE_INFINITY) -
     (getAverageAnswerMs(right) ?? Number.POSITIVE_INFINITY)
+}
+
+function getSurvivalRankMap(results: PlayResult[]) {
+  return new Map(
+    [...results]
+      .sort(compareSurvivalBest)
+      .map((result, index) => [createSurvivalResultKey(result), index + 1]),
+  )
 }
 
 function createSurvivalTotalCategory(
@@ -330,64 +342,26 @@ function createSurvivalTotalCategory(
   }
 }
 
-function SurvivalBestRecord({
-  messages: t,
-  result,
-}: {
-  messages: AppMessages
+type SurvivalRecordRow = {
+  rank: number | null
   result: PlayResult
-}) {
-  const averageAnswerMs = getAverageAnswerMs(result)
-
-  return (
-    <article className="score-card">
-      <h4>{t.score.bestRecord}</h4>
-      <dl className="result-summary">
-        <div>
-          <dt>{t.score.bestCorrectCount}</dt>
-          <dd>{result.correctCount}</dd>
-        </div>
-        <div>
-          <dt>{t.result.survivalTime}</dt>
-          <dd>{formatDurationMs(getResultDurationMs(result), t)}</dd>
-        </div>
-        <div>
-          <dt>{t.score.mistakes}</dt>
-          <dd>{getMistakeCount(result)}</dd>
-        </div>
-        <div>
-          <dt>{t.score.accuracy}</dt>
-          <dd>{formatResultAccuracy(result, t)}</dd>
-        </div>
-        <div>
-          <dt>{t.score.averageAnswerTime}</dt>
-          <dd>{formatDurationMs(averageAnswerMs, t)}</dd>
-        </div>
-        <div>
-          <dt>{t.top.difficulty}</dt>
-          <dd>{formatDifficulty(result.settings, t)}</dd>
-        </div>
-        <div>
-          <dt>{t.top.operations}</dt>
-          <dd>{formatOperations(result.settings, t)}</dd>
-        </div>
-      </dl>
-    </article>
-  )
+  typeLabel: string
 }
 
-function SurvivalRecentTable({
+function SurvivalRecordTable({
   messages: t,
-  results,
+  rows,
 }: {
   messages: AppMessages
-  results: PlayResult[]
+  rows: SurvivalRecordRow[]
 }) {
   return (
     <div className="score-history__table-scroll">
       <table className="score-history__table">
         <thead>
           <tr>
+            <th scope="col">{t.score.recordType}</th>
+            <th scope="col">{t.score.rank}</th>
             <th scope="col">{t.score.dateTime}</th>
             <th scope="col">{t.top.difficulty}</th>
             <th scope="col">{t.top.operations}</th>
@@ -399,8 +373,10 @@ function SurvivalRecentTable({
           </tr>
         </thead>
         <tbody>
-          {results.map((result, index) => (
-            <tr key={`${result.createdAtMs ?? 'unknown'}-${index}`}>
+          {rows.map(({ rank, result, typeLabel }, index) => (
+            <tr key={`${typeLabel}-${createSurvivalResultKey(result)}-${index}`}>
+              <td>{typeLabel}</td>
+              <td>{rank ?? t.common.noData}</td>
               <td>{formatCreatedAt(result, t)}</td>
               <td>{formatDifficulty(result.settings, t)}</td>
               <td>{formatOperations(result.settings, t)}</td>
@@ -428,11 +404,36 @@ function SurvivalScorePanel({
 }) {
   const totalCategory = createSurvivalTotalCategory(categories)
   const survivalResults = getSurvivalResults(scoreSummary)
-  const bestRecord = [...survivalResults].sort(compareSurvivalBest)[0] ?? null
+  const rankedSurvivalResults = [...survivalResults].sort(compareSurvivalBest)
+  const rankMap = getSurvivalRankMap(survivalResults)
+  const bestRecord = rankedSurvivalResults[0] ?? null
   const displayTotalCategory = {
     ...totalCategory,
     latestResult: bestRecord,
   }
+  const recentRows: SurvivalRecordRow[] = survivalResults
+    .slice(0, 10)
+    .map((result, index) => ({
+      rank: rankMap.get(createSurvivalResultKey(result)) ?? null,
+      result,
+      typeLabel:
+        index === 0
+          ? t.score.recordLatest
+          : index === 1
+            ? t.score.recordPrevious
+            : String(index + 1),
+    }))
+  const tableRows: SurvivalRecordRow[] =
+    bestRecord === null
+      ? recentRows
+      : [
+          {
+            rank: rankMap.get(createSurvivalResultKey(bestRecord)) ?? null,
+            result: bestRecord,
+            typeLabel: t.score.recordBest,
+          },
+          ...recentRows,
+        ]
 
   if (categories.length === 0) {
     return <p className="empty-message">{t.score.noModeScore}</p>
@@ -445,21 +446,12 @@ function SurvivalScorePanel({
         <ScoreCategoryCard category={displayTotalCategory} messages={t} />
       </section>
 
-      {bestRecord !== null && (
-        <section className="score-section">
-          <SurvivalBestRecord messages={t} result={bestRecord} />
-        </section>
-      )}
-
       <section className="score-section">
         <h4>{t.score.recent}</h4>
-        {survivalResults.length === 0 ? (
+        {tableRows.length === 0 ? (
           <p className="empty-message">{t.score.noModeScore}</p>
         ) : (
-          <SurvivalRecentTable
-            messages={t}
-            results={survivalResults.slice(0, 10)}
-          />
+          <SurvivalRecordTable messages={t} rows={tableRows} />
         )}
       </section>
     </div>
