@@ -20,6 +20,7 @@ export const DEFAULT_SETTINGS: DrillSettings = {
 
 export const DEFAULT_SCORE_SUMMARY: ScoreSummary = {
   bestCorrectCount: 0,
+  byCategory: {},
   totalPlayCount: 0,
   latestResult: null,
 }

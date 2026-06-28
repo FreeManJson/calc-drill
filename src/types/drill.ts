@@ -59,10 +59,27 @@ export type PlayResult = {
   totalCount: number
   durationMs: number
   answers: AnswerRecord[]
+  createdAtMs?: number
+}
+
+export type ScoreCategorySummary = {
+  averageClearTimeMs: number | null
+  averageCorrectCount: number
+  averageAnswerMs: number | null
+  bestClearTimeMs: number | null
+  bestCorrectCount: number
+  categoryKey: string
+  latestResult: PlayResult | null
+  mistakeCount: number
+  playCount: number
+  totalAnswerCount: number
+  totalClearTimeMs: number
+  totalCorrectCount: number
 }
 
 export type ScoreSummary = {
   bestCorrectCount: number
+  byCategory: Record<string, ScoreCategorySummary>
   totalPlayCount: number
   latestResult: PlayResult | null
 }

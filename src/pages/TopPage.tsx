@@ -3,15 +3,31 @@ import {
   isOperationUnlocked,
 } from '../constants/operations'
 import type { AppMessages } from '../i18n/messages'
+import { getScoreCategorySummary } from '../services/scoreStorage'
 import { OPERATION_TYPES } from '../types/drill'
-import type { DrillSettings } from '../types/drill'
+import type { DrillSettings, ScoreSummary } from '../types/drill'
 
 type TopPageProps = {
   messages: AppMessages
+  scoreSummary: ScoreSummary
   settings: DrillSettings
 }
 
-export function TopPage({ messages: t, settings }: TopPageProps) {
+function formatCurrentBest(settings: DrillSettings, scoreSummary: ScoreSummary, t: AppMessages) {
+  const currentCategory = getScoreCategorySummary(scoreSummary, settings)
+
+  if (currentCategory === null) {
+    return t.common.noData
+  }
+
+  return settings.mode === 'questionGoal'
+    ? currentCategory.bestClearTimeMs === null
+      ? t.common.noData
+      : t.result.formatAnswerTime(currentCategory.bestClearTimeMs)
+    : String(currentCategory.bestCorrectCount)
+}
+
+export function TopPage({ messages: t, scoreSummary, settings }: TopPageProps) {
   return (
     <section className="page">
       <h1>{t.top.title}</h1>
@@ -42,6 +58,10 @@ export function TopPage({ messages: t, settings }: TopPageProps) {
         <div>
           <dt>{t.top.difficulty}</dt>
           <dd>{t.difficultyLabels[settings.difficulty]}</dd>
+        </div>
+        <div>
+          <dt>{t.top.currentBest}</dt>
+          <dd>{formatCurrentBest(settings, scoreSummary, t)}</dd>
         </div>
         <div>
           <dt>{t.top.operations}</dt>

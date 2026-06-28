@@ -103,3 +103,4 @@ Phase 9 以降は、改善チケット方式で進める。
 - Difficulty-001B: Added difficulty-based question ranges for all four operations.
 - Difficulty-001C: Changed division generation to use matching multiplication pairs by difficulty.
 - Mode-001A: Added a 10-question goal mode foundation alongside time limit mode.
+- Score-001A: Added mode-based score categories and current-setting score display.

@@ -72,11 +72,23 @@ function renderPage(
         />
       )
     case ROUTES.score:
-      return <ScorePage messages={t} scoreSummary={scoreSummary} />
+      return (
+        <ScorePage
+          messages={t}
+          scoreSummary={scoreSummary}
+          settings={settings}
+        />
+      )
     case ROUTES.result:
       return <ResultPage messages={t} result={scoreSummary.latestResult} />
     case ROUTES.top:
-      return <TopPage messages={t} settings={settings} />
+      return (
+        <TopPage
+          messages={t}
+          scoreSummary={scoreSummary}
+          settings={settings}
+        />
+      )
   }
 }
 

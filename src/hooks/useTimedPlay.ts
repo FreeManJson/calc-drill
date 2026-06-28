@@ -100,6 +100,7 @@ export function useTimedPlay(
       totalCount: resultAnswers.length,
       durationMs,
       answers: resultAnswers,
+      createdAtMs: Date.now(),
     })
   }, [getPausedDurationMs])
 

@@ -33,6 +33,7 @@ export type AppMessages = {
     targetQuestionCount: string
     difficulty: string
     operations: string
+    currentBest: string
   }
   settings: {
     title: string
@@ -117,6 +118,21 @@ export type AppMessages = {
     totalPlays: string
     best: string
     latestScore: string
+    currentSettings: string
+    currentSettingScore: string
+    scoresByMode: string
+    noCurrentScore: string
+    timeLimitMode: string
+    questionGoalMode: string
+    bestCorrectCount: string
+    bestClearTime: string
+    averageCorrectCount: string
+    averageClearTime: string
+    plays: string
+    mistakes: string
+    accuracy: string
+    averageAnswerTime: string
+    recent: string
   }
 }
 
@@ -167,6 +183,7 @@ export const messages = {
       targetQuestionCount: '問題数',
       difficulty: 'むずかしさ',
       operations: 'もんだい',
+      currentBest: 'いまの設定のベスト',
     },
     settings: {
       title: 'くわしい設定',
@@ -252,6 +269,21 @@ export const messages = {
       totalPlays: 'プレイ回数',
       best: 'ベスト',
       latestScore: 'さいしんのせいせき',
+      currentSettings: '現在の設定',
+      currentSettingScore: '現在設定の成績',
+      scoresByMode: 'モード別成績',
+      noCurrentScore: 'この設定の成績はまだありません。',
+      timeLimitMode: '時間制限モード',
+      questionGoalMode: '問題数達成モード',
+      bestCorrectCount: 'ベスト正解数',
+      bestClearTime: 'ベストクリア時間',
+      averageCorrectCount: '平均正解数',
+      averageClearTime: '平均クリア時間',
+      plays: 'プレイ回数',
+      mistakes: 'ミス数',
+      accuracy: '正答率',
+      averageAnswerTime: '平均解答時間',
+      recent: '直近',
     },
   },
   en: {
@@ -299,6 +331,7 @@ export const messages = {
       targetQuestionCount: 'Questions',
       difficulty: 'Difficulty',
       operations: 'Operations',
+      currentBest: 'Current setting best',
     },
     settings: {
       title: 'Settings',
@@ -385,6 +418,21 @@ export const messages = {
       totalPlays: 'Total plays',
       best: 'Best correct count',
       latestScore: 'Latest score',
+      currentSettings: 'Current Settings',
+      currentSettingScore: 'Current Setting Score',
+      scoresByMode: 'Scores by Mode',
+      noCurrentScore: 'No score for this setting yet.',
+      timeLimitMode: 'Time Limit Mode',
+      questionGoalMode: 'Question Goal Mode',
+      bestCorrectCount: 'Best Correct Count',
+      bestClearTime: 'Best Clear Time',
+      averageCorrectCount: 'Average Correct Count',
+      averageClearTime: 'Average Clear Time',
+      plays: 'Plays',
+      mistakes: 'Mistakes',
+      accuracy: 'Accuracy',
+      averageAnswerTime: 'Average Answer Time',
+      recent: 'Recent',
     },
   },
 } satisfies Record<Language, AppMessages>

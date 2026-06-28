@@ -1,0 +1,25 @@
+Tag: score-001a-mode-based-scores
+
+Summary:
+  Score 集計をプレイモード別・設定別のカテゴリへ整理した。
+  時間制限モードと問題数達成モードの成績が混ざらないようにした。
+
+Details:
+  - ScoreSummary に byCategory を追加
+  - playMode / timeLimitSeconds / targetQuestionCount / difficulty / operations でカテゴリキーを生成
+  - 時間制限モードはベスト正解数で評価
+  - 問題数達成モードはベストクリア時間で評価
+  - Score 画面に現在設定の成績とモード別成績を表示
+  - Top 画面に現在設定カテゴリのベストを表示
+  - 旧 localStorage データに対するフォールバックを維持
+  - Score-001A の完了メモを backlog に追記
+
+Verification:
+  - npm run lint: OK
+  - npm run build: OK
+  - score category sample check: OK
+
+Impact:
+  - Result-001B の問題別結果一覧は変更なし
+  - Mode-001A の10問達成モードは維持
+  - 既存の旧スコアデータは安全に読み込み可能
