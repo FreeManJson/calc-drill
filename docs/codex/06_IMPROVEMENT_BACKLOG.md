@@ -112,4 +112,5 @@ Phase 9 以降は、改善チケット方式で進める。
 - Mode-001C: Added optional 1/3/10 minute limits for question goal mode.
 - PlayStart-001A: Added a Top screen play settings panel for mode, difficulty, and course selection.
 - Settings-002A: Reorganized Settings around app preferences while keeping operations temporary.
+- Score-001B: Changed Score to mode tabs for time limit and question goal records.
 - Docs-003: Added play start flow and Settings role planning notes.

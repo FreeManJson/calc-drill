@@ -534,6 +534,27 @@ button:disabled {
   font-size: 20px;
 }
 
+.score-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.score-tab {
+  flex: 1 1 160px;
+  min-height: 44px;
+}
+
+.score-tab[aria-selected='true'] {
+  background: var(--text-heading);
+  border-color: var(--text-heading);
+  color: var(--surface);
+}
+
+.app-layout--theme-blackboard .score-tab[aria-selected='true'] {
+  color: #173f35;
+}
+
 .score-mode-group h3,
 .score-card h3 {
   font-size: 16px;

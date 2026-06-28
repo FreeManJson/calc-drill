@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { AppMessages } from '../i18n/messages'
 import { getScoreCategorySummary } from '../services/scoreStorage'
 import { OPERATION_TYPES } from '../types/drill'
@@ -13,6 +14,8 @@ type ScorePageProps = {
   scoreSummary: ScoreSummary
   settings: DrillSettings
 }
+
+const SCORE_MODE_TABS = ['timeLimit', 'questionGoal'] as const
 
 function formatDurationMs(durationMs: number | null, t: AppMessages) {
   return durationMs === null
@@ -63,6 +66,24 @@ function formatBest(category: ScoreCategorySummary, t: AppMessages) {
   return category.latestResult?.settings.mode === 'questionGoal'
     ? formatDurationMs(category.bestClearTimeMs, t)
     : String(category.bestCorrectCount)
+}
+
+function formatQuestionGoalStatus(category: ScoreCategorySummary, t: AppMessages) {
+  const latestResult = category.latestResult
+
+  if (latestResult?.settings.mode !== 'questionGoal') {
+    return t.common.noData
+  }
+
+  const isCleared =
+    latestResult.isCleared ??
+    latestResult.correctCount >= latestResult.settings.targetQuestionCount
+
+  if (isCleared) {
+    return t.result.clear
+  }
+
+  return latestResult.isTimeUp === true ? t.result.timeUp : t.result.notCleared
 }
 
 function getCategoryTitle(category: ScoreCategorySummary, t: AppMessages) {
@@ -120,15 +141,46 @@ function ScoreCategoryCard({
           <dt>{t.score.averageAnswerTime}</dt>
           <dd>{formatDurationMs(category.averageAnswerMs, t)}</dd>
         </div>
+        {isQuestionGoal && (
+          <div>
+            <dt>{t.result.status}</dt>
+            <dd>{formatQuestionGoalStatus(category, t)}</dd>
+          </div>
+        )}
       </dl>
     </article>
   )
 }
 
 function getCategoriesByMode(scoreSummary: ScoreSummary, mode: GameMode) {
-  return Object.values(scoreSummary.byCategory).filter(
-    (category) => category.latestResult?.settings.mode === mode,
-  )
+  return Object.values(scoreSummary.byCategory)
+    .filter((category) => category.latestResult?.settings.mode === mode)
+    .sort(
+      (left, right) =>
+        (right.latestResult?.createdAtMs ?? 0) -
+        (left.latestResult?.createdAtMs ?? 0),
+    )
+}
+
+function getInitialScoreMode(
+  scoreSummary: ScoreSummary,
+  settings: DrillSettings,
+): GameMode {
+  const latestMode = scoreSummary.latestResult?.settings.mode
+
+  if (latestMode === 'timeLimit' || latestMode === 'questionGoal') {
+    return latestMode
+  }
+
+  if (settings.mode === 'timeLimit' || settings.mode === 'questionGoal') {
+    return settings.mode
+  }
+
+  return 'timeLimit'
+}
+
+function getModeTitle(mode: GameMode, t: AppMessages) {
+  return mode === 'timeLimit' ? t.score.timeLimitMode : t.score.questionGoalMode
 }
 
 export function ScorePage({
@@ -136,9 +188,13 @@ export function ScorePage({
   scoreSummary,
   settings,
 }: ScorePageProps) {
+  const [activeMode, setActiveMode] = useState<GameMode>(() =>
+    getInitialScoreMode(scoreSummary, settings),
+  )
   const currentCategory = getScoreCategorySummary(scoreSummary, settings)
-  const timeLimitCategories = getCategoriesByMode(scoreSummary, 'timeLimit')
-  const questionGoalCategories = getCategoriesByMode(scoreSummary, 'questionGoal')
+  const activeModeCategories = getCategoriesByMode(scoreSummary, activeMode)
+  const activeCurrentCategory =
+    settings.mode === activeMode ? currentCategory : null
 
   return (
     <section className="page">
@@ -172,39 +228,37 @@ export function ScorePage({
 
         <section className="score-section">
           <h2>{t.score.currentSettingScore}</h2>
-          {currentCategory === null ? (
+          {activeCurrentCategory === null ? (
             <p className="empty-message">{t.score.noCurrentScore}</p>
           ) : (
-            <ScoreCategoryCard category={currentCategory} messages={t} />
+            <ScoreCategoryCard category={activeCurrentCategory} messages={t} />
           )}
         </section>
 
         <section className="score-section">
           <h2>{t.score.scoresByMode}</h2>
-          <div className="score-mode-group">
-            <h3>{t.score.timeLimitMode}</h3>
-            {timeLimitCategories.length === 0 ? (
-              <p className="empty-message">{t.common.noData}</p>
-            ) : (
-              <div className="score-card-list">
-                {timeLimitCategories.map((category) => (
-                  <ScoreCategoryCard
-                    category={category}
-                    key={category.categoryKey}
-                    messages={t}
-                  />
-                ))}
-              </div>
-            )}
+          <div className="score-tabs" role="tablist" aria-label={t.score.scoresByMode}>
+            {SCORE_MODE_TABS.map((mode) => (
+              <button
+                aria-selected={activeMode === mode}
+                className="score-tab"
+                key={mode}
+                onClick={() => setActiveMode(mode)}
+                role="tab"
+                type="button"
+              >
+                {t.gameModeLabels[mode]}
+              </button>
+            ))}
           </div>
 
-          <div className="score-mode-group">
-            <h3>{t.score.questionGoalMode}</h3>
-            {questionGoalCategories.length === 0 ? (
-              <p className="empty-message">{t.common.noData}</p>
+          <div className="score-mode-group" role="tabpanel">
+            <h3>{getModeTitle(activeMode, t)}</h3>
+            {activeModeCategories.length === 0 ? (
+              <p className="empty-message">{t.score.noModeScore}</p>
             ) : (
               <div className="score-card-list">
-                {questionGoalCategories.map((category) => (
+                {activeModeCategories.map((category) => (
                   <ScoreCategoryCard
                     category={category}
                     key={category.categoryKey}

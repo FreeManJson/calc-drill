@@ -137,6 +137,7 @@ export type AppMessages = {
     currentSettingScore: string
     scoresByMode: string
     noCurrentScore: string
+    noModeScore: string
     timeLimitMode: string
     questionGoalMode: string
     bestCorrectCount: string
@@ -303,6 +304,7 @@ export const messages = {
       currentSettingScore: '現在設定の成績',
       scoresByMode: 'モード別成績',
       noCurrentScore: 'この設定の成績はまだありません。',
+      noModeScore: 'このモードの成績はまだありません。',
       timeLimitMode: '時間制限モード',
       questionGoalMode: '問題数達成モード',
       bestCorrectCount: 'ベスト正解数',
@@ -467,6 +469,7 @@ export const messages = {
       currentSettingScore: 'Current Setting Score',
       scoresByMode: 'Scores by Mode',
       noCurrentScore: 'No score for this setting yet.',
+      noModeScore: 'No records for this mode yet.',
       timeLimitMode: 'Time Limit Mode',
       questionGoalMode: 'Question Goal Mode',
       bestCorrectCount: 'Best Correct Count',
