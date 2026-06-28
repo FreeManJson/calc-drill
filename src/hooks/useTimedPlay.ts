@@ -17,7 +17,8 @@ const ANSWER_EFFECT_MS = 240
 const COUNTDOWN_STEP_MS = 400
 const COUNTDOWN_VALUES = ['3', '2', '1', 'Go'] as const
 const SURVIVAL_INITIAL_TIME_MS = 10_000
-const SURVIVAL_CORRECT_BONUS_MS = 3_000
+//const SURVIVAL_CORRECT_BONUS_MS = 3_000
+const SURVIVAL_CORRECT_BONUS_MS = 2_000
 const SURVIVAL_MAX_TIME_MS = 30_000
 
 export type PlayStatus = 'idle' | 'countdown' | 'playing' | 'finished'
