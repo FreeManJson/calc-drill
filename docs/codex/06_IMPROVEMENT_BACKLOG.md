@@ -65,6 +65,12 @@ Phase 9 以降は、改善チケット方式で進める。
 - Special-001: 10分サバイバルモード
 - Special-002: ひらめきモード
 
+## Survival Future Tickets
+
+- Survival-001B: サバイバルモードの最小実装
+- Survival-001C: サバイバル成績表示を整える
+- Survival-001D: サバイバルバランス調整
+
 ## Not Now
 
 - 既存仕様の全面改稿
@@ -114,3 +120,4 @@ Phase 9 以降は、改善チケット方式で進める。
 - Settings-002A: Reorganized Settings around app preferences while keeping operations temporary.
 - Score-001B: Changed Score to mode tabs for time limit and question goal records.
 - Docs-003: Added play start flow and Settings role planning notes.
+- Survival-001A: Documented survival mode rules, timing, result/score direction, and future tickets.

@@ -1,0 +1,8 @@
+Survival-001A: サバイバルモードの仕様を整理
+
+- サバイバルモードの基本ルールを docs/codex/07_GAME_MODE_PLAN.md に追記
+- 初期持ち時間10秒、正解+3秒、最大30秒、誤答追加ペナルティなしを初期仕様として整理
+- PlayStart / Play / Result / Score / 保存データの将来方針を整理
+- Survival-001B / Survival-001C / Survival-001D の将来チケット候補を整理
+- docs/codex/06_IMPROVEMENT_BACKLOG.md に完了メモを追記
+- npm run build 成功
