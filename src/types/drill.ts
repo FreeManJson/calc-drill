@@ -6,6 +6,10 @@ export type GameMode = (typeof GAME_MODES)[number]
 export const TARGET_QUESTION_COUNTS = [10, 30, 100] as const
 export type TargetQuestionCount = (typeof TARGET_QUESTION_COUNTS)[number]
 
+export const QUESTION_GOAL_TIME_LIMIT_SECONDS = [0, 60, 180, 600] as const
+export type QuestionGoalTimeLimitSeconds =
+  (typeof QUESTION_GOAL_TIME_LIMIT_SECONDS)[number]
+
 export const DIFFICULTIES = ['easy', 'normal', 'hard', 'expert'] as const
 export type Difficulty = (typeof DIFFICULTIES)[number]
 
@@ -33,6 +37,7 @@ export type DrillSettings = {
   mode: GameMode
   timeLimitSeconds: number
   targetQuestionCount: TargetQuestionCount
+  questionGoalTimeLimitSeconds: QuestionGoalTimeLimitSeconds
   language: Language
   difficulty: Difficulty
   operations: OperationType[]
@@ -63,6 +68,8 @@ export type PlayResult = {
   durationMs: number
   answers: AnswerRecord[]
   createdAtMs?: number
+  isCleared?: boolean
+  isTimeUp?: boolean
 }
 
 export type ScoreCategorySummary = {

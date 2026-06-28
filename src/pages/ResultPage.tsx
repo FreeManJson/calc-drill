@@ -15,6 +15,19 @@ function formatNullableAnswer(answer: number | null, t: AppMessages) {
   return answer === null ? t.common.noData : String(answer)
 }
 
+function formatQuestionGoalTimeLimit(result: PlayResult, t: AppMessages) {
+  switch (result.settings.questionGoalTimeLimitSeconds ?? 0) {
+    case 0:
+      return t.settings.questionGoalNoTimeLimit
+    case 60:
+      return t.settings.questionGoalTimeLimit1Minute
+    case 180:
+      return t.settings.questionGoalTimeLimit3Minutes
+    case 600:
+      return t.settings.questionGoalTimeLimit10Minutes
+  }
+}
+
 type QuestionResultRow = {
   answers: string[]
   correctAnswer: string
@@ -89,6 +102,24 @@ export function ResultPage({ messages: t, result }: ResultPageProps) {
   const questionResultRows =
     result === null ? [] : createQuestionResultRows(result.answers, t)
   const isQuestionGoalResult = result?.settings.mode === 'questionGoal'
+  const isQuestionGoalTimed =
+    result !== null &&
+    isQuestionGoalResult &&
+    (result.settings.questionGoalTimeLimitSeconds ?? 0) > 0
+  const isCleared =
+    result !== null &&
+    isQuestionGoalResult &&
+    (result.isCleared ??
+      result.correctCount >= result.settings.targetQuestionCount)
+  const isTimeUp = result?.isTimeUp === true
+  const resultStatus =
+    result === null || !isQuestionGoalResult
+      ? null
+      : isCleared
+        ? t.result.clear
+        : isTimeUp
+          ? t.result.timeUp
+          : t.result.notCleared
   const mistakeCount =
     result === null
       ? 0
@@ -126,6 +157,18 @@ export function ResultPage({ messages: t, result }: ResultPageProps) {
                 </dd>
               </div>
             )}
+            {isQuestionGoalResult && (
+              <div>
+                <dt>{t.result.status}</dt>
+                <dd>{resultStatus}</dd>
+              </div>
+            )}
+            {isQuestionGoalTimed && (
+              <div>
+                <dt>{t.result.timeLimit}</dt>
+                <dd>{formatQuestionGoalTimeLimit(result, t)}</dd>
+              </div>
+            )}
             <div>
               <dt>{t.result.totalAnswers}</dt>
               <dd>{result.totalCount}</dd>
@@ -140,7 +183,11 @@ export function ResultPage({ messages: t, result }: ResultPageProps) {
             </div>
             <div>
               <dt>
-                {isQuestionGoalResult ? t.result.clearTime : t.result.duration}
+                {isQuestionGoalResult
+                  ? isCleared
+                    ? t.result.clearTime
+                    : t.play.elapsedTime
+                  : t.result.duration}
               </dt>
               <dd>{formatDuration(result.durationMs, t)}</dd>
             </div>

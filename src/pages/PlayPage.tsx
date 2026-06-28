@@ -14,6 +14,8 @@ type PlayPageProps = {
 export function PlayPage({ messages: t, onComplete, settings }: PlayPageProps) {
   const play = useTimedPlay(settings, { messages: t, onComplete })
   const isQuestionGoalMode = settings.mode === 'questionGoal'
+  const hasQuestionGoalTimeLimit =
+    isQuestionGoalMode && settings.questionGoalTimeLimitSeconds > 0
   const answerFormClassName = [
     'answer-form',
     `answer-form--layout-${settings.numberPadLayout}`,
@@ -32,9 +34,9 @@ export function PlayPage({ messages: t, onComplete, settings }: PlayPageProps) {
       <div className="play-panel">
         <div className="play-stats" aria-label={t.play.statusLabel}>
           <p>
-            {isQuestionGoalMode
-              ? `${t.play.elapsedTime}: ${t.result.formatAnswerTime(play.elapsedMs)}`
-              : `${t.play.time}: ${t.common.formatSeconds(play.remainingSeconds)}`}
+            {hasQuestionGoalTimeLimit || !isQuestionGoalMode
+              ? `${t.play.time}: ${t.common.formatSeconds(play.remainingSeconds)}`
+              : `${t.play.elapsedTime}: ${t.result.formatAnswerTime(play.elapsedMs)}`}
           </p>
           <p>
             {t.play.score}: {play.correctCount} /{' '}

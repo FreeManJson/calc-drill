@@ -27,6 +27,19 @@ function formatCurrentBest(settings: DrillSettings, scoreSummary: ScoreSummary, 
     : String(currentCategory.bestCorrectCount)
 }
 
+function formatQuestionGoalTimeLimit(settings: DrillSettings, t: AppMessages) {
+  switch (settings.questionGoalTimeLimitSeconds ?? 0) {
+    case 0:
+      return t.settings.questionGoalNoTimeLimit
+    case 60:
+      return t.settings.questionGoalTimeLimit1Minute
+    case 180:
+      return t.settings.questionGoalTimeLimit3Minutes
+    case 600:
+      return t.settings.questionGoalTimeLimit10Minutes
+  }
+}
+
 export function TopPage({ messages: t, scoreSummary, settings }: TopPageProps) {
   return (
     <section className="page">
@@ -46,7 +59,7 @@ export function TopPage({ messages: t, scoreSummary, settings }: TopPageProps) {
           <dd>
             {settings.mode === 'timeLimit'
               ? t.common.formatSeconds(settings.timeLimitSeconds)
-              : t.common.noData}
+              : formatQuestionGoalTimeLimit(settings, t)}
           </dd>
         </div>
         {settings.mode === 'questionGoal' && (

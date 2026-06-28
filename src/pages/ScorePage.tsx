@@ -39,9 +39,24 @@ function formatOperations(settings: DrillSettings, t: AppMessages) {
 }
 
 function formatModeSetting(settings: DrillSettings, t: AppMessages) {
-  return settings.mode === 'timeLimit'
-    ? t.common.formatSeconds(settings.timeLimitSeconds)
-    : t.settings.fixedTargetQuestionCount(settings.targetQuestionCount)
+  if (settings.mode === 'timeLimit') {
+    return t.common.formatSeconds(settings.timeLimitSeconds)
+  }
+
+  const questionCount = t.settings.fixedTargetQuestionCount(
+    settings.targetQuestionCount,
+  )
+
+  switch (settings.questionGoalTimeLimitSeconds ?? 0) {
+    case 0:
+      return `${questionCount} / ${t.settings.questionGoalNoTimeLimit}`
+    case 60:
+      return `${questionCount} / ${t.settings.questionGoalTimeLimit1Minute}`
+    case 180:
+      return `${questionCount} / ${t.settings.questionGoalTimeLimit3Minutes}`
+    case 600:
+      return `${questionCount} / ${t.settings.questionGoalTimeLimit10Minutes}`
+  }
 }
 
 function formatBest(category: ScoreCategorySummary, t: AppMessages) {
@@ -204,4 +219,3 @@ export function ScorePage({
     </section>
   )
 }
-

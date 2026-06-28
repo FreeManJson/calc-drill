@@ -31,6 +31,20 @@ type UseTimedPlayOptions = {
   onComplete: (result: PlayResult) => void
 }
 
+type CompletionReason = 'cleared' | 'timeUp' | 'manual'
+
+function getActiveTimeLimitMs(settings: DrillSettings) {
+  if (settings.mode === 'timeLimit') {
+    return settings.timeLimitSeconds * 1000
+  }
+
+  if (settings.questionGoalTimeLimitSeconds > 0) {
+    return settings.questionGoalTimeLimitSeconds * 1000
+  }
+
+  return null
+}
+
 export function useTimedPlay(
   settings: DrillSettings,
   { messages: t, onComplete }: UseTimedPlayOptions,
@@ -46,7 +60,7 @@ export function useTimedPlay(
     null,
   )
   const [remainingSecondsState, setRemainingSeconds] = useState(
-    settings.timeLimitSeconds,
+    Math.ceil((getActiveTimeLimitMs(settings) ?? 0) / 1000),
   )
   const [elapsedMs, setElapsedMs] = useState(0)
   const [answerEffect, setAnswerEffect] = useState<AnswerEffect>(null)
@@ -76,7 +90,7 @@ export function useTimedPlay(
     return pausedDurationMsRef.current + activePauseMs
   }, [])
 
-  const completePlay = useCallback(() => {
+  const completePlay = useCallback((reason: CompletionReason = 'manual') => {
     if (completedRef.current) {
       return
     }
@@ -87,20 +101,31 @@ export function useTimedPlay(
       startedAt === null
         ? 0
         : Math.max(Date.now() - startedAt - getPausedDurationMs(), 0)
-    const maxDurationMs = settingsRef.current.timeLimitSeconds * 1000
+    const maxDurationMs = getActiveTimeLimitMs(settingsRef.current)
     const durationMs =
-      settingsRef.current.mode === 'timeLimit'
-        ? Math.min(rawDurationMs, maxDurationMs)
-        : rawDurationMs
+      maxDurationMs === null
+        ? rawDurationMs
+        : Math.min(rawDurationMs, maxDurationMs)
     const resultAnswers = answersRef.current
+    const resultCorrectCount = resultAnswers.filter(
+      (answer) => answer.isCorrect,
+    ).length
+    const isQuestionGoal = settingsRef.current.mode === 'questionGoal'
+    const isCleared =
+      isQuestionGoal &&
+      resultCorrectCount >= settingsRef.current.targetQuestionCount &&
+      reason !== 'timeUp'
+    const isTimeUp = reason === 'timeUp'
 
     onCompleteRef.current({
       settings: settingsRef.current,
-      correctCount: resultAnswers.filter((answer) => answer.isCorrect).length,
+      correctCount: resultCorrectCount,
       totalCount: resultAnswers.length,
       durationMs,
       answers: resultAnswers,
       createdAtMs: Date.now(),
+      isCleared,
+      isTimeUp,
     })
   }, [getPausedDurationMs])
 
@@ -146,11 +171,12 @@ export function useTimedPlay(
 
       setElapsedMs(activeDurationMs)
 
-      if (settingsRef.current.mode !== 'timeLimit') {
+      const maxDurationMs = getActiveTimeLimitMs(settingsRef.current)
+
+      if (maxDurationMs === null) {
         return
       }
 
-      const maxDurationMs = settingsRef.current.timeLimitSeconds * 1000
       const nextRemainingSeconds = Math.max(
         Math.ceil((maxDurationMs - activeDurationMs) / 1000),
         0,
@@ -159,7 +185,7 @@ export function useTimedPlay(
 
       if (activeDurationMs >= maxDurationMs) {
         setStatus('finished')
-        completePlay()
+        completePlay('timeUp')
       }
     }, 100)
 
@@ -217,7 +243,7 @@ export function useTimedPlay(
     completedRef.current = false
     pauseStartedAtMsRef.current = null
     pausedDurationMsRef.current = 0
-    setRemainingSeconds(settings.timeLimitSeconds)
+    setRemainingSeconds(Math.ceil((getActiveTimeLimitMs(settings) ?? 0) / 1000))
     setElapsedMs(0)
     setAnswerEffect(null)
     setCountdownValue(COUNTDOWN_VALUES[0])
@@ -229,7 +255,7 @@ export function useTimedPlay(
   const finish = () => {
     setStatus('finished')
     setFeedback(null)
-    completePlay()
+    completePlay('manual')
   }
 
   const appendAnswerDigit = (digit: string) => {
@@ -286,10 +312,10 @@ export function useTimedPlay(
       if (
         settings.mode === 'questionGoal' &&
         nextAnswers.filter((answer) => answer.isCorrect).length >=
-          settings.targetQuestionCount
+        settings.targetQuestionCount
       ) {
         setStatus('finished')
-        completePlay()
+        completePlay('cleared')
         return
       }
 
@@ -322,7 +348,9 @@ export function useTimedPlay(
     feedback,
     nextQuestion,
     remainingSeconds:
-      status === 'idle' ? settings.timeLimitSeconds : remainingSecondsState,
+      status === 'idle'
+        ? Math.ceil((getActiveTimeLimitMs(settings) ?? 0) / 1000)
+        : remainingSecondsState,
     elapsedMs,
     setAnswerInput,
     start,

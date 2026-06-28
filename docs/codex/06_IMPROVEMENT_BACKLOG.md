@@ -109,4 +109,5 @@ Phase 9 以降は、改善チケット方式で進める。
 - Mode-001A: Added a 10-question goal mode foundation alongside time limit mode.
 - Score-001A: Added mode-based score categories and current-setting score display.
 - Mode-001B: Added 10/30/100 question goal count selection.
+- Mode-001C: Added optional 1/3/10 minute limits for question goal mode.
 - Docs-003: Added play start flow and Settings role planning notes.

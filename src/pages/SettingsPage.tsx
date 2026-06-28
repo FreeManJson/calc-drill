@@ -1,7 +1,4 @@
-import {
-  DEFAULT_TARGET_QUESTION_COUNT,
-  DEFAULT_TIME_LIMIT_SECONDS,
-} from '../constants/defaults'
+import { DEFAULT_TIME_LIMIT_SECONDS } from '../constants/defaults'
 import {
   isLockedOperation,
   isOperationUnlocked,
@@ -14,6 +11,7 @@ import {
   GAME_MODES,
   NUMBER_PAD_LAYOUTS,
   OPERATION_TYPES,
+  QUESTION_GOAL_TIME_LIMIT_SECONDS,
   TARGET_QUESTION_COUNTS,
 } from '../types/drill'
 import type {
@@ -23,6 +21,7 @@ import type {
   GameMode,
   NumberPadLayout,
   OperationType,
+  QuestionGoalTimeLimitSeconds,
   TargetQuestionCount,
 } from '../types/drill'
 
@@ -57,6 +56,12 @@ export function SettingsPage({
     targetQuestionCount: TargetQuestionCount,
   ) => {
     updateSettings({ targetQuestionCount })
+  }
+
+  const handleQuestionGoalTimeLimitChange = (
+    questionGoalTimeLimitSeconds: QuestionGoalTimeLimitSeconds,
+  ) => {
+    updateSettings({ questionGoalTimeLimitSeconds })
   }
 
   const handleOperationChange = (
@@ -122,6 +127,21 @@ export function SettingsPage({
     }
   }
 
+  const getQuestionGoalTimeLimitLabel = (
+    questionGoalTimeLimitSeconds: QuestionGoalTimeLimitSeconds,
+  ) => {
+    switch (questionGoalTimeLimitSeconds) {
+      case 0:
+        return t.settings.questionGoalNoTimeLimit
+      case 60:
+        return t.settings.questionGoalTimeLimit1Minute
+      case 180:
+        return t.settings.questionGoalTimeLimit3Minutes
+      case 600:
+        return t.settings.questionGoalTimeLimit10Minutes
+    }
+  }
+
   return (
     <section className="page">
       <h1>{t.settings.title}</h1>
@@ -145,41 +165,76 @@ export function SettingsPage({
           ))}
         </fieldset>
 
-        <label className="field">
-          <span>{t.settings.timeLimitSeconds}</span>
-          <input
-            disabled={settings.mode !== 'timeLimit'}
-            min="1"
-            onChange={(event) =>
-              handleTimeLimitChange(event.currentTarget.value)
-            }
-            type="number"
-            value={settings.timeLimitSeconds}
-          />
-        </label>
+        {settings.mode === 'timeLimit' && (
+          <label className="field">
+            <span>{t.settings.timeLimitSeconds}</span>
+            <input
+              min="1"
+              onChange={(event) =>
+                handleTimeLimitChange(event.currentTarget.value)
+              }
+              type="number"
+              value={settings.timeLimitSeconds}
+            />
+          </label>
+        )}
 
         {settings.mode === 'questionGoal' && (
-          <fieldset className="field-group">
-            <legend>{t.settings.targetQuestionCount}</legend>
-            {TARGET_QUESTION_COUNTS.map((targetQuestionCount) => (
-              <label className="check-field" key={targetQuestionCount}>
-                <input
-                  checked={settings.targetQuestionCount === targetQuestionCount}
-                  name="targetQuestionCount"
-                  onChange={() =>
-                    handleTargetQuestionCountChange(targetQuestionCount)
-                  }
-                  type="radio"
-                  value={targetQuestionCount}
-                />
-                <span>
-                  {t.settings.fixedTargetQuestionCount(
-                    targetQuestionCount || DEFAULT_TARGET_QUESTION_COUNT,
-                  )}
-                </span>
-              </label>
-            ))}
-          </fieldset>
+          <>
+            <fieldset className="field-group">
+              <legend>{t.settings.targetQuestionCount}</legend>
+              {TARGET_QUESTION_COUNTS.map((targetQuestionCount) => (
+                <label className="check-field" key={targetQuestionCount}>
+                  <input
+                    checked={
+                      settings.targetQuestionCount === targetQuestionCount
+                    }
+                    name="targetQuestionCount"
+                    onChange={() =>
+                      handleTargetQuestionCountChange(targetQuestionCount)
+                    }
+                    type="radio"
+                    value={targetQuestionCount}
+                  />
+                  <span>
+                    {t.settings.fixedTargetQuestionCount(targetQuestionCount)}
+                  </span>
+                </label>
+              ))}
+            </fieldset>
+
+            <fieldset className="field-group">
+              <legend>{t.settings.questionGoalTimeLimit}</legend>
+              {QUESTION_GOAL_TIME_LIMIT_SECONDS.map(
+                (questionGoalTimeLimitSeconds) => (
+                  <label
+                    className="check-field"
+                    key={questionGoalTimeLimitSeconds}
+                  >
+                    <input
+                      checked={
+                        settings.questionGoalTimeLimitSeconds ===
+                        questionGoalTimeLimitSeconds
+                      }
+                      name="questionGoalTimeLimitSeconds"
+                      onChange={() =>
+                        handleQuestionGoalTimeLimitChange(
+                          questionGoalTimeLimitSeconds,
+                        )
+                      }
+                      type="radio"
+                      value={questionGoalTimeLimitSeconds}
+                    />
+                    <span>
+                      {getQuestionGoalTimeLimitLabel(
+                        questionGoalTimeLimitSeconds,
+                      )}
+                    </span>
+                  </label>
+                ),
+              )}
+            </fieldset>
+          </>
         )}
 
         <fieldset className="field-group">

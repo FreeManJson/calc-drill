@@ -9,6 +9,7 @@ import {
   GAME_MODES,
   NUMBER_PAD_LAYOUTS,
   OPERATION_TYPES,
+  QUESTION_GOAL_TIME_LIMIT_SECONDS,
   TARGET_QUESTION_COUNTS,
 } from '../types/drill'
 import type {
@@ -18,6 +19,7 @@ import type {
   GameMode,
   NumberPadLayout,
   OperationType,
+  QuestionGoalTimeLimitSeconds,
   TargetQuestionCount,
 } from '../types/drill'
 
@@ -45,6 +47,28 @@ function parseTargetQuestionCount(value: unknown): TargetQuestionCount {
   return isTargetQuestionCount(targetQuestionCount)
     ? targetQuestionCount
     : DEFAULT_SETTINGS.targetQuestionCount
+}
+
+function isQuestionGoalTimeLimitSeconds(
+  value: unknown,
+): value is QuestionGoalTimeLimitSeconds {
+  return QUESTION_GOAL_TIME_LIMIT_SECONDS.includes(
+    value as QuestionGoalTimeLimitSeconds,
+  )
+}
+
+function parseQuestionGoalTimeLimitSeconds(
+  value: unknown,
+): QuestionGoalTimeLimitSeconds {
+  if (typeof value !== 'number' || !Number.isFinite(value)) {
+    return DEFAULT_SETTINGS.questionGoalTimeLimitSeconds
+  }
+
+  const questionGoalTimeLimitSeconds = Math.trunc(value)
+
+  return isQuestionGoalTimeLimitSeconds(questionGoalTimeLimitSeconds)
+    ? questionGoalTimeLimitSeconds
+    : DEFAULT_SETTINGS.questionGoalTimeLimitSeconds
 }
 
 function isDifficulty(value: unknown): value is Difficulty {
@@ -112,6 +136,9 @@ function parseSettings(value: unknown): DrillSettings {
         ? Math.trunc(value.timeLimitSeconds)
         : DEFAULT_SETTINGS.timeLimitSeconds,
     targetQuestionCount: parseTargetQuestionCount(value.targetQuestionCount),
+    questionGoalTimeLimitSeconds: parseQuestionGoalTimeLimitSeconds(
+      value.questionGoalTimeLimitSeconds,
+    ),
     language: isLanguage(value.language) ? value.language : DEFAULT_LANGUAGE,
     difficulty: parseDifficulty(value.difficulty),
     operations: parseOperations(value.operations),

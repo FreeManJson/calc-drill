@@ -42,6 +42,11 @@ export type AppMessages = {
     timeLimitSeconds: string
     targetQuestionCount: string
     fixedTargetQuestionCount: (count: number) => string
+    questionGoalTimeLimit: string
+    questionGoalNoTimeLimit: string
+    questionGoalTimeLimit1Minute: string
+    questionGoalTimeLimit3Minutes: string
+    questionGoalTimeLimit10Minutes: string
     difficulty: string
     language: string
     languageJapanese: string
@@ -94,6 +99,10 @@ export type AppMessages = {
     clearTime: string
     clearQuestionCount: string
     timeLimit: string
+    status: string
+    clear: string
+    timeUp: string
+    notCleared: string
     totalAnswers: string
     mistakes: string
     accuracy: string
@@ -193,6 +202,11 @@ export const messages = {
       timeLimitSeconds: 'じかん（秒）',
       targetQuestionCount: '問題数',
       fixedTargetQuestionCount: (count) => `${count}問`,
+      questionGoalTimeLimit: '制限時間',
+      questionGoalNoTimeLimit: '制限なし',
+      questionGoalTimeLimit1Minute: '1分',
+      questionGoalTimeLimit3Minutes: '3分',
+      questionGoalTimeLimit10Minutes: '10分',
       difficulty: 'むずかしさ',
       language: 'ことば',
       languageJapanese: '日本語',
@@ -245,6 +259,10 @@ export const messages = {
       clearTime: 'クリア時間',
       clearQuestionCount: 'クリア問題数',
       timeLimit: 'じかん',
+      status: '状態',
+      clear: 'クリア',
+      timeUp: '時間切れ',
+      notCleared: '未クリア',
       totalAnswers: '回答数',
       mistakes: 'ミス数',
       accuracy: '正答率',
@@ -343,6 +361,11 @@ export const messages = {
       timeLimitSeconds: 'Time limit seconds',
       targetQuestionCount: 'Questions',
       fixedTargetQuestionCount: (count) => `${count} Questions`,
+      questionGoalTimeLimit: 'Time limit',
+      questionGoalNoTimeLimit: 'No limit',
+      questionGoalTimeLimit1Minute: '1 min',
+      questionGoalTimeLimit3Minutes: '3 min',
+      questionGoalTimeLimit10Minutes: '10 min',
       difficulty: 'Difficulty',
       language: 'Language',
       languageJapanese: '日本語',
@@ -395,6 +418,10 @@ export const messages = {
       clearTime: 'Clear Time',
       clearQuestionCount: 'Goal',
       timeLimit: 'Time limit',
+      status: 'Status',
+      clear: 'Clear',
+      timeUp: 'Time Up',
+      notCleared: 'Not Cleared',
       totalAnswers: 'Answers',
       mistakes: 'Mistakes',
       accuracy: 'Accuracy',

@@ -37,11 +37,21 @@ function getOperationKey(operations: OperationType[]) {
   ).join('+')
 }
 
+function isClearedQuestionGoal(result: PlayResult) {
+  return (
+    result.settings.mode === 'questionGoal' &&
+    (result.isCleared ??
+      result.correctCount >= result.settings.targetQuestionCount)
+  )
+}
+
 export function createScoreCategoryKey(settings: DrillSettings): string {
+  const questionGoalTimeLimitSeconds =
+    settings.questionGoalTimeLimitSeconds ?? 0
   const modePart =
     settings.mode === 'timeLimit'
       ? `time:${settings.timeLimitSeconds}`
-      : `goal:${settings.targetQuestionCount}`
+      : `goal:${settings.targetQuestionCount}:limit:${questionGoalTimeLimitSeconds}`
 
   return [
     settings.mode,
@@ -169,8 +179,9 @@ export function recordPlayResult(
   const totalClearTimeMs =
     currentCategory.totalClearTimeMs + resultWithCreatedAt.durationMs
   const mistakeCount = currentCategory.mistakeCount + getMistakeCount(resultWithCreatedAt)
+  const isQuestionGoalClear = isClearedQuestionGoal(resultWithCreatedAt)
   const bestClearTimeMs =
-    resultWithCreatedAt.settings.mode === 'questionGoal'
+    isQuestionGoalClear
       ? currentCategory.bestClearTimeMs === null
         ? resultWithCreatedAt.durationMs
         : Math.min(currentCategory.bestClearTimeMs, resultWithCreatedAt.durationMs)
