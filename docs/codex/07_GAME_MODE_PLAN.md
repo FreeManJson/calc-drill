@@ -766,6 +766,12 @@ Score-001B のモード別タブに、将来的にサバイバルタブを追加
   remainingTimeSeconds,
   maxTimeSeconds,
   correctBonusSeconds,
+  survivalRuleVersion,
+  survivalLevel,
+  baseBonusSeconds,
+  bonusDecaySeconds,
+  levelUpEveryCorrectCount,
+  minBonusSeconds,
   averageAnswerMs,
   createdAt,
 }
@@ -803,6 +809,40 @@ Score-001B のモード別タブに、将来的にサバイバルタブを追加
 - 最大持ち時間を調整する。
 - 不正解ペナルティを入れるか検討する。
 - 難易度別パラメータを検討する。
+
+#### Survival-001E: サバイバル公式ルール v2
+
+サバイバルモードは、上手い人でも無限に続きにくいように、正解時の回復量をLvに応じて段階的に減らす。
+
+固定値:
+
+- survivalRuleVersion: 2
+- 初期持ち時間: 10秒
+- 最大持ち時間: 30秒
+- 基準正解ボーナス: +3.0秒
+- Lvごとの減少量: -0.1秒
+- Lvアップ間隔: 3正解ごと
+- 最小正解ボーナス: +0.5秒
+- 最大Lv: 26
+- 不正解ペナルティ: 0秒
+
+計算式:
+
+- Lv = min(26, floor(correctCount / 3) + 1)
+- 正解ボーナス = max(0.5, 3.0 - (Lv - 1) * 0.1)
+
+表示・保存方針:
+
+- Play では現在Lvと現在の正解ボーナスを表示する。
+- Result では到達Lvと最終正解ボーナスを表示する。
+- Score では到達Lvと survivalRuleVersion を保存・表示する。
+- 旧記録に survivalRuleVersion がない場合は、表示上は v1 として扱う。
+
+今回まだやらないこと:
+
+- 初期10問の平均解答時間による開始Lvの自動調整。
+- サバイバル専用スコア制。
+- 難易度別のサバイバル専用パラメータ。
 
 ### Survival-001A でやらないこと
 

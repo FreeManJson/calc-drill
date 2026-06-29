@@ -5,6 +5,20 @@ import {
 } from '../services/feedbackEffects'
 import type { AppMessages } from '../i18n/messages'
 import { generateQuestion } from '../services/questionGenerator'
+import {
+  getSurvivalBonusMs,
+  getSurvivalBonusSeconds,
+  getSurvivalLevel,
+  SURVIVAL_BASE_BONUS_SECONDS,
+  SURVIVAL_BONUS_DECAY_SECONDS,
+  SURVIVAL_INITIAL_TIME_SECONDS,
+  SURVIVAL_LEVEL_UP_EVERY_CORRECT_COUNT,
+  SURVIVAL_MAX_LEVEL,
+  SURVIVAL_MAX_TIME_SECONDS,
+  SURVIVAL_MIN_BONUS_SECONDS,
+  SURVIVAL_RULE_VERSION,
+  SURVIVAL_WRONG_PENALTY_SECONDS,
+} from '../services/survivalRules'
 import type {
   AnswerRecord,
   DrillQuestion,
@@ -16,10 +30,8 @@ const INCORRECT_FEEDBACK_MS = 700
 const ANSWER_EFFECT_MS = 240
 const COUNTDOWN_STEP_MS = 400
 const COUNTDOWN_VALUES = ['3', '2', '1', 'Go'] as const
-const SURVIVAL_INITIAL_TIME_MS = 10_000
-//const SURVIVAL_CORRECT_BONUS_MS = 3_000
-const SURVIVAL_CORRECT_BONUS_MS = 2_000
-const SURVIVAL_MAX_TIME_MS = 30_000
+const SURVIVAL_INITIAL_TIME_MS = SURVIVAL_INITIAL_TIME_SECONDS * 1000
+const SURVIVAL_MAX_TIME_MS = SURVIVAL_MAX_TIME_SECONDS * 1000
 
 export type PlayStatus = 'idle' | 'countdown' | 'playing' | 'finished'
 export type AnswerEffect = 'correct' | 'incorrect' | null
@@ -146,14 +158,26 @@ export function useTimedPlay(
       isCleared,
       isTimeUp,
       survivalTimeMs: isSurvival ? durationMs : undefined,
-      initialTimeSeconds: isSurvival ? SURVIVAL_INITIAL_TIME_MS / 1000 : undefined,
+      survivalRuleVersion: isSurvival ? SURVIVAL_RULE_VERSION : undefined,
+      survivalLevel: isSurvival
+        ? getSurvivalLevel(resultCorrectCount)
+        : undefined,
+      initialTimeSeconds: isSurvival ? SURVIVAL_INITIAL_TIME_SECONDS : undefined,
       remainingTimeSeconds: isSurvival
         ? Math.max(survivalRemainingMsRef.current / 1000, 0)
         : undefined,
-      maxTimeSeconds: isSurvival ? SURVIVAL_MAX_TIME_MS / 1000 : undefined,
+      maxTimeSeconds: isSurvival ? SURVIVAL_MAX_TIME_SECONDS : undefined,
       correctBonusSeconds: isSurvival
-        ? SURVIVAL_CORRECT_BONUS_MS / 1000
+        ? getSurvivalBonusSeconds(resultCorrectCount)
         : undefined,
+      baseBonusSeconds: isSurvival ? SURVIVAL_BASE_BONUS_SECONDS : undefined,
+      bonusDecaySeconds: isSurvival ? SURVIVAL_BONUS_DECAY_SECONDS : undefined,
+      levelUpEveryCorrectCount: isSurvival
+        ? SURVIVAL_LEVEL_UP_EVERY_CORRECT_COUNT
+        : undefined,
+      minBonusSeconds: isSurvival ? SURVIVAL_MIN_BONUS_SECONDS : undefined,
+      maxSurvivalLevel: isSurvival ? SURVIVAL_MAX_LEVEL : undefined,
+      wrongPenaltySeconds: isSurvival ? SURVIVAL_WRONG_PENALTY_SECONDS : undefined,
     })
   }, [getPausedDurationMs])
 
@@ -358,6 +382,9 @@ export function useTimedPlay(
       answeredAtMs,
     }
 
+    const previousCorrectCount = answersRef.current.filter(
+      (answer) => answer.isCorrect,
+    ).length
     const nextAnswers = [...answersRef.current, answerRecord]
     answersRef.current = nextAnswers
     setAnswers(nextAnswers)
@@ -370,7 +397,8 @@ export function useTimedPlay(
       }
       if (settings.mode === 'survival') {
         const nextRemainingMs = Math.min(
-          survivalRemainingMsRef.current + SURVIVAL_CORRECT_BONUS_MS,
+          survivalRemainingMsRef.current +
+            getSurvivalBonusMs(previousCorrectCount),
           SURVIVAL_MAX_TIME_MS,
         )
         survivalRemainingMsRef.current = nextRemainingMs
@@ -421,9 +449,11 @@ export function useTimedPlay(
       status === 'idle'
         ? Math.ceil(getInitialRemainingMs(settings) / 1000)
         : remainingSecondsState,
+    survivalBonusSeconds: getSurvivalBonusSeconds(correctCount),
+    survivalLevel: getSurvivalLevel(correctCount),
     survivalRemainingSeconds:
       status === 'idle'
-        ? SURVIVAL_INITIAL_TIME_MS / 1000
+        ? SURVIVAL_INITIAL_TIME_SECONDS
         : survivalRemainingMs / 1000,
     elapsedMs,
     setAnswerInput,

@@ -70,7 +70,9 @@ Phase 9 以降は、改善チケット方式で進める。
 - Survival-001B: サバイバルモードの最小実装
 - Survival-001C: サバイバル成績表示を整える
 - Survival-001D: サバイバルバランス調整
-- Survival-001E: サバイバル成績表の列ソート UI を検討する
+- Survival-001F: サバイバル成績表の列ソート UI を検討する
+- Survival-002A: 初期10問の平均解答時間による開始Lv調整を検討する
+- Survival-002B: サバイバル専用スコア制を検討する
 
 ## Not Now
 
@@ -126,3 +128,4 @@ Phase 9 以降は、改善チケット方式で進める。
 - Survival-001C: Improved survival score summaries, best record display, and recent survival history.
 - Survival-001D: Fixed survival elapsed time capping and unified survival score records into a ranked table.
 - Survival-001D-fix: Removed duplicate survival score summary cards so survival records appear only in the table.
+- Survival-001E: Added level-based survival bonus decay and saved/displayed survival rule version.

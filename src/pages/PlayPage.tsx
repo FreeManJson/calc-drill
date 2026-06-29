@@ -65,6 +65,18 @@ export function PlayPage({
             {t.play.score}: {play.correctCount}
             {isQuestionGoalMode ? ` / ${settings.targetQuestionCount}` : ''}
           </p>
+          {isSurvivalMode && (
+            <p>
+              {t.play.survivalLevel}:{' '}
+              {t.play.formatSurvivalLevel(play.survivalLevel)}
+            </p>
+          )}
+          {isSurvivalMode && (
+            <p>
+              {t.play.correctBonus}:{' '}
+              {t.play.formatCorrectBonus(play.survivalBonusSeconds)}
+            </p>
+          )}
         </div>
 
         {play.status === 'idle' && (

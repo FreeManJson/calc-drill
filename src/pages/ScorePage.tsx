@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { AppMessages } from '../i18n/messages'
 import { getScoreCategorySummary } from '../services/scoreStorage'
+import { getSurvivalLevel } from '../services/survivalRules'
 import { OPERATION_TYPES } from '../types/drill'
 import type {
   DrillSettings,
@@ -40,6 +41,14 @@ function getResultDurationMs(result: PlayResult) {
 
 function getAverageAnswerMs(result: PlayResult) {
   return result.totalCount > 0 ? getResultDurationMs(result) / result.totalCount : null
+}
+
+function getResultSurvivalLevel(result: PlayResult) {
+  return result.survivalLevel ?? getSurvivalLevel(result.correctCount)
+}
+
+function formatSurvivalRuleVersion(result: PlayResult) {
+  return `v${result.survivalRuleVersion ?? 1}`
 }
 
 function formatResultAccuracy(result: PlayResult, t: AppMessages) {
@@ -270,6 +279,13 @@ function compareSurvivalBest(left: PlayResult, right: PlayResult) {
     return right.correctCount - left.correctCount
   }
 
+  const leftLevel = getResultSurvivalLevel(left)
+  const rightLevel = getResultSurvivalLevel(right)
+
+  if (leftLevel !== rightLevel) {
+    return rightLevel - leftLevel
+  }
+
   const leftDurationMs = getResultDurationMs(left)
   const rightDurationMs = getResultDurationMs(right)
 
@@ -320,6 +336,8 @@ function SurvivalRecordTable({
             <th scope="col">{t.top.difficulty}</th>
             <th scope="col">{t.top.operations}</th>
             <th scope="col">{t.result.score}</th>
+            <th scope="col">{t.result.survivalLevel}</th>
+            <th scope="col">{t.score.ruleVersion}</th>
             <th scope="col">{t.result.survivalTime}</th>
             <th scope="col">{t.score.mistakes}</th>
             <th scope="col">{t.score.accuracy}</th>
@@ -335,6 +353,10 @@ function SurvivalRecordTable({
               <td>{formatDifficulty(result.settings, t)}</td>
               <td>{formatOperations(result.settings, t)}</td>
               <td>{result.correctCount}</td>
+              <td>
+                {t.play.formatSurvivalLevel(getResultSurvivalLevel(result))}
+              </td>
+              <td>{formatSurvivalRuleVersion(result)}</td>
               <td>{formatDurationMs(getResultDurationMs(result), t)}</td>
               <td>{getMistakeCount(result)}</td>
               <td>{formatResultAccuracy(result, t)}</td>

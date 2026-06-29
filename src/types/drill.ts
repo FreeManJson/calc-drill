@@ -71,10 +71,18 @@ export type PlayResult = {
   isCleared?: boolean
   isTimeUp?: boolean
   survivalTimeMs?: number
+  survivalRuleVersion?: number
+  survivalLevel?: number
   initialTimeSeconds?: number
   remainingTimeSeconds?: number
   maxTimeSeconds?: number
   correctBonusSeconds?: number
+  baseBonusSeconds?: number
+  bonusDecaySeconds?: number
+  levelUpEveryCorrectCount?: number
+  minBonusSeconds?: number
+  maxSurvivalLevel?: number
+  wrongPenaltySeconds?: number
 }
 
 export type ScoreCategorySummary = {

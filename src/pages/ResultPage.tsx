@@ -1,5 +1,6 @@
 import type { AppMessages } from '../i18n/messages'
 import { formatQuestion } from '../services/questionGenerator'
+import { getSurvivalLevel } from '../services/survivalRules'
 import type { AnswerRecord, DrillQuestion, PlayResult } from '../types/drill'
 
 type ResultPageProps = {
@@ -156,6 +157,23 @@ export function ResultPage({ messages: t, result }: ResultPageProps) {
                 <dd>{t.result.survivalResult}</dd>
               </div>
             )}
+            {isSurvivalResult && (
+              <div>
+                <dt>{t.result.survivalLevel}</dt>
+                <dd>
+                  {t.play.formatSurvivalLevel(
+                    result.survivalLevel ?? getSurvivalLevel(result.correctCount),
+                  )}
+                </dd>
+              </div>
+            )}
+            {isSurvivalResult &&
+              typeof result.correctBonusSeconds === 'number' && (
+                <div>
+                  <dt>{t.result.finalCorrectBonus}</dt>
+                  <dd>{t.play.formatCorrectBonus(result.correctBonusSeconds)}</dd>
+                </div>
+              )}
             {isQuestionGoalResult && (
               <div>
                 <dt>{t.result.clearQuestionCount}</dt>

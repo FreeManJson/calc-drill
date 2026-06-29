@@ -80,6 +80,10 @@ export type AppMessages = {
     timeLeft: string
     elapsedTime: string
     score: string
+    survivalLevel: string
+    correctBonus: string
+    formatSurvivalLevel: (level: number) => string
+    formatCorrectBonus: (seconds: number) => string
     start: (seconds: number) => string
     startQuestionGoal: (count: number) => string
     startSurvival: string
@@ -108,6 +112,8 @@ export type AppMessages = {
     clearQuestionCount: string
     survivalResult: string
     survivalTime: string
+    survivalLevel: string
+    finalCorrectBonus: string
     timeLimit: string
     status: string
     clear: string
@@ -150,6 +156,7 @@ export type AppMessages = {
     recordLatest: string
     recordPrevious: string
     rank: string
+    ruleVersion: string
     timeLimitMode: string
     questionGoalMode: string
     survivalMode: string
@@ -264,6 +271,10 @@ export const messages = {
       timeLeft: '残り時間',
       elapsedTime: '経過時間',
       score: 'せいかい',
+      survivalLevel: 'Lv',
+      correctBonus: '正解ボーナス',
+      formatSurvivalLevel: (level) => `Lv.${level}`,
+      formatCorrectBonus: (seconds) => `+${seconds.toFixed(1)}秒`,
       start: (seconds) => `${seconds}秒ドリルをスタート`,
       startQuestionGoal: (count) => `${count}問チャレンジをスタート`,
       startSurvival: 'サバイバルをスタート',
@@ -292,6 +303,8 @@ export const messages = {
       clearQuestionCount: 'クリア問題数',
       survivalResult: 'サバイバル結果',
       survivalTime: '生存時間',
+      survivalLevel: '到達Lv',
+      finalCorrectBonus: '最終正解ボーナス',
       timeLimit: 'じかん',
       status: '状態',
       clear: 'クリア',
@@ -335,6 +348,7 @@ export const messages = {
       recordLatest: '今回',
       recordPrevious: '前回',
       rank: 'Rank',
+      ruleVersion: 'ルール',
       timeLimitMode: '時間制限モード',
       questionGoalMode: '問題数達成モード',
       survivalMode: 'サバイバルモード',
@@ -447,6 +461,10 @@ export const messages = {
       timeLeft: 'Time Left',
       elapsedTime: 'Elapsed Time',
       score: 'Score',
+      survivalLevel: 'Lv',
+      correctBonus: 'Correct Bonus',
+      formatSurvivalLevel: (level) => `Lv.${level}`,
+      formatCorrectBonus: (seconds) => `+${seconds.toFixed(1)} sec`,
       start: (seconds) => `Start ${seconds}-second drill`,
       startQuestionGoal: (count) => `Start ${count}-question challenge`,
       startSurvival: 'Start survival',
@@ -475,6 +493,8 @@ export const messages = {
       clearQuestionCount: 'Goal',
       survivalResult: 'Survival Result',
       survivalTime: 'Survival Time',
+      survivalLevel: 'Reached Lv',
+      finalCorrectBonus: 'Final Correct Bonus',
       timeLimit: 'Time limit',
       status: 'Status',
       clear: 'Clear',
@@ -518,6 +538,7 @@ export const messages = {
       recordLatest: 'Latest',
       recordPrevious: 'Previous',
       rank: 'Rank',
+      ruleVersion: 'Rule',
       timeLimitMode: 'Time Limit Mode',
       questionGoalMode: 'Question Goal Mode',
       survivalMode: 'Survival Mode',
